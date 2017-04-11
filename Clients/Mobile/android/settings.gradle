@@ -1,0 +1,3 @@
+rootProject.name = 'MyCommunity'
+
+include ':app'
