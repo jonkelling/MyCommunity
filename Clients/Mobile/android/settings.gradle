@@ -1,4 +1,4 @@
-rootProject.name = 'MyCommunity'
+rootProject.name = 'mycommunity'
 include ':react-native-lock'
 project(':react-native-lock').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-lock/android')
 

@@ -14,10 +14,6 @@ import {
 import DemoScreen from "./DemoScreen";
 import * as storeconfig from "./store/ConfigureStore.dev";
 
-// tslint:disable-next-line:no-var-requires
-const Auth0Lock = require("react-native-lock");
-const lock = new Auth0Lock({ clientId: "z3vOGTlPy9haCCwotU_9OuVvsRLSDqjK", domain: "mycommunity.auth0.com" });
-
 export default class App extends React.Component<{}, { loggedin: boolean }> {
     constructor(props) {
         super(props);
@@ -27,6 +23,17 @@ export default class App extends React.Component<{}, { loggedin: boolean }> {
     }
     public componentWillMount() {
         if (!this.state.loggedin) {
+            // tslint:disable-next-line:no-var-requires
+            const Auth0Lock = require("react-native-lock");
+            const lock = new Auth0Lock({
+                clientId: "z3vOGTlPy9haCCwotU_9OuVvsRLSDqjK",
+                domain: "mycommunity.auth0.com",
+                integrations: {
+                    facebook: {
+                        permissions: ['public_profile']
+                    }
+                }
+            });
             lock.show({}, (err, profile, token) => {
                 if (err) {
                     // tslint:disable-next-line:no-console
@@ -68,4 +75,4 @@ const styles: any = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent("MyCommunity", () => App);
+AppRegistry.registerComponent("mycommunity", () => App);
