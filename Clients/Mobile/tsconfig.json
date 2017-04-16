@@ -12,7 +12,8 @@
         "rootDir": "src",
         "experimentalDecorators": true,
         "stripInternal": true,
-        "inlineSourceMap": true,
+        "sourceMap": true,
+        "inlineSourceMap": false,
         "noImplicitAny": false,
         "allowSyntheticDefaultImports": true,
         "typeRoots": [

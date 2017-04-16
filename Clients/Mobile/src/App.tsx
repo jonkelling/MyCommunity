@@ -30,9 +30,9 @@ export default class App extends React.Component<{}, { loggedin: boolean }> {
                 domain: "mycommunity.auth0.com",
                 integrations: {
                     facebook: {
-                        permissions: ['public_profile']
-                    }
-                }
+                        permissions: ["public_profile"],
+                    },
+                },
             });
             lock.show({}, (err, profile, token) => {
                 if (err) {
