@@ -11,16 +11,17 @@ namespace Server.Controllers
     {
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<string>> Get()
+        public IEnumerable<string> Get()
         {
             using (var context = new ConfigurationContext())
             {
-                Func<double> getSeconds = () => {
+                Func<double> getSeconds = () =>
+                {
                     return (DateTime.Now - DateTime.Today).TotalSeconds;
                 };
-                await context.Values.AddAsync(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
-                await context.Values.AddAsync(new ConfigurationValue { Id = (getSeconds()+ 1).ToString(), Value = "cde" });
-                await context.SaveChangesAsync();
+                context.Values.Add(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
+                context.Values.Add(new ConfigurationValue { Id = (getSeconds() + 1).ToString(), Value = "cde" });
+                context.SaveChanges();
             }
 
             using (var context = new ConfigurationContext())
