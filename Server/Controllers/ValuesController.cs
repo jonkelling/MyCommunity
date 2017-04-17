@@ -11,7 +11,7 @@ namespace Server.Controllers
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
             using (var context = new ConfigurationContext())
             {
@@ -19,9 +19,9 @@ namespace Server.Controllers
                 {
                     return (DateTime.Now - DateTime.Today).TotalSeconds;
                 };
-                context.Values.Add(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
-                context.Values.Add(new ConfigurationValue { Id = (getSeconds() + 1).ToString(), Value = "cde" });
-                context.SaveChanges();
+                await context.Values.AddAsync(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
+                await context.Values.AddAsync(new ConfigurationValue { Id = (getSeconds() + 1).ToString(), Value = "cde" });
+                await context.SaveChangesAsync();
             }
 
             using (var context = new ConfigurationContext())
@@ -56,6 +56,18 @@ namespace Server.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet("PerfTest")]
+        public async Task<IEnumerable<string>> PerfTest()
+        {
+            using (var dbContext = new ConfigurationContext())
+            {
+                var results = from x in dbContext.Values.ToList()
+                              from y in new[] { x.Id, x.Value }
+                              select y;
+                return await Task.FromResult(results);
+            }
         }
     }
 }
