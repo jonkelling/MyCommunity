@@ -31,7 +31,8 @@ namespace Server
                 // Add the EF configuration provider, which will override any
                 // config made with the JSON provider.
                 .AddEntityFrameworkConfig(options => 
-                    options.UseNpgsql(connectionStringConfig.GetConnectionString("DefaultConnection"))
+                    options.UseSqlServer(connectionStringConfig.GetConnectionString("AzureSqlConnection"))
+
                 );
             Configuration = config.Build();
         }

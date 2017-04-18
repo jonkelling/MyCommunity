@@ -26,7 +26,7 @@ namespace Server
                 var connectionStringConfig = connectionStringConfigBuilder.Build();
 
                 var builder = new DbContextOptionsBuilder();
-                builder.UseNpgsql(connectionStringConfig.GetConnectionString("DefaultConnection"));
+                builder.UseSqlServer(connectionStringConfig.GetConnectionString("AzureSqlConnection"));
                 return builder.Options;
             }
         }
