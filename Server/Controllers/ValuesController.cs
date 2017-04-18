@@ -58,15 +58,25 @@ namespace Server.Controllers
         {
         }
 
-        [HttpGet("PerfTest")]
-        public async Task<IEnumerable<string>> PerfTest()
+        [HttpGet("PerfTestAsync")]
+        public async Task<IEnumerable<string>> PerfTestAsync()
         {
             using (var dbContext = new ConfigurationContext())
             {
-                var results = from x in dbContext.Values.ToList()
-                              from y in new[] { x.Id, x.Value }
-                              select y;
-                return await Task.FromResult(results);
+                return from x in await dbContext.Values.ToAsyncEnumerable().ToList()
+                       from y in new[] { x.Id, x.Value }
+                       select y;
+            }
+        }
+
+        [HttpGet("PerfTest")]
+        public IEnumerable<string> PerfTest()
+        {
+            using (var dbContext = new ConfigurationContext())
+            {
+                return from x in dbContext.Values.ToList()
+                       from y in new[] { x.Id, x.Value }
+                       select y;
             }
         }
     }
