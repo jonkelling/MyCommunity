@@ -35,9 +35,10 @@ namespace Server.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            using (var context = new ConfigurationContext())
+                return Ok(await context.Values.FindAsync(id));
         }
 
         // POST api/values
