@@ -58,7 +58,7 @@ namespace Server.Controllers
         {
         }
 
-        [HttpGet("PerfTestAsync")]
+        [HttpGet("PerfTest")]
         public async Task<IEnumerable<string>> PerfTestAsync()
         {
             using (var dbContext = new ConfigurationContext())
@@ -69,7 +69,7 @@ namespace Server.Controllers
             }
         }
 
-        [HttpGet("PerfTest")]
+        [HttpGet("PerfTestOld")]
         public IEnumerable<string> PerfTest()
         {
             using (var dbContext = new ConfigurationContext())
