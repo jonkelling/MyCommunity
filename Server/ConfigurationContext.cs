@@ -1,35 +1,22 @@
-using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Server
 {
-    public class ConfigurationContext : DbContext
+    public interface IConfigurationContext
     {
-        public ConfigurationContext() : this(getDefaultOptions)
-        {
-        }
+        DbSet<ConfigurationValue> Values { get; }
 
+        Task<int> SaveChangesAsync(CancellationToken CancellationToken = default(CancellationToken));
+    }
+    
+    public class ConfigurationContext : DbContext, IConfigurationContext
+    {
         public ConfigurationContext(DbContextOptions options) : base(options)
         {
         }
 
-        public static DbContextOptions getDefaultOptions
-        {
-            get
-            {
-                var connectionStringConfigBuilder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddEnvironmentVariables();
-
-                var connectionStringConfig = connectionStringConfigBuilder.Build();
-
-                var builder = new DbContextOptionsBuilder();
-                builder.UseSqlServer(connectionStringConfig.GetConnectionString("AzureSqlConnection"));
-                return builder.Options;
-            }
-        }
         public DbSet<ConfigurationValue> Values { get; set; }
     }
 }

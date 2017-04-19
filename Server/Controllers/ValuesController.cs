@@ -9,36 +9,36 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly IConfigurationContext _configurationContext;
+
+        public ValuesController(IConfigurationContext configurationContext)
+        {
+            this._configurationContext = configurationContext;
+        }
+
         // GET api/values
         [HttpGet]
         public async Task<IEnumerable<string>> Get()
         {
-            using (var context = new ConfigurationContext())
+            Func<double> getSeconds = () =>
             {
-                Func<double> getSeconds = () =>
-                {
-                    return (DateTime.Now - DateTime.Today).TotalSeconds;
-                };
-                await context.Values.AddAsync(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
-                await context.Values.AddAsync(new ConfigurationValue { Id = (getSeconds() + 1).ToString(), Value = "cde" });
-                await context.SaveChangesAsync();
-            }
+                return (DateTime.Now - DateTime.Today).TotalSeconds;
+            };
+            await _configurationContext.Values.AddAsync(new ConfigurationValue() { Id = getSeconds().ToString(), Value = "abc" });
+            await _configurationContext.Values.AddAsync(new ConfigurationValue { Id = (getSeconds() + 1).ToString(), Value = "cde" });
+            await _configurationContext.SaveChangesAsync();
 
-            using (var context = new ConfigurationContext())
-            {
-                var results = from x in context.Values
-                              from v in new[] { x.Id, x.Value }
-                              select v;
-                return results.ToList();
-            }
+            var results = from x in _configurationContext.Values
+                          from v in new[] { x.Id, x.Value }
+                          select v;
+            return results.ToList();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            using (var context = new ConfigurationContext())
-                return Ok(await context.Values.FindAsync(id));
+            return Ok(await _configurationContext.Values.FindAsync(id));
         }
 
         // POST api/values
@@ -62,23 +62,17 @@ namespace Server.Controllers
         [HttpGet("PerfTest")]
         public async Task<IEnumerable<string>> PerfTestAsync()
         {
-            using (var dbContext = new ConfigurationContext())
-            {
-                return from x in await dbContext.Values.ToAsyncEnumerable().ToList()
-                       from y in new[] { x.Id, x.Value }
-                       select y;
-            }
+            return from x in await _configurationContext.Values.ToAsyncEnumerable().ToList()
+                   from y in new[] { x.Id, x.Value }
+                   select y;
         }
 
         [HttpGet("PerfTestOld")]
         public IEnumerable<string> PerfTest()
         {
-            using (var dbContext = new ConfigurationContext())
-            {
-                return from x in dbContext.Values.ToList()
-                       from y in new[] { x.Id, x.Value }
-                       select y;
-            }
+            return from x in _configurationContext.Values.ToList()
+                   from y in new[] { x.Id, x.Value }
+                   select y;
         }
     }
 }
