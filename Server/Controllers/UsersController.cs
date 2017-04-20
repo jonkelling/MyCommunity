@@ -19,12 +19,9 @@ namespace Server.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            var results = from x in _dbContext.Users
-                          from v in new[] { x.Email }
-                          select v;
-            return await results.ToAsyncEnumerable().ToList();
+            return Ok(await _dbContext.Users.ToAsyncEnumerable().ToList());
         }
 
         // GET api/values/5
