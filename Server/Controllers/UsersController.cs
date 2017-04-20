@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Server.Core;
 
 namespace Server.Controllers
 {
@@ -35,20 +36,27 @@ namespace Server.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task Post([FromBody]User value)
         {
+            await _dbContext.Users.AddAsync(value);
+            await _dbContext.SaveChangesAsync();
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Put(int id, [FromBody]User value)
         {
+            _dbContext.Users.Update(value);
+            await _dbContext.SaveChangesAsync();
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            var user = await _dbContext.Users.FindAsync(id);
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         [HttpGet("PerfTest")]
