@@ -30,7 +30,6 @@ namespace Server
                 // config made with the JSON provider.
                 .AddEntityFrameworkConfig(options =>
                     options.UseSqlServer(connectionStringConfig.GetConnectionString("AzureSqlConnection"))
-
                 );
             Configuration = config.Build();
         }
@@ -45,19 +44,17 @@ namespace Server
         {
             // Add services to the collection.
             services.AddMvc();
+            services.AddEntityFrameworkSqlServer();
+            services.AddDbContext<MyCommunityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection")));
 
             // Create the container builder.
             var builder = new ContainerBuilder();
-
 
             // Register dependencies, populate the services from
             // the collection, and build the container. If you want
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
-
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder();
-            dbContextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection"));
-            builder.Register(x => new ConfigurationContext(dbContextOptionsBuilder.Options)).As<IConfigurationContext>().InstancePerLifetimeScope();
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
 

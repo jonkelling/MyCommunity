@@ -9,9 +9,9 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IConfigurationContext _configurationContext;
+        private readonly IMyCommunityContext _configurationContext;
 
-        public ValuesController(IConfigurationContext configurationContext)
+        public ValuesController(IMyCommunityContext configurationContext)
         {
             this._configurationContext = configurationContext;
         }

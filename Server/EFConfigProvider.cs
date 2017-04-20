@@ -18,10 +18,10 @@ namespace Server
         // Load config data from EF DB.
         public override void Load()
         {
-            var builder = new DbContextOptionsBuilder<ConfigurationContext>();
+            var builder = new DbContextOptionsBuilder<MyCommunityContext>();
             OptionsAction(builder);
 
-            using (var dbContext = new ConfigurationContext(builder.Options))
+            using (var dbContext = new MyCommunityContext(builder.Options))
             {
                 dbContext.Database.EnsureCreated();
                 Data = !dbContext.Values.Any()
@@ -31,7 +31,7 @@ namespace Server
         }
 
         private static IDictionary<string, string> CreateAndSaveDefaultValues(
-            ConfigurationContext dbContext)
+            MyCommunityContext dbContext)
         {
             var configValues = new Dictionary<string, string>
                 {

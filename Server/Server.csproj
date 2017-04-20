@@ -15,5 +15,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1"/>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.0.0"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0"/>
   </ItemGroup>
 </Project>
