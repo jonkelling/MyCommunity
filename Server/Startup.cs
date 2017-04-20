@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Server.Data;
 
 namespace Server
 {
@@ -14,23 +15,11 @@ namespace Server
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            var connectionStringConfig = builder.Build();
-
             var config = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables()
-                // Add the EF configuration provider, which will override any
-                // config made with the JSON provider.
-                .AddEntityFrameworkConfig(options =>
-                    options.UseSqlServer(connectionStringConfig.GetConnectionString("AzureSqlConnection"))
-                );
+                .AddEnvironmentVariables();
             Configuration = config.Build();
         }
 
@@ -44,7 +33,8 @@ namespace Server
         {
             // Add services to the collection.
             services.AddMvc();
-            services.AddEntityFrameworkSqlServer();
+            services.AddApiVersioning();
+            // services.AddEntityFrameworkSqlServer();
             services.AddDbContext<MyCommunityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection")));
 
@@ -55,6 +45,8 @@ namespace Server
             // the collection, and build the container. If you want
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
+            builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
+
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
 
@@ -75,9 +67,30 @@ namespace Server
 
             app.UseMvc();
 
+            RunEfMigrations(app);
+
             // If you want to dispose of resources that have been resolved in the
             // application container, register for the "ApplicationStopped" event.
             appLifetime.ApplicationStopped.Register(() => this.ApplicationContainer.Dispose());
+        }
+
+        private static void RunEfMigrations(IApplicationBuilder app)
+        {
+            try
+            {
+                using (var serviceScope = app.ApplicationServices
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<MyCommunityContext>()
+                        .Database.Migrate();
+                }
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+                var stacktrace = e.StackTrace;
+            }
         }
     }
 }

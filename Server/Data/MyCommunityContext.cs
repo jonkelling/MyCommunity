@@ -1,9 +1,7 @@
-using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
+using Server.Core;
 
-namespace Server
+namespace Server.Data
 {
 
     public class MyCommunityContext : DbContext, IMyCommunityContext
@@ -12,6 +10,7 @@ namespace Server
         {
         }
 
-        public DbSet<ConfigurationValue> Values { get; set; }
+        public DbSet<Community> Communities { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
