@@ -1,12 +1,12 @@
 
 import * as constants from "../constants/index";
-const {PUSH} = require("redux-little-router");
+// const {PUSH} = require("redux-little-router");
 
 export function updateContactInformation(contactInfo: any) {
     return (dispatch, getState) => {
         dispatch({
             type: constants.UPDATE_CONTACT_INFORMATION,
-            data: contactInfo,
+            // data: contactInfo,
         });
     };
 }
@@ -19,4 +19,4 @@ export const LOGOUT = "LOGOUT";
 export const AUTHENTICATED = "AUTHENTICATED";
 export const FETCH_PROVIDERS = "FETCH_PROVIDERS";
 
-export const push = (path: string) => ({ type: PUSH, payload: path });
+// export const push = (path: string) => ({ type: PUSH, payload: path });

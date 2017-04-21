@@ -2513,7 +2513,7 @@ lodash@^3.5.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2719,15 +2719,9 @@ normalize-path@^2.0.1:
   dependencies:
     remove-trailing-separator "^1.0.1"
 
-normalizr@*, normalizr@^3.2.2:
+normalizr@*, "normalizr@^2.0.0 || ^3.0.0", normalizr@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.2.2.tgz#542e915a260ca53279b76a63fb554185e9225f90"
-
-normalizr@^2.0.0:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-2.3.1.tgz#ac12d771ce1fe6a43094c3d828caada4ed9a4540"
-  dependencies:
-    lodash "^4.17.2"
 
 npmlog@^2.0.4:
   version "2.0.4"
@@ -3230,12 +3224,12 @@ redux-logger@^3.0.1:
   dependencies:
     deep-diff "0.3.4"
 
-redux-normalizr-middleware@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/redux-normalizr-middleware/-/redux-normalizr-middleware-2.0.0.tgz#f67a4644b07964a639e809a68ec0285befc49b30"
+redux-normalizr3-middleware@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/redux-normalizr3-middleware/-/redux-normalizr3-middleware-2.0.1.tgz#26e0b566e6f9fcbc20a0d9f5ca92ec734764467e"
   dependencies:
     lodash "^4.0.0"
-    normalizr "^2.0.0"
+    normalizr "^2.0.0 || ^3.0.0"
 
 redux-thunk@^2.2.0:
   version "2.2.0"

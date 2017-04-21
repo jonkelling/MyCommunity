@@ -7,18 +7,22 @@
 import React from "react";
 import {
     AppRegistry,
+    Image,
     StyleSheet,
     Text,
     View,
 } from "react-native";
+import { Provider } from "react-redux";
 import DemoScreen from "./DemoScreen";
-import * as storeconfig from "./store/ConfigureStore.dev";
+import storeconfig from "./store/ConfigureStore.dev";
 
-export default class App extends React.Component<{}, { loggedin: boolean }> {
+export default class App extends React.Component<{}, { loggedin: boolean, profile: any, token: any }> {
     constructor(props) {
         super(props);
         this.state = {
             loggedin: false,
+            profile: null,
+            token: null,
         };
     }
     public componentWillMount() {
@@ -26,15 +30,15 @@ export default class App extends React.Component<{}, { loggedin: boolean }> {
             // tslint:disable-next-line:no-var-requires
             const Auth0Lock = require("react-native-lock");
             const lock = new Auth0Lock({
-                clientId: "z3vOGTlPy9haCCwotU_9OuVvsRLSDqjK",
+                clientId: "b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn",
                 domain: "mycommunity.auth0.com",
-                integrations: {
-                    facebook: {
-                        permissions: ["public_profile"],
-                    },
-                },
+                // integrations: {
+                //     facebook: {
+                //         permissions: ["public_profile"],
+                //     },
+                // },
             });
-            lock.show({}, (err, profile, token) => {
+            lock.show({closable: true}, (err, profile, token) => {
                 if (err) {
                     // tslint:disable-next-line:no-console
                     // console.log(err);
@@ -43,15 +47,27 @@ export default class App extends React.Component<{}, { loggedin: boolean }> {
                 // Authentication worked!
                 // tslint:disable-next-line:no-console
                 // console.log("Logged in with Auth0!");
-                this.setState({ loggedin: true });
+                this.setState({ loggedin: true, profile, token });
             });
         }
     }
     public render() {
+        const ProfileImage = () => {
+            if (!this.state.profile) { return null; }
+            if (!this.state.profile.picture) { return null; }
+            return <Image
+                style={{width: 50, height: 50}}
+                source={{uri: this.state.profile.picture}} />;
+        };
         return (
-            <View style={styles.container}>
-                <DemoScreen />
-            </View>
+            <Provider store={storeconfig}>
+                <View style={styles.container}>
+                    <Text>{this.state.profile && this.state.profile.email || "no email"}</Text>
+                    <Text>{(this.state.token || {}).toString()}</Text>
+                    <ProfileImage />
+                    <DemoScreen email={this.state.profile && this.state.profile.email || null} />
+                </View>
+            </Provider>
         );
     }
 }

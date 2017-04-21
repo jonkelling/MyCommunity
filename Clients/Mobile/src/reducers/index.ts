@@ -40,9 +40,10 @@ function handleApiResponseActions(handlers) {
     };
 }
 
-const entities = (state = {}, action) => {
+const entities = (state = {entities: {}}, action) => {
   if (action.payload && action.payload.entities) {
-    return { ...state, entities: action.payload.entities };
+    const newState = { ...state, ...action.payload.entities };
+    return newState;
   }
 
   return state;

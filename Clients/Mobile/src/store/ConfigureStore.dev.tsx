@@ -1,27 +1,27 @@
 ﻿import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
+import normalizrMiddleware from "redux-normalizr3-middleware";
 // import * as createLogger from 'redux-logger';
 import thunk from "redux-thunk";
 import rootReducer from "../reducers/index";
 // import DevTools from "../containers/DevTools";
 // import api from "../middleware/api";
 // import auth from "../middleware/auth";
-import * as schemas from "../schemas";
+import schemas from "../schemas";
 
 // tslint:disable:no-var-requires
-const { apiMiddleware } = require("redux-api-middleware");
-const normalizrMiddleware = require("redux-normalizr-middleware").default;
+// const { apiMiddleware } = require("redux-api-middleware");
 // tslint:enable:no-var-requires
 
 // See reducers.ts before changing anything
 
 declare const module: any;
 
-export default (preloadedState?: any) => {
+const storeConfig = (preloadedState?: any) => {
     const store = configureStore(
         compose(
             applyMiddleware(
                 // auth,
-                apiMiddleware,
+                // apiMiddleware,
                 normalizrMiddleware(),
                 // api,
                 thunk,
@@ -34,6 +34,8 @@ export default (preloadedState?: any) => {
 
     return store;
 };
+
+export default storeConfig({});
 
 function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any) {
 
@@ -48,7 +50,7 @@ function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers
-        module.hot.accept("../reducers/index", () => {
+        module.hot.accept(() => {
             const nextRootReducer = require("../reducers/index").default;
             store.replaceReducer(nextRootReducer);
         });

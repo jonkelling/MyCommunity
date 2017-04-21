@@ -23,7 +23,7 @@
 		"redux-actions": "^2.0.1",
 		"redux-api-middleware": "^1.0.2",
 		"redux-logger": "^3.0.1",
-		"redux-normalizr-middleware": "^2.0.0",
+		"redux-normalizr3-middleware": "^2.0.1",
 		"redux-thunk": "^2.2.0"
 	},
 	"devDependencies": {

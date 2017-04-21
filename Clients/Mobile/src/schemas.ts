@@ -1,28 +1,15 @@
 import { schema } from "normalizr";
 
-export const account = new schema.Entity("accounts");
-export const member = new schema.Entity("members");
-export const person = new schema.Entity("people");
-export const client = new schema.Entity("clients");
-export const teamMember = new schema.Entity("teamMembers");
-export const phrase = new schema.Entity("phrases");
+export const user = new schema.Entity("users");
+export const community = new schema.Entity("communities");
 
-account.define({
-  clients: [ client ],
-  owner: member,
+user.define({
+  community,
 });
 
-teamMember.define({
-    member,
-    client,
+community.define({
+    users: [ user ],
 });
 
-phrase.define({
-    client,
-});
-
-client.define({
-    account,
-    phrases: [ phrase ],
-    teamMembers: [ teamMember ],
-});
+export const userList = new schema.Array(user);
+export const communityList = new schema.Array(community);
