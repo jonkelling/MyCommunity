@@ -1,13 +1,11 @@
-namespace Server.Core
+namespace Server.Model
 {
-    public class User
+    public class UserVm
     {
         public int Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? CommunityId { get; set; }
-        public Community Community { get; set; }
-        public UserRole UserRole { get; set; }
     }
 }

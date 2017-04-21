@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Server.Data;
 
@@ -34,9 +38,14 @@ namespace Server
             // Add services to the collection.
             services.AddMvc();
             services.AddApiVersioning();
-            // services.AddEntityFrameworkSqlServer();
+            services.AddAutoMapper(config => {
+                config.AddProfile<UIMapperProfile>();
+            });
             services.AddDbContext<MyCommunityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection")));
+
+            services.AddScoped<IMapper>(sp => 
+                new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -46,7 +55,7 @@ namespace Server
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
             builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
-
+            
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
 

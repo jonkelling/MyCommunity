@@ -1,53 +1,57 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Server.Core;
+using Server.Model;
 
 namespace Server.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
-        private readonly IMyCommunityContext _dbContext;
+        public UsersController(IMyCommunityContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        { }
 
-        public UsersController(IMyCommunityContext dbContext)
-        {
-            this._dbContext = dbContext;
-        }
-
-        // GET api/values
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _dbContext.Users.ToAsyncEnumerable().ToList());
+            var results = _dbContext.Users;
+            return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _dbContext.Users.FindAsync(id));
+            return Ok(_mapper.Map<UserVm>(await _dbContext.Users.FindAsync(id)));
         }
 
-        // POST api/values
+        [HttpGet]
+        public async Task<IActionResult> Get([RequiredFromQuery]string email)
+        {
+            var results = from x in _dbContext.Users
+                          where x.Email == email
+                          select x;
+            return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
+        }
+
         [HttpPost]
-        public async Task Post([FromBody]User value)
+        public async Task Post([FromBody]UserVm value)
         {
-            await _dbContext.Users.AddAsync(value);
+            await _dbContext.Users.AddAsync(_mapper.Map<User>(value));
             await _dbContext.SaveChangesAsync();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]User value)
+        public async Task Put(int id, [FromBody]UserVm value)
         {
-            _dbContext.Users.Update(value);
+            _dbContext.Users.Update(_mapper.Map<User>(value));
             await _dbContext.SaveChangesAsync();
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
@@ -57,19 +61,15 @@ namespace Server.Controllers
         }
 
         [HttpGet("PerfTest")]
-        public async Task<IEnumerable<string>> PerfTestAsync()
+        public async Task<IActionResult> PerfTestAsync()
         {
-            return from x in await _dbContext.Users.ToAsyncEnumerable().ToList()
-                   from y in new[] { x.Email }
-                   select y;
+            return Ok(_mapper.Map<IEnumerable<UserVm>>(await _dbContext.Users.ToListAsync()));
         }
 
         [HttpGet("PerfTestOld")]
-        public IEnumerable<string> PerfTest()
+        public IActionResult PerfTest()
         {
-            return from x in _dbContext.Users.ToList()
-                   from y in new[] { x.Email }
-                   select y;
+            return Ok(_mapper.Map<IEnumerable<UserVm>>(_dbContext.Users.ToList()));
         }
     }
 }
