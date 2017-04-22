@@ -3,17 +3,35 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [{
+            "name": "Debug Android",
+            "program": "${workspaceRoot}/.vscode/launchReactNative.js",
+            "type": "reactnative",
+            "request": "launch",
+            "platform": "android",
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/.vscode/.react",
+            "preLaunchTask": "watch"
+        },
         {
             "name": "Debug iOS",
-            "preLaunchTask": "tsc",
             "program": "${workspaceRoot}/.vscode/launchReactNative.js",
             "type": "reactnative",
             "request": "launch",
             "platform": "ios",
-            "sourceMaps": true,
             "target": "iPhone 5s",
-            "outDir": "${workspaceRoot}/.vscode/.react"
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/.vscode/.react",
+            "preLaunchTask": "watch"
+        },
+        {
+            "name": "Attach to packager",
+            "program": "${workspaceRoot}/.vscode/launchReactNative.js",
+            "type": "reactnative",
+            "request": "attach",
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/.vscode/.react",
+            "preLaunchTask": "watch"
         }
     ]
 }

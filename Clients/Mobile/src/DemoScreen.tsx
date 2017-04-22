@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 // tslint:disable-next-line:ordered-imports
 import { user, community } from "./schemas";
+// tslint:disable-next-line:no-var-requires
+const { CALL_API } = require("redux-api-middleware");
 
 class DemoScreen extends React.Component<{ email: string, entities: any, actions: any }, {}> {
     public componentWillMount() {
@@ -73,21 +75,35 @@ function mapDispatchToProps(dispatch2, ownProps) {
             },
             loadUsers: (email) => async (dispatch) => {
                 const endpoint = `http://localhost:5000/api/v1/users?email=${email}`;
-                try {
-                    // Make the API call
-                    const response = await fetch(endpoint);
-                    const json = await response.json();
-                    dispatch({
-                        meta: {
-                            schema: [user],
-                        },
-                        payload: json,
-                        type: "SUCCESS",
-                    });
-                } catch (e) {
-                    // The request was malformed, or there was a network error
-                    return;
-                }
+                dispatch({
+                    [CALL_API]: {
+                        endpoint,
+                        method: "GET",
+                        types: [
+                            {
+                                meta: { source: "users" },
+                                type: "REQUEST",
+                            },
+                            "SUCCESS",
+                            "FAILURE",
+                        ],
+                    },
+                });
+                // try {
+                //     // Make the API call
+                //     const response = await fetch(endpoint);
+                //     const json = await response.json();
+                //     dispatch({
+                //         meta: {
+                //             schema: [user],
+                //         },
+                //         payload: json,
+                //         type: "SUCCESS",
+                //     });
+                // } catch (e) {
+                //     // The request was malformed, or there was a network error
+                //     return;
+                // }
             },
         }), dispatch2),
     };

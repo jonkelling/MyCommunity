@@ -1,22 +1,26 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "target": "es6",
+        "target": "es2015",
+        "module": "es2015",
         "forceConsistentCasingInFileNames": true,
         "pretty": true,
         "allowJs": true,
-        "module": "es6",
-        "moduleResolution": "node",
+        "moduleResolution": "classic",
         "jsx": "react",
         "outDir": "build",
         "rootDir": "src",
         "experimentalDecorators": true,
         "stripInternal": true,
-        "sourceMap": true,
-        "inlineSourceMap": false,
+        "inlineSourceMap": true,
         "noImplicitAny": false,
         "allowSyntheticDefaultImports": true,
+        "sourceRoot": "src",
         "typeRoots": [
+            "node_modules/redux-api-middleware",
+            "node_modules/redux-normalizr3-middleware",
+            "node_modules/normalizr",
+            "node_modules/redux",
             "node_modules/@types",
             "typings/globals"
         ]
@@ -25,9 +29,6 @@
         "enable": true
     },
     "include": [
-        "node_modules/normalizr/**/*.d.ts",
-        "node_modules/redux/**/*.d.ts",
-        "node_modules/redux-thunk/**/*.d.ts",
         "src/**/*.ts",
         "src/**/*.tsx"
     ],

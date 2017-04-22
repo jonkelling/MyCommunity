@@ -1,4 +1,5 @@
 ﻿import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
+const { apiMiddleware } = require("redux-api-middleware");
 import normalizrMiddleware from "redux-normalizr3-middleware";
 // import * as createLogger from 'redux-logger';
 import thunk from "redux-thunk";
@@ -21,7 +22,7 @@ const storeConfig = (preloadedState?: any) => {
         compose(
             applyMiddleware(
                 // auth,
-                // apiMiddleware,
+                apiMiddleware,
                 normalizrMiddleware(),
                 // api,
                 thunk,
