@@ -56,3 +56,8 @@ fastlane/screenshots
 # dotnet
 bin/
 obj/
+
+# React Native
+.vscode/debuggerWorker.js
+.vscode/index.ios.bundle
+.vscode/index.ios.map
