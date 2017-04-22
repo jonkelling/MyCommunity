@@ -58,6 +58,6 @@ bin/
 obj/
 
 # React Native
-.vscode/debuggerWorker.js
-.vscode/index.ios.bundle
-.vscode/index.ios.map
+**/.vscode/.react/debuggerWorker.js
+**/.vscode/.react/index.ios.bundle
+**/.vscode/.react/index.ios.map
