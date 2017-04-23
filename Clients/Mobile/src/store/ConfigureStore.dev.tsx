@@ -1,23 +1,22 @@
-﻿import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
+﻿// tslint:disable:no-var-requires
+import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
 const { apiMiddleware } = require("redux-api-middleware");
-import normalizrMiddleware from "redux-normalizr3-middleware";
+const normalizrMiddleware = require("redux-normalizr3-middleware").default;
 // import * as createLogger from 'redux-logger';
-import thunk from "redux-thunk";
+const thunk = require("redux-thunk").default;
 import rootReducer from "../reducers/index";
 // import DevTools from "../containers/DevTools";
 // import api from "../middleware/api";
 // import auth from "../middleware/auth";
 import schemas from "../schemas";
 
-// tslint:disable:no-var-requires
 // const { apiMiddleware } = require("redux-api-middleware");
-// tslint:enable:no-var-requires
 
 // See reducers.ts before changing anything
 
 declare const module: any;
 
-const storeConfig = (preloadedState?: any) => {
+export default function storeConfig(preloadedState?: any) {
     const store = configureStore(
         compose(
             applyMiddleware(
@@ -34,9 +33,7 @@ const storeConfig = (preloadedState?: any) => {
     );
 
     return store;
-};
-
-export default storeConfig({});
+}
 
 function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any) {
 

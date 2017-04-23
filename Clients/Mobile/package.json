@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "node node_modules/react-native/local-cli/cli.js start --skipflow",
+        "start": "node node_modules/react-native/local-cli/cli.js start --transformer node_modules/react-native-sm-transformer --skipflow",
         "android": "adb reverse tcp:8081 tcp:8081 && node node_modules/react-native/local-cli/cli.js run-android",
         "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
         "prebuild": "rm -rf build",
@@ -13,28 +13,30 @@
     },
     "dependencies": {
         "@types/immutability-helper": "^2.0.15",
-        "@types/normalizr": "^2.0.18",
+        "@types/lodash": "^4.14.63",
         "@types/react": "^15.0.21",
         "@types/react-native": "^0.43.0",
         "@types/react-redux": "^4.4.38",
         "@types/redux-actions": "^1.2.3",
         "immutability-helper": "^2.1.2",
         "normalizr": "^3.2.2",
-        "react": "16.0.0-alpha.6",
-        "react-native": "^0.43.3",
+        "react": "~15.4.0",
+        "react-native": "0.41.2",
+        "react-native-button": "^1.7.1",
         "react-native-lock": "^0.6.0",
         "react-redux": "^5.0.4",
         "redux": "^3.6.0",
         "redux-actions": "^2.0.1",
         "redux-logger": "^3.0.1",
         "redux-normalizr3-middleware": "^2.0.1",
-        "redux-thunk": "^2.2.0",
+        "redux-thunk": "^2.1.0",
         "typescript": "2.2.2"
     },
     "devDependencies": {
         "babel-jest": "19.0.0",
         "babel-preset-react-native": "1.9.1",
         "jest": "19.0.2",
+        "react-native-sm-transformer": "^1.0.3",
         "react-test-renderer": "16.0.0-alpha.6"
     },
     "jest": {

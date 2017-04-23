@@ -11,7 +11,7 @@
             "platform": "android",
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/.vscode/.react",
-            "preLaunchTask": "watch"
+            "preLaunchTask": "tsc"
         },
         {
             "name": "Debug iOS",
@@ -22,7 +22,7 @@
             "target": "iPhone 5s",
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/.vscode/.react",
-            "preLaunchTask": "watch"
+            "preLaunchTask": "tsc"
         },
         {
             "name": "Attach to packager",
@@ -31,7 +31,7 @@
             "request": "attach",
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/.vscode/.react",
-            "preLaunchTask": "watch"
+            "preLaunchTask": "tsc"
         }
     ]
 }

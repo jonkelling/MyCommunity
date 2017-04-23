@@ -1,4 +1,5 @@
 import update from "immutability-helper";
+// import { merge } from "lodash";
 import {
     applyMiddleware,
     combineReducers,
@@ -40,10 +41,10 @@ function handleApiResponseActions(handlers) {
     };
 }
 
-const entities = (state = {entities: {}}, action) => {
+const entities = (state = {}, action) => {
   if (action.payload && action.payload.entities) {
-    const newState = { ...state, ...action.payload.entities };
-    return newState;
+    // return merge({}, state, action.payload.entities);
+    return { ...state, ...action.payload.entities };
   }
 
   return state;

@@ -14,9 +14,10 @@ import {
 } from "react-native";
 import { Provider } from "react-redux";
 import DemoScreen from "./DemoScreen";
-import storeconfig from "./store/ConfigureStore.dev";
+import storeConfig from "./store/ConfigureStore.dev";
 
 export default class App extends React.Component<{}, { loggedin: boolean, profile: any, token: any }> {
+    private storeConfig: any;
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +25,7 @@ export default class App extends React.Component<{}, { loggedin: boolean, profil
             profile: null,
             token: null,
         };
+        this.storeConfig = storeConfig({});
     }
     public componentWillMount() {
         if (!this.state.loggedin) {
@@ -60,7 +62,7 @@ export default class App extends React.Component<{}, { loggedin: boolean, profil
                 source={{uri: this.state.profile.picture}} />;
         };
         return (
-            <Provider store={storeconfig}>
+            <Provider store={this.storeConfig}>
                 <View style={styles.container}>
                     <Text>{this.state.profile && this.state.profile.email || "no email"}</Text>
                     <Text>{(this.state.token || {}).toString()}</Text>

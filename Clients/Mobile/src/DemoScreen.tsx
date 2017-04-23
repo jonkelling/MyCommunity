@@ -7,7 +7,7 @@ import {
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 // tslint:disable-next-line:ordered-imports
-import { user, community } from "./schemas";
+import { community, communityList, user, userList } from "./schemas";
 // tslint:disable-next-line:no-var-requires
 const { CALL_API } = require("redux-api-middleware");
 
@@ -57,21 +57,20 @@ function mapDispatchToProps(dispatch2, ownProps) {
         actions: bindActionCreators(({
             loadCommunity: (id) => async (dispatch) => {
                 const endpoint = `http://localhost:5000/api/v1/communities/${id}`;
-                try {
-                    // Make the API call
-                    const response = await fetch(endpoint);
-                    const json = await response.json();
-                    dispatch({
-                        meta: {
-                            schema: community,
-                        },
-                        payload: json,
-                        type: "SUCCESS",
-                    });
-                } catch (e) {
-                    // The request was malformed, or there was a network error
-                    return;
-                }
+                dispatch({
+                    [CALL_API]: {
+                        endpoint,
+                        method: "GET",
+                        types: [
+                            "REQUEST",
+                            {
+                                meta: { schema: communityList },
+                                type: "SUCCESS",
+                            },
+                            "FAILURE",
+                        ],
+                    },
+                });
             },
             loadUsers: (email) => async (dispatch) => {
                 const endpoint = `http://localhost:5000/api/v1/users?email=${email}`;
@@ -80,30 +79,17 @@ function mapDispatchToProps(dispatch2, ownProps) {
                         endpoint,
                         method: "GET",
                         types: [
+                            "REQUEST",
                             {
-                                meta: { source: "users" },
-                                type: "REQUEST",
+                                meta: { schema: userList },
+                                type: "SUCCESS",
                             },
-                            "SUCCESS",
-                            "FAILURE",
+                            {
+                                type: "FAILURE",
+                            },
                         ],
                     },
                 });
-                // try {
-                //     // Make the API call
-                //     const response = await fetch(endpoint);
-                //     const json = await response.json();
-                //     dispatch({
-                //         meta: {
-                //             schema: [user],
-                //         },
-                //         payload: json,
-                //         type: "SUCCESS",
-                //     });
-                // } catch (e) {
-                //     // The request was malformed, or there was a network error
-                //     return;
-                // }
             },
         }), dispatch2),
     };

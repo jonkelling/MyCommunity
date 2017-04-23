@@ -1,8 +1,8 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "target": "es2015",
-        "module": "es2015",
+        "target": "es6",
+        "module": "es6",
         "forceConsistentCasingInFileNames": true,
         "pretty": true,
         "allowJs": true,
@@ -21,6 +21,7 @@
             "node_modules/redux-normalizr3-middleware",
             "node_modules/normalizr",
             "node_modules/redux",
+            "node_modules/redux-thunk",
             "node_modules/@types",
             "typings/globals"
         ]
