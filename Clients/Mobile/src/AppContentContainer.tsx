@@ -1,10 +1,54 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
+import { Store } from "redux";
+import AuthService from "./auth/AuthService";
+import * as jwtHelper from "./auth/jwtHelper";
+import DemoScreen from "./DemoScreen";
 
-class AppContentContainer extends React.Component<{ app: any, accessToken: string }, {}> {
+class AppContentContainer extends React.Component<{ app: any, accessToken: string, store: Store<any> }, {}> {
+    private authService: AuthService;
+    constructor(props) {
+        super(props);
+        this.authService = new AuthService(this.props.store);
+    }
+    public componentWillMount() {
+        this.loginIfNeeded(this.props);
+    }
+    public componentWillReceiveProps(nextProps: any) {
+        this.loginIfNeeded(nextProps);
+    }
     public render() {
-        return <View style={styles.container}>{this.props.children}</View>;
+        if (this.props.app.loading) {
+            return null;
+        }
+        const ProfileImage = () => {
+            if (!this.props.app.profile) { return null; }
+            if (!this.props.app.profile.picture) { return null; }
+            return <Image
+                style={{ width: 50, height: 50 }}
+                source={{ uri: this.props.app.profile.picture }} />;
+        };
+        return (
+            <View style={styles.container}>
+                <ProfileImage />
+                <Text>{this.props.app.profile && this.props.app.profile.email || "no email"}</Text>
+                <Button
+                    onPress={() => this.authService.logout()}
+                    title="Logout Button">Logout</Button>
+                <DemoScreen email={this.props.app.profile && this.props.app.profile.email || null} />
+                {this.props.children}
+            </View>
+        );
+    }
+    private loginIfNeeded(props: any) {
+        if (props.app.loading) {
+            // Maybe skip this component until loading is done?
+            return;
+        }
+        if (!props.app.idToken || jwtHelper.isTokenExpired(props.app.idToken)) {
+            this.authService.login();
+        }
     }
 }
 
@@ -27,7 +71,7 @@ const styles: any = StyleSheet.create({
     },
 });
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any, ownProps: any) => {
     return ({
         accessToken: "",
         app: state.app,

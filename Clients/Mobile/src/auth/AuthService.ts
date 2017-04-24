@@ -17,13 +17,15 @@ export default class AuthService {
         this.login = this.login.bind(this);
     }
 
-    public login(callback: any) {
+    public login(callback?: any) {
         // Call the show method to display the widget.
         this.lock.show({}, (err, profile, token) => {
             if (!err) {
                 this._doAuthentication(token);
             }
-            callback(err, profile, token);
+            if (callback) {
+                callback(err, profile, token);
+            }
         });
     }
 
@@ -41,8 +43,7 @@ export default class AuthService {
     public getToken() {
         // Retrieves the user token from local storage
         // return AsyncStorage.getItem("id_token");
-        const state = this.store.getState();
-        return "nothingyet";
+        return this.store.getState().app.idToken;
     }
 
     public logout() {
