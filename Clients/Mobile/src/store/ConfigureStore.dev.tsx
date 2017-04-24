@@ -4,6 +4,8 @@ const { apiMiddleware } = require("redux-api-middleware");
 const normalizrMiddleware = require("redux-normalizr3-middleware").default;
 // import * as createLogger from 'redux-logger';
 const thunk = require("redux-thunk").default;
+import { AsyncStorage } from "react-native";
+import { autoRehydrate, persistStore } from "redux-persist";
 import rootReducer from "../reducers/index";
 // import DevTools from "../containers/DevTools";
 // import api from "../middleware/api";
@@ -27,6 +29,7 @@ export default function storeConfig(preloadedState?: any) {
                 thunk,
                 // createLogger(),
             ),
+            autoRehydrate(),
             // DevTools.instrument(),
         ),
         preloadedState,
@@ -45,6 +48,8 @@ function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any
             // DevTools.instrument()
         ),
     );
+
+    persistStore(store, { storage: AsyncStorage });
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers

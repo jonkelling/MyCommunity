@@ -21,6 +21,7 @@
             "node_modules/redux-normalizr3-middleware",
             "node_modules/normalizr",
             "node_modules/redux",
+            "node_modules/redux-persist",
             "node_modules/redux-thunk",
             "node_modules/@types",
             "typings/globals"

@@ -27,6 +27,12 @@ const app = handleActions(
             }
             return state;
         },
+        // REMOVE_AUTH_TOKEN: (state, action) => {
+        //     return state;
+        // },
+        // SET_AUTH_TOKEN: (state, action) => {
+        //     return state;
+        // },
     }, {
         authenticated: true,
     },

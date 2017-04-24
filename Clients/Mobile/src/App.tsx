@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from "react";
 import {
     AppRegistry,
@@ -13,11 +7,15 @@ import {
     View,
 } from "react-native";
 import { Provider } from "react-redux";
+import { Store } from "redux";
+import AppContentContainer from "./AppContentContainer";
+import AuthService from "./auth/AuthService";
 import DemoScreen from "./DemoScreen";
 import storeConfig from "./store/ConfigureStore.dev";
 
 export default class App extends React.Component<{}, { loggedin: boolean, profile: any, token: any }> {
-    private storeConfig: any;
+    private store: Store<any>;
+    private authService: AuthService;
     constructor(props) {
         super(props);
         this.state = {
@@ -25,25 +23,17 @@ export default class App extends React.Component<{}, { loggedin: boolean, profil
             profile: null,
             token: null,
         };
-        this.storeConfig = storeConfig({});
+        this.store = storeConfig({});
+        this.authService = new AuthService(this.store);
     }
     public componentWillMount() {
         if (!this.state.loggedin) {
             // tslint:disable-next-line:no-var-requires
-            const Auth0Lock = require("react-native-lock");
-            const lock = new Auth0Lock({
-                clientId: "b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn",
-                domain: "mycommunity.auth0.com",
-                // integrations: {
-                //     facebook: {
-                //         permissions: ["public_profile"],
-                //     },
-                // },
-            });
-            lock.show({closable: true}, (err, profile, token) => {
+            this.authService.login((err, profile, token) => {
                 if (err) {
                     // tslint:disable-next-line:no-console
                     // console.log(err);
+                    this.setState({ loggedin: false, profile: null, token: null });
                     return;
                 }
                 // Authentication worked!
@@ -58,17 +48,19 @@ export default class App extends React.Component<{}, { loggedin: boolean, profil
             if (!this.state.profile) { return null; }
             if (!this.state.profile.picture) { return null; }
             return <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.profile.picture}} />;
+                style={{ width: 50, height: 50 }}
+                source={{ uri: this.state.profile.picture }} />;
         };
         return (
-            <Provider store={this.storeConfig}>
-                <View style={styles.container}>
-                    <Text>{this.state.profile && this.state.profile.email || "no email"}</Text>
-                    <Text>{(this.state.token || {}).toString()}</Text>
-                    <ProfileImage />
-                    <DemoScreen email={this.state.profile && this.state.profile.email || null} />
-                </View>
+            <Provider store={this.store}>
+                <AppContentContainer>
+                    <View style={styles.container}>
+                        <Text>{this.state.profile && this.state.profile.email || "no email"}</Text>
+                        <Text>{(this.state.token || {}).toString()}</Text>
+                        <ProfileImage />
+                        <DemoScreen email={this.state.profile && this.state.profile.email || null} />
+                    </View>
+                </AppContentContainer>
             </Provider>
         );
     }

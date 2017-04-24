@@ -29,6 +29,7 @@
         "redux-actions": "^2.0.1",
         "redux-logger": "^3.0.1",
         "redux-normalizr3-middleware": "^2.0.1",
+        "redux-persist": "^4.6.0",
         "redux-thunk": "^2.1.0",
         "typescript": "2.2.2"
     },
