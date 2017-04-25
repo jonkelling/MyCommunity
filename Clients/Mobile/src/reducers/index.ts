@@ -31,7 +31,7 @@ const app = handleActions(
         [REHYDRATE]: (state, action: any) => {
             const incoming = action.payload.app;
             if (incoming) { return { ...state, ...incoming, loading: false }; }
-            return state;
+            return { ...state, loading: false };
         },
         REMOVE_AUTH_TOKEN: (state, action) => {
             if (action.payload) {

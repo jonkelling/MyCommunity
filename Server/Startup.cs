@@ -38,14 +38,31 @@ namespace Server
             // Add services to the collection.
             services.AddMvc();
             services.AddApiVersioning();
-            services.AddAutoMapper(config => {
+            services.AddAutoMapper(config =>
+            {
                 config.AddProfile<UIMapperProfile>();
             });
             services.AddDbContext<MyCommunityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection")));
 
-            services.AddScoped<IMapper>(sp => 
+            services.AddScoped<IMapper>(sp =>
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
+
+            // Auth stuff
+            var domain = $"https://{Configuration["Auth0:Domain"]}/";
+            var scopes = new[] {
+                "read:users",
+                "create:users",
+                "update:users",
+                "delete:users",
+            };
+            services.AddAuthorization(options =>
+            {
+                foreach (var scope in scopes)
+                {
+                    options.AddPolicy(scope, policy => policy.Requirements.Add(new HasScopeRequirement(scope, domain)));
+                }
+            });
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -55,7 +72,7 @@ namespace Server
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
             builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
-            
+
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
 
@@ -77,6 +94,13 @@ namespace Server
             app.UseMvc();
 
             RunEfMigrations(app);
+
+            var options = new JwtBearerOptions
+            {
+                Audience = Configuration["Auth0:ApiIdentifier"],
+                Authority = $"https://{Configuration["Auth0:Domain"]}/"
+            };
+            app.UseJwtBearerAuthentication(options);
 
             // If you want to dispose of resources that have been resolved in the
             // application container, register for the "ApplicationStopped" event.

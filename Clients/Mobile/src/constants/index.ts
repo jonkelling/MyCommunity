@@ -5,7 +5,7 @@ export const TESTING = "TEST abc 123 DEF fdsafdsa";
 export const LOGO = "http://www.affirmativeselftalk.com/wp-content/uploads/2016/10/Logo.png";
 export const ColorTheme = {
     Primary: "rgba(81,239,201,0.99)",
-    Secondary: "rgba(81, 239, 201, 1)"
+    Secondary: "rgba(81, 239, 201, 1)",
 };
 
 export const __AUTH0_CLIENT_ID__ = "36K2ZypGbSrL9HhksOhfUSvYT6q8OdK1";
