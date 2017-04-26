@@ -67,10 +67,7 @@ function mapDispatchToProps(dispatch2, ownProps) {
                                 meta: { schema: communityList },
                                 type: "SUCCESS",
                             },
-                            {
-                                meta: { source: "loadcommunities" },
-                                type: "FAILURE",
-                            },
+                            "FAILURE",
                         ],
                     },
                 });
@@ -87,21 +84,7 @@ function mapDispatchToProps(dispatch2, ownProps) {
                                 meta: { schema: userList },
                                 type: "SUCCESS",
                             },
-                            {
-                                meta: (action, state, res) => {
-                                    if (res) {
-                                        return {
-                                            status: res.status,
-                                            statusText: res.statusText,
-                                        };
-                                    } else {
-                                        return {
-                                            status: "Network request failed",
-                                        };
-                                    }
-                                },
-                                type: "FAILURE",
-                            },
+                            "FAILURE",
                         ],
                     },
                 });
