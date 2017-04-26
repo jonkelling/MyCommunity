@@ -20,6 +20,7 @@
     <PackageReference Include="AutoMapper" Version="6.0.2"/>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="2.0.1"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.1"/>
+    <PackageReference Include="FubarCoder.RestSharp.Portable.HttpClient" Version="4.0.8"/>
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0"/>

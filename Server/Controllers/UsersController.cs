@@ -11,13 +11,13 @@ using Server.Model;
 namespace Server.Controllers
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController : BaseController
     {
         public UsersController(IMyCommunityContext dbContext, IMapper mapper) : base(dbContext, mapper)
         { }
 
-        [Authorize("read:users")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -25,24 +25,22 @@ namespace Server.Controllers
             return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
         }
 
-        [Authorize("read:users")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(_mapper.Map<UserVm>(await _dbContext.Users.FindAsync(id)));
         }
 
-        [Authorize("read:users")]
         [HttpGet]
         public async Task<IActionResult> Get([RequiredFromQuery]string email)
         {
             var results = from x in _dbContext.Users
                           where x.Email == email
                           select x;
+            var profile = await new Auth0Service().GetTokenInfo(this.Request.Headers["Authorization"][0].Remove(0, "Bearer ".Length));
             return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
         }
 
-        [Authorize("create:users")]
         [HttpPost]
         public async Task Post([FromBody]UserVm value)
         {
@@ -50,7 +48,6 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
-        [Authorize("update:users")]
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody]UserVm value)
         {
@@ -58,7 +55,6 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
-        [Authorize("delete:users")]
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {

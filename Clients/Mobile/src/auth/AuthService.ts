@@ -22,8 +22,10 @@ export default class AuthService {
         this.lock.show({}, (err, profile, token) => {
             if (!err) {
                 this._doAuthentication(token);
+                this.store.dispatch({ type: "SET_AUTH_PROFILE", payload: profile });
             }
             if (callback) {
+                this.store.dispatch({ type: "AUTH_LOGIN_FAILED", payload: err });
                 callback(err, profile, token);
             }
         });

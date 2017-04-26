@@ -35,7 +35,13 @@ const app = handleActions(
         },
         REMOVE_AUTH_TOKEN: (state, action) => {
             if (action.payload) {
-                return { ...state, idToken: null };
+                return { ...state, idToken: null, profile: null };
+            }
+            return state;
+        },
+        SET_AUTH_PROFILE: (state, action) => {
+            if (action.payload) {
+                return { ...state, profile: action.payload };
             }
             return state;
         },

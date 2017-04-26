@@ -48,21 +48,21 @@ namespace Server
             services.AddScoped<IMapper>(sp =>
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
-            // Auth stuff
-            var domain = $"https://{Configuration["Auth0:Domain"]}/";
-            var scopes = new[] {
-                "read:users",
-                "create:users",
-                "update:users",
-                "delete:users",
-            };
-            services.AddAuthorization(options =>
-            {
-                foreach (var scope in scopes)
-                {
-                    options.AddPolicy(scope, policy => policy.Requirements.Add(new HasScopeRequirement(scope, domain)));
-                }
-            });
+            // Auth stuff (scopes)
+            // var domain = $"https://{Configuration["Auth0:Domain"]}/";
+            // var scopes = new[] {
+            //     "read:users",
+            //     "create:users",
+            //     "update:users",
+            //     "delete:users",
+            // };
+            // services.AddAuthorization(options =>
+            // {
+            //     foreach (var scope in scopes)
+            //     {
+            //         options.AddPolicy(scope, policy => policy.Requirements.Add(new HasScopeRequirement(scope, domain)));
+            //     }
+            // });
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -91,16 +91,16 @@ namespace Server
             loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
-
-            RunEfMigrations(app);
-
             var options = new JwtBearerOptions
             {
                 Audience = Configuration["Auth0:ApiIdentifier"],
                 Authority = $"https://{Configuration["Auth0:Domain"]}/"
             };
             app.UseJwtBearerAuthentication(options);
+
+            app.UseMvc();
+
+            RunEfMigrations(app);
 
             // If you want to dispose of resources that have been resolved in the
             // application container, register for the "ApplicationStopped" event.

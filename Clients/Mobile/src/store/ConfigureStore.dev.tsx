@@ -11,6 +11,7 @@ import rootReducer from "../reducers/index";
 // import api from "../middleware/api";
 // import auth from "../middleware/auth";
 import schemas from "../schemas";
+import apiAuthMiddleware from "./middleware/ApiAuthMiddleware";
 
 // const { apiMiddleware } = require("redux-api-middleware");
 
@@ -23,6 +24,7 @@ export default function storeConfig(preloadedState?: any) {
         compose(
             applyMiddleware(
                 // auth,
+                apiAuthMiddleware,
                 apiMiddleware,
                 normalizrMiddleware(),
                 // api,
