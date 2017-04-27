@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using RestSharp.Portable;
 using RestSharp.Portable.HttpClient;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using Microsoft.Extensions.Primitives;
 
 namespace Server.Services
 {
@@ -13,13 +15,13 @@ namespace Server.Services
         {
         }
 
-        public Task<IAuth0UserProfile> GetTokenInfo(IRequestProvider requestProvider)
+        public Task<IAuth0UserProfile> GetTokenInfo(IHeaderProvider headerProvider)
         {
-            var request = requestProvider.Request;
-            var authorizationHeaderValues = request.Headers["Authorization"];
+            var headers = headerProvider.Headers;
+            var authorizationHeaderValues = headers["Authorization"];
             if (authorizationHeaderValues.Count == 0)
                 return null;
-            return this.GetTokenInfo(request.Headers["Authorization"][0].Remove(0, "Bearer ".Length));
+            return this.GetTokenInfo(headers["Authorization"][0].Remove(0, "Bearer ".Length));
         }
 
         public async Task<IAuth0UserProfile> GetTokenInfo(string idToken)

@@ -5,7 +5,7 @@ namespace Server.Services
 {
     public interface IAuth0Service
     {
-        Task<IAuth0UserProfile> GetTokenInfo(IRequestProvider requestProvider);
+        Task<IAuth0UserProfile> GetTokenInfo(IHeaderProvider headerProvider);
         Task<IAuth0UserProfile> GetTokenInfo(string idToken);
     }
 }
