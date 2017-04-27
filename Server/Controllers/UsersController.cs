@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Core;
 using Server.Model;
+using Server.Services;
 
 namespace Server.Controllers
 {
@@ -15,8 +16,12 @@ namespace Server.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController : BaseController
     {
-        public UsersController(IMyCommunityContext dbContext, IMapper mapper) : base(dbContext, mapper)
-        { }
+        private readonly IAuth0Service _auth0Service;
+
+        public UsersController(IMyCommunityContext dbContext, IMapper mapper, IAuth0Service auth0Service) : base(dbContext, mapper)
+        {
+            this._auth0Service = auth0Service;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -37,7 +42,7 @@ namespace Server.Controllers
             var results = from x in _dbContext.Users
                           where x.Email == email
                           select x;
-            var profile = await new Auth0Service().GetTokenInfo(this.Request.Headers["Authorization"][0].Remove(0, "Bearer ".Length));
+            var profile = await _auth0Service.GetTokenInfo(this);
             return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
         }
 

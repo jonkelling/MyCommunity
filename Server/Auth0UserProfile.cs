@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Server
 {
-    public class Auth0UserProfile
+    public class Auth0UserProfile : IAuth0UserProfile
     {
         public string Name { get; set; }
         public string Nickname { get; set; }

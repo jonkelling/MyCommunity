@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers
 {
-    public abstract class BaseController : Controller
+    public abstract class BaseController : Controller, IRequestProvider
     {
         protected readonly IMyCommunityContext _dbContext;
         protected readonly IMapper _mapper;

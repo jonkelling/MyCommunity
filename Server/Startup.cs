@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Server.Data;
+using Server.Services;
 
 namespace Server
 {
@@ -48,6 +49,8 @@ namespace Server
             services.AddScoped<IMapper>(sp =>
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
+            services.AddTransient<IAuth0Service, Auth0Service>();
+
             // Auth stuff (scopes)
             // var domain = $"https://{Configuration["Auth0:Domain"]}/";
             // var scopes = new[] {
@@ -72,6 +75,7 @@ namespace Server
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
             builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
+            builder.RegisterType<Auth0Service>().AsImplementedInterfaces();
 
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
