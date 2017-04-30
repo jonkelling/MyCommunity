@@ -9,9 +9,10 @@ using Server.Core;
 namespace Server.Migrations
 {
     [DbContext(typeof(MyCommunityContext))]
-    partial class MyCommunityContextModelSnapshot : ModelSnapshot
+    [Migration("20170429013114_Events")]
+    partial class Events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -35,33 +36,6 @@ namespace Server.Migrations
                     b.ToTable("Communities");
                 });
 
-            modelBuilder.Entity("Server.Core.EventAttendee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<int>("EventId");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<int>("Status");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EventAttendee");
-                });
-
             modelBuilder.Entity("Server.Core.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -79,8 +53,6 @@ namespace Server.Migrations
                     b.Property<string>("Headline")
                         .IsRequired()
                         .HasMaxLength(140);
-
-                    b.Property<string>("HeadlineImageUrl");
 
                     b.Property<DateTime>("ModifiedDate");
 
@@ -141,19 +113,6 @@ namespace Server.Migrations
                     b.ToTable("Event");
 
                     b.HasDiscriminator().HasValue("Event");
-                });
-
-            modelBuilder.Entity("Server.Core.EventAttendee", b =>
-                {
-                    b.HasOne("Server.Core.Event", "Event")
-                        .WithMany("EventAttendees")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Server.Core.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Server.Core.Post", b =>

@@ -16,11 +16,8 @@ namespace Server.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController : BaseController
     {
-        private readonly IAuth0Service _auth0Service;
-
-        public UsersController(IMyCommunityContext dbContext, IMapper mapper, IAuth0Service auth0Service) : base(dbContext, mapper)
+        public UsersController(IMyCommunityContext dbContext, IMapper mapper, IAuth0Service auth0Service) : base(dbContext, mapper, auth0Service)
         {
-            this._auth0Service = auth0Service;
         }
 
         [HttpGet]

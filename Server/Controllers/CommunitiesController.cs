@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Core;
 using Server.Model;
+using Server.Services;
 
 namespace Server.Controllers
 {
@@ -13,8 +14,9 @@ namespace Server.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CommunitiesController : BaseController
     {
-        public CommunitiesController(IMyCommunityContext dbContext, IMapper mapper) : base(dbContext, mapper)
-        { }
+        public CommunitiesController(IMyCommunityContext dbContext, IMapper mapper, IAuth0Service auth0Service) : base(dbContext, mapper, auth0Service)
+        {
+        }
 
         [HttpGet]
         public async Task<IActionResult> Get()

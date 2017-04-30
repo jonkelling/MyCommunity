@@ -9,9 +9,10 @@ using Server.Core;
 namespace Server.Migrations
 {
     [DbContext(typeof(MyCommunityContext))]
-    partial class MyCommunityContextModelSnapshot : ModelSnapshot
+    [Migration("20170429154030_EventAttendees")]
+    partial class EventAttendees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -79,8 +80,6 @@ namespace Server.Migrations
                     b.Property<string>("Headline")
                         .IsRequired()
                         .HasMaxLength(140);
-
-                    b.Property<string>("HeadlineImageUrl");
 
                     b.Property<DateTime>("ModifiedDate");
 
