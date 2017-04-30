@@ -9,7 +9,7 @@ namespace Server.Core
         public int Id { get; set; }
 
         [InverseProperty(nameof(User.AuthoredPosts))]
-        public virtual User Author { get; set; }
+        [Required] public virtual User Author { get; set; }
 
         [StringLength(140), Required]
         public string Headline { get; set; }

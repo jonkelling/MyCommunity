@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Server.Data;
+using Server.Core;
 
 namespace Server.Migrations
 {
     [DbContext(typeof(MyCommunityContext))]
-    partial class MyCommunityContextModelSnapshot : ModelSnapshot
+    [Migration("20170430050621_PostAuthorRequired")]
+    partial class PostAuthorRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

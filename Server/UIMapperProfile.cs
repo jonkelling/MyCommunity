@@ -10,9 +10,15 @@ namespace Server
         {
             CreateMap<User, UserVm>();
             CreateMap<Community, CommunityVm>();
+            CreateMap<Post, PostVm>();
+            CreateMap<Event, EventVm>();
+            CreateMap<EventAttendee, EventAttendeeVm>();
 
             CreateMap<UserVm, User>();
             CreateMap<CommunityVm, Community>();
+            CreateMap<PostVm, Post>();
+            CreateMap<EventVm, Event>();
+            CreateMap<EventAttendeeVm, EventAttendee>();
         }
     }
 }

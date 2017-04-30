@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Core;
@@ -11,6 +12,7 @@ using Server.Services;
 namespace Server.Controllers
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CommunitiesController : BaseController
     {

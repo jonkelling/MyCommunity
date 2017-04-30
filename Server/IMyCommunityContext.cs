@@ -9,6 +9,8 @@ namespace Server
     {
         DbSet<Community> Communities { get; }
         DbSet<User> Users { get; }
+        DbSet<Post> Posts { get; }
+        DbSet<Event> Events { get; }
 
         Task<int> SaveChangesAsync(CancellationToken CancellationToken = default(CancellationToken));
     }

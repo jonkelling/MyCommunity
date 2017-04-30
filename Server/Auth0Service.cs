@@ -15,13 +15,13 @@ namespace Server.Services
         {
         }
 
-        public Task<IAuth0UserProfile> GetTokenInfo(IHeaderProvider headerProvider)
+        public async Task<IAuth0UserProfile> GetTokenInfo(IHeaderProvider headerProvider)
         {
             var headers = headerProvider.Headers;
             var authorizationHeaderValues = headers["Authorization"];
             if (authorizationHeaderValues.Count == 0)
                 return null;
-            return this.GetTokenInfo(headers["Authorization"][0].Remove(0, "Bearer ".Length));
+            return await this.GetTokenInfo(headers["Authorization"][0].Remove(0, "Bearer ".Length));
         }
 
         public async Task<IAuth0UserProfile> GetTokenInfo(string idToken)
