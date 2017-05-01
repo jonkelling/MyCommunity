@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
+using Server.Controllers;
 using Server.Data;
 using Server.Services;
 
@@ -37,6 +38,7 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add services to the collection.
+            services.AddMemoryCache();
             services.AddMvc();
             services.AddApiVersioning();
             services.AddAutoMapper(config =>
@@ -50,6 +52,8 @@ namespace Server
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddTransient<IAuth0Service, Auth0Service>();
+
+            // services.AddScoped<ValidateCommunityUserAttribute>();
 
             // Auth stuff (scopes)
             // var domain = $"https://{Configuration["Auth0:Domain"]}/";

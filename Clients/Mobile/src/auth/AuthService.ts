@@ -9,8 +9,10 @@ export default class AuthService {
     constructor(store: Store<any>) {
         // Configure Auth0
         this.lock = new Auth0Lock({
+            authParams: { scope: "openid name email nickname" },
             clientId: "b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn",
             domain: "mycommunity.auth0.com",
+            useBrowser: false,
         });
         this.store = store;
         this._doAuthentication = this._doAuthentication.bind(this);

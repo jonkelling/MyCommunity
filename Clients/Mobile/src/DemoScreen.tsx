@@ -84,7 +84,21 @@ function mapDispatchToProps(dispatch2, ownProps) {
                                 meta: { schema: userList },
                                 type: "SUCCESS",
                             },
-                            "FAILURE",
+                            {
+                                meta: (action, state, res) => {
+                                    if (res) {
+                                        return {
+                                            status: res.status,
+                                            statusText: res.statusText,
+                                        };
+                                    } else {
+                                        return {
+                                            status: "Network request failed",
+                                        };
+                                    }
+                                },
+                                type: "FAILURE",
+                            },
                         ],
                     },
                 });
