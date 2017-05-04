@@ -9,9 +9,10 @@ using Server.Core;
 namespace Server.Migrations
 {
     [DbContext(typeof(MyCommunityContext))]
-    partial class MyCommunityContextModelSnapshot : ModelSnapshot
+    [Migration("20170504123537_RenameCreateDateAndModifiedDate")]
+    partial class RenameCreateDateAndModifiedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

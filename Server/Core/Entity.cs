@@ -5,7 +5,7 @@ namespace Server.Core
 {
     public abstract class Entity
     {
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime ModifiedDateTime { get; set; }
     }
 }

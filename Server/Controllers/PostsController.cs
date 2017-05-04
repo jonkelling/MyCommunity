@@ -25,11 +25,32 @@ namespace Server.Controllers
 
         [HttpGet]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        public async Task<IActionResult> Get(int communityId)
+        public async Task<IActionResult> Get(int communityId, [FromQuery] DateTime? before = null, [FromQuery] DateTime? after = null, [FromQuery] int? limit = null)
         {
             var results = from post in _dbContext.Posts.Include(post => post.Author)
                           where post.Author.CommunityId == communityId
                           select post;
+
+            if (before.HasValue)
+            {
+                results = from post in results
+                          where post.CreatedDateTime < before.Value
+                          orderby post.CreatedDateTime descending
+                          select post;
+            }
+            else if (after.HasValue)
+            {
+                results = from post in results
+                          where post.CreatedDateTime > after.Value
+                          orderby post.CreatedDateTime ascending
+                          select post;
+            }
+
+            if (limit.HasValue)
+            {
+                results = results.Take(limit.Value);
+            }
+            
             return Ok(_mapper.Map<IEnumerable<PostVm>>(await results.ToListAsync()));
         }
 
