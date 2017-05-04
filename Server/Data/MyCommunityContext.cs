@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Core;
 
@@ -12,6 +16,23 @@ namespace Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            DateTime saveTime = DateTime.Now;
+            foreach (var entry in this.ChangeTracker.Entries<Entity>()
+                .Where(e => e.State == Microsoft.EntityFrameworkCore.EntityState.Added))
+            {
+                entry.Property("CreatedDateTime").CurrentValue = saveTime;
+                entry.Property("ModifiedDateTime").CurrentValue = saveTime;
+            }
+            foreach (var entry in this.ChangeTracker.Entries<Entity>()
+                .Where(e => e.State == Microsoft.EntityFrameworkCore.EntityState.Modified))
+            {
+                entry.Property("ModifiedDateTime").CurrentValue = saveTime;
+            }
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<Community> Communities { get; set; }
