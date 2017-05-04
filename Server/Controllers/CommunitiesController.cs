@@ -30,7 +30,7 @@ namespace Server.Controllers
             return base.Ok(_mapper.Map<IEnumerable<CommunityVm>>(await communities.ToListAsync()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{communityId}")]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
         public async Task<IActionResult> Get(int communityId)
         {
@@ -51,7 +51,7 @@ namespace Server.Controllers
             return Ok(await _dbContext.SaveChangesAsync());
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{communityId}")]
         public async Task<IActionResult> Delete(int communityId)
         {
             if ((await this.AuthenticatedUser.Value).UserRole != UserRole.GlobalAdministrator)
