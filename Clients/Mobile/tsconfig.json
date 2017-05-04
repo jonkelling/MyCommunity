@@ -19,7 +19,6 @@
         "typeRoots": [
             "node_modules/redux-api-middleware",
             "node_modules/redux-normalizr3-middleware",
-            "node_modules/normalizr",
             "node_modules/redux",
             "node_modules/redux-persist",
             "node_modules/redux-thunk",
@@ -28,7 +27,10 @@
         ]
     },
     "typeAcquisition": {
-        "enable": true
+        "enable": true,
+        "include": [
+            "lodash"
+        ]
     },
     "include": [
         "src/**/*.ts",
