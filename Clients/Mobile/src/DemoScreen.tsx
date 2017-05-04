@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as appActions from "./appActions";
+import appActions from "./appActions";
 // tslint:disable-next-line:ordered-imports
 import { community, communityList, user, userList } from "./schemas";
 // tslint:disable-next-line:no-var-requires
