@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Caching.Memory;
 using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Server.Services
 {

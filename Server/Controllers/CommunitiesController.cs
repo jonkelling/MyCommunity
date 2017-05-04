@@ -23,35 +23,44 @@ namespace Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(_mapper.Map<IEnumerable<CommunityVm>>(await _dbContext.Communities.ToListAsync()));
+            var user = await this.AuthenticatedUser.Value;
+            var communities = from c in _dbContext.Communities
+                              where c.Users.Any(u => u.Id == user.Id)
+                              select c;
+            return base.Ok(_mapper.Map<IEnumerable<CommunityVm>>(await communities.ToListAsync()));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
+        public async Task<IActionResult> Get(int communityId)
         {
-            return Ok(_mapper.Map<CommunityVm>(await _dbContext.Communities.FindAsync(id)));
+            return Ok(_mapper.Map<CommunityVm>(await _dbContext.Communities.FindAsync(communityId)));
         }
 
         [HttpPost]
-        public async Task Post([FromBody]CommunityVm community)
+        public async Task<IActionResult> Post([FromBody]CommunityVm community)
         {
             await _dbContext.Communities.AddAsync(_mapper.Map<Community>(community));
-            await _dbContext.SaveChangesAsync();
+            return Ok(await _dbContext.SaveChangesAsync());
         }
 
         [HttpPut]
-        public async Task Put([FromBody]CommunityVm community)
+        public async Task<IActionResult> Put([FromBody]CommunityVm community)
         {
             _dbContext.Communities.Update(_mapper.Map<Community>(community));
-            await _dbContext.SaveChangesAsync();
+            return Ok(await _dbContext.SaveChangesAsync());
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int communityId)
         {
-            var community = await _dbContext.Communities.FindAsync(id);
+            if ((await this.AuthenticatedUser.Value).UserRole != UserRole.GlobalAdministrator)
+            {
+                return Forbid();
+            }
+            var community = await _dbContext.Communities.FindAsync(communityId);
             _dbContext.Communities.Remove(community);
-            await _dbContext.SaveChangesAsync();
+            return Ok(await _dbContext.SaveChangesAsync());
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Server
             var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (user?.CommunityId != communityId)
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new ForbidResult();
                 return;
             }
             await base.OnActionExecutionAsync(context, next);
@@ -53,7 +53,7 @@ namespace Server
             var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (user?.Id != postVm.Author.Id)
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new ForbidResult();
                 return;
             }
             await base.OnActionExecutionAsync(context, next);
@@ -68,7 +68,7 @@ namespace Server
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var postId = (int)context.ActionArguments["id"];
+            var postId = (int)context.ActionArguments["postId"];
             var email = (await base._auth0Service.GetTokenInfo((IHeaderProvider)context.Controller)).Email;
             var user = _dbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
             var post = _dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);

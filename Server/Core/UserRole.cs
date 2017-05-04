@@ -2,7 +2,8 @@ namespace Server.Core
 {
     public enum UserRole
     {
-        CommunityManager,
-        CommunityMember,
+        CommunityMember = 1,
+        CommunityManager = 2,
+        GlobalAdministrator = 3,
     }
 }

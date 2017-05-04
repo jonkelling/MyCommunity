@@ -1,4 +1,4 @@
-import { schema } from "../node_modules/normalizr/index";
+import { schema } from "normalizr";
 
 export const user = new schema.Entity("users");
 export const community = new schema.Entity("communities");

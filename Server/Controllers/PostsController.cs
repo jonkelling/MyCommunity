@@ -33,13 +33,13 @@ namespace Server.Controllers
             return Ok(_mapper.Map<IEnumerable<PostVm>>(await results.ToListAsync()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{postId}")]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        public async Task<IActionResult> Get(int communityId, int id)
+        public async Task<IActionResult> Get(int communityId, int postId)
         {
             var results = from post in _dbContext.Posts.Include(post => post.Author)
                           where post.Author.CommunityId == communityId
-                          where post.Id == id
+                          where post.Id == postId
                           select post;
             return OkOrNotFound(_mapper.Map<PostVm>(await results.SingleOrDefaultAsync()));
         }
@@ -55,21 +55,21 @@ namespace Server.Controllers
             return Ok(await _dbContext.SaveChangesAsync());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{postId}")]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
         [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
-        public async Task<IActionResult> Put(int communityId, int id, [FromBody]PostVm value)
+        public async Task<IActionResult> Put(int communityId, int postId, [FromBody]PostVm value)
         {
             _dbContext.Posts.Update(_mapper.Map<Post>(value));
             return Ok(await _dbContext.SaveChangesAsync());
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{postId}")]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
         [TypeFilter(typeof(ValidateUserIsPostAuthorByIdFilterAttribute))]
-        public async Task<IActionResult> Delete(int communityId, int id)
+        public async Task<IActionResult> Delete(int communityId, int postId)
         {
-            var post = await _dbContext.Posts.FindAsync(id);
+            var post = await _dbContext.Posts.FindAsync(postId);
             _dbContext.Posts.Remove(post);
             return Ok(await _dbContext.SaveChangesAsync());
         }

@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import * as appActions from "./appActions";
 // tslint:disable-next-line:ordered-imports
 import { community, communityList, user, userList } from "./schemas";
 // tslint:disable-next-line:no-var-requires
@@ -52,58 +53,9 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch2, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
-        actions: bindActionCreators(({
-            loadCommunity: (id) => async (dispatch) => {
-                const endpoint = `http://localhost:5000/api/v1/communities/${id}`;
-                dispatch({
-                    [CALL_API]: {
-                        endpoint,
-                        method: "GET",
-                        types: [
-                            "REQUEST",
-                            {
-                                meta: { schema: communityList },
-                                type: "SUCCESS",
-                            },
-                            "FAILURE",
-                        ],
-                    },
-                });
-            },
-            loadUsers: (email) => async (dispatch) => {
-                const endpoint = `http://localhost:5000/api/v1/users?email=${email}`;
-                dispatch({
-                    [CALL_API]: {
-                        endpoint,
-                        method: "GET",
-                        types: [
-                            "REQUEST",
-                            {
-                                meta: { schema: userList },
-                                type: "SUCCESS",
-                            },
-                            {
-                                meta: (action, state, res) => {
-                                    if (res) {
-                                        return {
-                                            status: res.status,
-                                            statusText: res.statusText,
-                                        };
-                                    } else {
-                                        return {
-                                            status: "Network request failed",
-                                        };
-                                    }
-                                },
-                                type: "FAILURE",
-                            },
-                        ],
-                    },
-                });
-            },
-        }), dispatch2),
+        actions: bindActionCreators(appActions, dispatch),
     };
 }
 

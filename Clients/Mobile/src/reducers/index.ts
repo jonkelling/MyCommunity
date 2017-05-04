@@ -13,11 +13,10 @@ import * as actions from "../actions/index";
 
 const app = handleActions(
     {
-        [actions.SHOW_REGISTRATION_FORM]: (state, action) => {
-            if (action.payload) {
-                return { ...state };
-            }
-            return state;
+        [REHYDRATE]: (state, action: any) => {
+            const incoming = action.payload.app;
+            if (incoming) { return { ...state, ...incoming, loading: false }; }
+            return { ...state, loading: false };
         },
         [actions.LOGOUT]: (state) => {
             return { ...state, authToken: null };
@@ -28,24 +27,19 @@ const app = handleActions(
             }
             return state;
         },
-        [REHYDRATE]: (state, action: any) => {
-            const incoming = action.payload.app;
-            if (incoming) { return { ...state, ...incoming, loading: false }; }
-            return { ...state, loading: false };
-        },
-        REMOVE_AUTH_TOKEN: (state, action) => {
+        [actions.REMOVE_AUTH_TOKEN]: (state, action) => {
             if (action.payload) {
                 return { ...state, idToken: null, profile: null };
             }
             return state;
         },
-        SET_AUTH_PROFILE: (state, action) => {
+        [actions.SET_AUTH_PROFILE]: (state, action) => {
             if (action.payload) {
                 return { ...state, profile: action.payload };
             }
             return state;
         },
-        SET_AUTH_TOKEN: (state, action) => {
+        [actions.SET_AUTH_TOKEN]: (state, action) => {
             if (action.payload) {
                 return { ...state, ...action.payload };
             }
@@ -66,6 +60,12 @@ function handleApiResponseActions(handlers) {
 }
 
 const entities = (state = {}, action) => {
+    if (action.type === REHYDRATE) {
+        const incoming = action.payload.entities;
+        if (incoming) { return { ...state, ...incoming, loading: false }; }
+        return { ...state, loading: false };
+    }
+
     if (action.payload && action.payload.entities) {
         // return merge({}, state, action.payload.entities);
         return { ...state, ...action.payload.entities };

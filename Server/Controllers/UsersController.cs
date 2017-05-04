@@ -27,10 +27,16 @@ namespace Server.Controllers
             return Ok(_mapper.Map<IEnumerable<UserVm>>(await results.ToListAsync()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> Get(int userId)
         {
-            return Ok(_mapper.Map<UserVm>(await _dbContext.Users.FindAsync(id)));
+            return Ok(_mapper.Map<UserVm>(await _dbContext.Users.FindAsync(userId)));
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMe()
+        {
+            return Ok(await this.AuthenticatedUser.Value);
         }
 
         [HttpGet]
@@ -50,17 +56,17 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]UserVm value)
+        [HttpPut("{userId}")]
+        public async Task Put(int userId, [FromBody]UserVm value)
         {
             _dbContext.Users.Update(_mapper.Map<User>(value));
             await _dbContext.SaveChangesAsync();
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [HttpDelete("{userId}")]
+        public async Task Delete(int userId)
         {
-            var user = await _dbContext.Users.FindAsync(id);
+            var user = await _dbContext.Users.FindAsync(userId);
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
