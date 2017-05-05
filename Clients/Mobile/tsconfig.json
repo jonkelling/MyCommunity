@@ -17,6 +17,7 @@
         "allowSyntheticDefaultImports": true,
         "sourceRoot": "src",
         "typeRoots": [
+            "node_modules/linq",
             "node_modules/redux-api-middleware",
             "node_modules/redux-normalizr3-middleware",
             "node_modules/redux",
