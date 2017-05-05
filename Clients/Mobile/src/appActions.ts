@@ -11,21 +11,29 @@ export default {
         const endpoint = `${baseUrl}/users/me`;
         return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.user));
     },
-    loadCommunity: (communityId) => {
+    loadCommunity: (communityId: number) => {
         const endpoint = `${baseUrl}/communities/${communityId}`;
         return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.communityList));
     },
-    loadNewerPosts: (communityId, afterDateTime) => {
-        const endpoint = `${baseUrl}/communities/${communityId}/posts?after=${afterDateTime}`;
+    loadNewestPosts: (communityId: number, limit = null) => {
+        const now = new Date().toUTCString();
+        const endpoint = `${baseUrl}/communities/${communityId}/posts?before=${now}&limit=${limit || ""}`;
         return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.postList));
     },
-    loadOlderPosts: (communityId, beforeDateTime, limit) => {
-        const endpoint = `${baseUrl}/communities/${communityId}/posts?before=${beforeDateTime}&limit=${limit}`;
+    loadNewerPosts: (communityId: number, afterDateTime: Date, limit = null) => {
+        const now = new Date().toUTCString();
+        const queryString = `before=${now}&after=${afterDateTime.toUTCString()}&limit=${limit || ""}`;
+        const endpoint = `${baseUrl}/communities/${communityId}/posts?${queryString}`;
+        return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.postList));
+    },
+    loadOlderPosts: (communityId: number, beforeDateTime: Date, limit) => {
+        const queryString = `before=${beforeDateTime.toUTCString()}&limit=${limit || ""}`;
+        const endpoint = `${baseUrl}/communities/${communityId}/posts?${queryString}`;
         return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.postList));
     },
 };
 
-function getCallApiAction(endpoint, responseSchema) {
+function getCallApiAction(endpoint: string, responseSchema) {
     return ({
         [CALL_API]: {
             endpoint,

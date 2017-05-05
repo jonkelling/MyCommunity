@@ -20,7 +20,7 @@ namespace Server.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            DateTime saveTime = DateTime.Now;
+            DateTime saveTime = DateTime.UtcNow;
             foreach (var entry in this.ChangeTracker.Entries<Entity>()
                 .Where(e => e.State == Microsoft.EntityFrameworkCore.EntityState.Added))
             {

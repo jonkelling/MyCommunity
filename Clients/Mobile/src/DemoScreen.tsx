@@ -12,7 +12,7 @@ import { community, communityList, user, userList } from "./schemas";
 // tslint:disable-next-line:no-var-requires
 const { CALL_API } = require("redux-api-middleware");
 
-class DemoScreen extends React.Component<{ email: string, entities: any, actions: any }, {}> {
+class DemoScreen extends React.Component<IDemoScreenProps, {}> {
     public componentWillMount() {
         if (!this.props.email) { return; }
         this.props.actions.loadUsers(this.props.email);
@@ -22,7 +22,7 @@ class DemoScreen extends React.Component<{ email: string, entities: any, actions
                 if (this.props.entities.users[0])
                     this.props.actions.loadCommunity();
     }
-    public componentWillReceiveProps(nextProps: any) {
+    public componentWillReceiveProps(nextProps: IDemoScreenProps) {
         if (!nextProps.email) { return; }
         if (this.props.email !== nextProps.email) {
             nextProps.actions.loadUsers(nextProps.email);
@@ -57,6 +57,12 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         actions: bindActionCreators(appActions, dispatch),
     };
+}
+
+interface IDemoScreenProps {
+    email: string;
+    entities: any;
+    actions: any;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DemoScreen);
