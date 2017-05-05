@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Store } from "redux";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
+import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
 
 class AppContentContainer extends React.Component<{ app: any, accessToken: string, store: Store<any> }, {}> {
@@ -37,6 +38,7 @@ class AppContentContainer extends React.Component<{ app: any, accessToken: strin
                     onPress={() => this.authService.logout()}
                     title="Logout Button">Logout</Button>
                 <DemoScreen email={this.props.app.profile && this.props.app.profile.email || null} />
+                <PostList />
                 {this.props.children}
             </View>
         );

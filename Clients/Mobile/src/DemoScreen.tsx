@@ -11,16 +11,21 @@ import appActions from "./appActions";
 import { community, communityList, user, userList } from "./schemas";
 // tslint:disable-next-line:no-var-requires
 const { CALL_API } = require("redux-api-middleware");
+import Enumerable from "../node_modules/linq/linq";
 
 class DemoScreen extends React.Component<IDemoScreenProps, {}> {
     public componentWillMount() {
         if (!this.props.email) { return; }
-        this.props.actions.loadUsers(this.props.email);
+        this.props.actions.loadCurrentUser();
         // tslint:disable:curly
         if (this.props.entities)
-            if (this.props.entities.users)
-                if (this.props.entities.users[0])
-                    this.props.actions.loadCommunity();
+            if (this.props.entities.users) {
+                const currentUser = Enumerable
+                    .from(this.props.entities.users)
+                    .select((x) => x.value)
+                    .singleOrDefault((x) => x.email === this.props.email);
+                this.props.actions.loadCommunity(currentUser.communityId);
+            }
     }
     public componentWillReceiveProps(nextProps: IDemoScreenProps) {
         if (!nextProps.email) { return; }
@@ -42,6 +47,7 @@ class DemoScreen extends React.Component<IDemoScreenProps, {}> {
         return (
             <View>
                 <Text>go get some community.</Text>
+                <Text>{JSON.stringify(this.props.entities)}</Text>
             </View>
         );
     }

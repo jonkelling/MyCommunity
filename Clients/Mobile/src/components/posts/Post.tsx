@@ -6,6 +6,7 @@ import PostHeadline from "./PostHeadline";
 
 interface IPostVm {
     headline: string;
+    content: string;
 }
 
 export default class Post extends React.Component<{ post: IPostVm }, {}> {
