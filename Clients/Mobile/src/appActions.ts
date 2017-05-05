@@ -13,7 +13,7 @@ export default {
     },
     loadCommunity: (communityId: number) => {
         const endpoint = `${baseUrl}/communities/${communityId}`;
-        return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.communityList));
+        return (dispatch) => dispatch(getCallApiAction(endpoint, schemas.community));
     },
     loadNewestPosts: (communityId: number, limit = null) => {
         const now = new Date().toUTCString();
