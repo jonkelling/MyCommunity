@@ -36,7 +36,7 @@ namespace Server.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetMe()
         {
-            return Ok(await this.AuthenticatedUser.Value);
+            return Ok(_mapper.Map<UserVm>(await this.AuthenticatedUser.Value));
         }
 
         [HttpGet]
