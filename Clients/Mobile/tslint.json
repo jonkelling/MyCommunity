@@ -1,3 +1,6 @@
 {
-    "extends": ["tslint:recommended", "react"]
+    "extends": ["tslint:recommended", "react"],
+    "rules": {
+        "object-literal-sort-keys": false
+    }
 }
