@@ -25,29 +25,16 @@ class DemoScreen extends React.Component<IDemoScreenProps, {}> {
                     .select((x) => x.value)
                     .singleOrDefault((x) => x.email === this.props.email);
                 this.props.actions.loadCommunity(currentUser.communityId);
+                this.props.actions.loadNewestPosts(currentUser.communityId);
             }
     }
     public componentWillReceiveProps(nextProps: IDemoScreenProps) {
         if (!nextProps.email) { return; }
-        if (this.props.email !== nextProps.email) {
-            nextProps.actions.loadUsers(nextProps.email);
-        }
-        if (nextProps.entities)
-            if (nextProps.entities.users)
-                if (nextProps.entities.users["1"])
-                    if (nextProps.entities.users["1"].communityId)
-                        if ((this.props.entities &&
-                            this.props.entities.users &&
-                            this.props.entities.users["1"] &&
-                            this.props.entities.users["1"].communityId ||
-                            null) !== nextProps.entities.users["1"].communityId)
-                            nextProps.actions.loadCommunity(nextProps.entities.users["1"].communityId);
     }
     public render() {
         return (
             <View>
                 <Text>go get some community.</Text>
-                <Text>{JSON.stringify(this.props.entities)}</Text>
             </View>
         );
     }

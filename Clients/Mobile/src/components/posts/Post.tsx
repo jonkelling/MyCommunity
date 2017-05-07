@@ -1,20 +1,28 @@
 import React from "react";
-import { View } from "react-native";
-import PostAuthor from "./PostAuthor";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
+import PostAuthor, { IPostAuthor } from "./PostAuthor";
 import PostContent from "./PostContent";
 import PostHeadline from "./PostHeadline";
 
 interface IPostVm {
-    headline: string;
-    content: string;
+    post: {
+        headline: string,
+        content: string,
+        createdDateTime: string,
+    };
+    author: IPostAuthor;
+    contentStyle: TextStyle;
+    headlineStyle: TextStyle;
+    style: ViewStyle;
 }
 
-export default class Post extends React.Component<{ post: IPostVm }, {}> {
+export default class Post extends React.Component<IPostVm, {}> {
     public render() {
-        return <View>
-            <PostHeadline text={this.props.post.headline} />
-            <PostAuthor />
-            <PostContent />
+        return <View style={this.props.style}>
+            <PostHeadline text={this.props.post.headline} style={this.props.headlineStyle} />
+            <Text>{new Date(this.props.post.createdDateTime).toLocaleString()}</Text>
+            <PostAuthor author={this.props.author} />
+            <PostContent content={this.props.post.content} style={this.props.contentStyle} />
         </View>;
     }
 }

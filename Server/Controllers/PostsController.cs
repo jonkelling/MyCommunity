@@ -34,14 +34,14 @@ namespace Server.Controllers
             if (before.HasValue)
             {
                 results = from post in results
-                          where post.CreatedDateTime < before.Value
+                          where post.CreatedDateTime < before.Value.ToUniversalTime()
                           orderby post.CreatedDateTime descending
                           select post;
             }
             else if (after.HasValue)
             {
                 results = from post in results
-                          where post.CreatedDateTime > after.Value
+                          where post.CreatedDateTime > after.Value.ToUniversalTime()
                           orderby post.CreatedDateTime ascending
                           select post;
             }

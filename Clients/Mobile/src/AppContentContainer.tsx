@@ -20,7 +20,7 @@ class AppContentContainer extends React.Component<{ app: any, accessToken: strin
         this.loginIfNeeded(nextProps);
     }
     public render() {
-        if (this.props.app.loading) {
+        if (this.props.app.loading.app) {
             return null;
         }
         const ProfileImage = () => {
@@ -44,7 +44,7 @@ class AppContentContainer extends React.Component<{ app: any, accessToken: strin
         );
     }
     private loginIfNeeded(props: any) {
-        if (props.app.loading) {
+        if (props.app.loading.app) {
             // Maybe skip this component until loading is done?
             return;
         }
@@ -56,10 +56,10 @@ class AppContentContainer extends React.Component<{ app: any, accessToken: strin
 
 const styles: any = StyleSheet.create({
     container: {
-        alignItems: "center",
-        backgroundColor: "#F5FCFF",
+        backgroundColor: "transparent",
         flex: 1,
-        justifyContent: "center",
+        flexDirection: "column",
+        justifyContent: "space-between",
     },
     instructions: {
         color: "#333333",

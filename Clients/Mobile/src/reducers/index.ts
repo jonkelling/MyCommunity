@@ -1,5 +1,5 @@
 import update from "immutability-helper";
-// import { merge } from "lodash";
+import merge from "lodash.merge";
 import {
     applyMiddleware,
     combineReducers,
@@ -15,8 +15,8 @@ const app = handleActions(
     {
         [REHYDRATE]: (state, action: any) => {
             const incoming = action.payload.app;
-            if (incoming) { return { ...state, ...incoming, loading: false }; }
-            return { ...state, loading: false };
+            if (incoming) { return { ...state, ...incoming, loading: { app: false } }; }
+            return { ...state, loading: { app: false } };
         },
         [actions.LOGOUT]: (state) => {
             return { ...state, authToken: null };
@@ -45,8 +45,76 @@ const app = handleActions(
             }
             return state;
         },
+        REQUEST: (state, action: any) => {
+            // TODO: This means there's an error.
+            // if (action.payload) {
+            //     return state;
+            // }
+            if (!action.meta) {
+                return state;
+            }
+            const loadingKey =
+                action.meta.source ||
+                (
+                    action.meta.schema.key ||
+                    (
+                        action.meta.schema.schema &&
+                        action.meta.schema.schema.key
+                    )
+                );
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    [loadingKey]: true,
+                },
+            };
+        },
+        SUCCESS: (state, action: any) => {
+            if (!action.meta) {
+                return state;
+            }
+            const loadingKey =
+                action.meta.source ||
+                (
+                    action.meta.schema.key ||
+                    (
+                        action.meta.schema.schema &&
+                        action.meta.schema.schema.key
+                    )
+                );
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    [loadingKey]: false,
+                },
+            };
+        },
+        // tslint:disable-next-line:object-literal-sort-keys
+        FAILURE: (state, action: any) => {
+            if (!action.meta) {
+                return state;
+            }
+            const loadingKey =
+                action.meta.source ||
+                (
+                    action.meta.schema.key ||
+                    (
+                        action.meta.schema.schema &&
+                        action.meta.schema.schema.key
+                    )
+                );
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    [loadingKey]: false,
+                },
+            };
+        },
     }, {
-        loading: true,
+        loading: { app: true },
     },
 );
 
@@ -67,8 +135,7 @@ const entities = (state = {}, action) => {
     }
 
     if (action.payload && action.payload.entities) {
-        // return merge({}, state, action.payload.entities);
-        return { ...state, ...action.payload.entities };
+        return merge({}, state, action.payload.entities);
     }
 
     return state;

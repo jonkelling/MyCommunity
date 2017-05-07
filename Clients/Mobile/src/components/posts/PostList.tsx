@@ -1,30 +1,146 @@
+import isEqual from "lodash.isequal";
 import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import {
+    Button,
+    Image, ListView, ListViewDataSource, RefreshControl, StyleSheet, Text,
+    TextStyle,
+    View,
+} from "react-native";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import Enumerable from "../../../node_modules/linq/linq";
+import appActions from "../../appActions";
+import { UPDATE_CONTACT_INFORMATION } from "../../constants/index";
 import Post from "./Post";
 
-class PostList extends React.Component<IPostListProps, {}> {
+const styles = StyleSheet.create({
+    row: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+    scrollview: {
+        flex: 1,
+    },
+    headline: {
+        fontWeight: "bold",
+    },
+    content: {
+        alignSelf: "auto",
+        color: "gray",
+    },
+});
+
+class PostList extends React.Component<IPostListProps, { postsDataSource: ListViewDataSource, isRefreshing: boolean }> {
+    constructor(props) {
+        super(props);
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        this.state = {
+            isRefreshing: false,
+            postsDataSource: ds.cloneWithRows(this.getSortedPostsArray()),
+        };
+        this._renderSeparator = this._renderSeparator.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
+    }
+    public componentWillReceiveProps(nextProps: IPostListProps) {
+        if (!isEqual(this.props.posts, nextProps.posts)) {
+            const newPosts = this.getSortedPostsArray(nextProps);
+            this.setState({
+                postsDataSource: this.state.postsDataSource.cloneWithRows(newPosts),
+            });
+        }
+        if (this.props.app.loading.posts && !nextProps.app.loading.posts) {
+            this.setState({ isRefreshing: false });
+        }
+    }
     public render() {
+        if (!this.props.posts) {
+            return null;
+        }
+        // TODO: Use accurate communityId
         return (
-            <View>
-                {this.props.posts.map((p) => <Post post={p} />)}
-            </View>
+            <ListView dataSource={this.state.postsDataSource}
+                renderRow={(rowData) => (
+                    <Post post={rowData}
+                        author={this.props.users[rowData.author]}
+                        style={styles.row}
+                        headlineStyle={styles.headline}
+                        contentStyle={styles.content} />
+                )}
+                renderSeparator={this._renderSeparator}
+                onEndReached={() => this.props.actions.loadOlderPosts(1, this.getOldestPostDateTime(), 5)}
+                refreshControl={this.getRefreshControl()}
+                style={styles.scrollview} />
         );
+    }
+    private getSortedPostsArray(props = this.props) {
+        return Enumerable.from(props.posts)
+            .select((x) => x.value)
+            .orderByDescending((post) => post.createdDateTime)
+            .toArray();
+    }
+    private getNewestPostDateTime(props = this.props) {
+        return Enumerable.from(props.posts)
+            .select((x) => x.value)
+            .orderByDescending((post) => post.createdDateTime)
+            .select((post) => new Date(post.createdDateTime))
+            .defaultIfEmpty(new Date())
+            .firstOrDefault();
+    }
+    private getOldestPostDateTime(props = this.props) {
+        return Enumerable.from(props.posts)
+            .select((x) => x.value)
+            .orderBy((post) => post.createdDateTime)
+            .select((post) => new Date(post.createdDateTime))
+            .defaultIfEmpty(new Date())
+            .firstOrDefault();
+    }
+    private onRefresh() {
+        // tslint:disable-next-line:no-console
+        console.log(this.getNewestPostDateTime());
+        this.props.actions.loadNewerPosts(1, this.getNewestPostDateTime());
+        this.setState({ isRefreshing: true });
+        setTimeout(() => this.setState({ isRefreshing: false }), 20000);
+    }
+    private _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: boolean) {
+        return (
+            <View
+                key={`${sectionID}-${rowID}`}
+                style={{
+                    backgroundColor: adjacentRowHighlighted ? "#3B5998" : "#CCCCCC",
+                    height: adjacentRowHighlighted ? 4 : 1,
+                }}
+            />
+        );
+    }
+    private getRefreshControl() {
+        return <RefreshControl
+            refreshing={!!this.state.isRefreshing || !!this.props.app.loading.posts}
+            onRefresh={this.onRefresh}
+            progressBackgroundColor="#ffff00"
+        />;
     }
 }
 
 function mapStateToProps(state: any) {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
-        posts: [],
+        app: state.app,
+        posts: state.entities.posts,
+        users: state.entities.users,
     };
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return {};
+    return {
+        actions: bindActionCreators(appActions, dispatch),
+    };
 }
 
 interface IPostListProps {
+    actions: any;
+    app: any;
     posts: any[];
+    users: any[];
 }
 
-export default connect(mapStateToProps)(PostList);
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);
