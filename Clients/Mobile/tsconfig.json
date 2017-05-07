@@ -18,6 +18,7 @@
         "sourceRoot": "src",
         "typeRoots": [
             "node_modules/linq",
+            "node_modules/normalizr",
             "node_modules/redux-api-middleware",
             "node_modules/redux-normalizr3-middleware",
             "node_modules/redux",
@@ -30,7 +31,8 @@
     "typeAcquisition": {
         "enable": true,
         "include": [
-            "lodash"
+            "lodash",
+            "normalizr"
         ]
     },
     "include": [
