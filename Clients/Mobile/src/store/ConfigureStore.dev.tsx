@@ -11,7 +11,7 @@ import rootReducer from "../reducers/index";
 // import api from "../middleware/api";
 // import auth from "../middleware/auth";
 import schemas from "../schemas";
-import apiAuthMiddleware from "./middleware/apiAuthMiddleware2";
+import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 
 // const { apiMiddleware } = require("redux-api-middleware");
 
