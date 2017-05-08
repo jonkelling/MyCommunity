@@ -95,8 +95,6 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             .firstOrDefault();
     }
     private onRefresh() {
-        // tslint:disable-next-line:no-console
-        console.log(this.getNewestPostDateTime());
         this.props.actions.loadNewerPosts(1, this.getNewestPostDateTime());
         this.setState({ isRefreshing: true });
         setTimeout(() => this.setState({ isRefreshing: false }), 20000);

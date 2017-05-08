@@ -2463,13 +2463,13 @@ lodash.templatesettings@^3.0.0:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
 
+lodash@4.x.x, lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
 lodash@^3.5.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
-
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -2541,13 +2541,13 @@ mime-db@~1.23.0:
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.23.0.tgz#a31b4070adaea27d732ea333740a64d0ec9a6659"
 
-mime-types@2.1.11, mime-types@~2.1.7, mime-types@~2.1.9:
+mime-types@2.1.11:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.11.tgz#c259c471bda808a85d6cd193b430a5fae4473b3c"
   dependencies:
     mime-db "~1.23.0"
 
-mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.15, mime-types@~2.1.6:
+mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.15, mime-types@~2.1.6, mime-types@~2.1.7, mime-types@~2.1.9:
   version "2.1.15"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.15.tgz#a4ebf5064094569237b8cf70046776d09fc92aed"
   dependencies:
@@ -2980,6 +2980,12 @@ react-native-lock@^0.6.0:
   dependencies:
     react-native-auth0 "^0.0.1"
 
+react-native-navigation@^1.1.61:
+  version "1.1.61"
+  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.61.tgz#a4eea9980ffbfa35cc3c6ff6183cefc0d7d28f1f"
+  dependencies:
+    lodash "4.x.x"
+
 react-native-sm-transformer@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-sm-transformer/-/react-native-sm-transformer-1.0.3.tgz#ef3cea1fa4c1815ce8cefdbffbebb6e2745e4852"
@@ -3161,12 +3167,13 @@ reduce-reducers@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.2.tgz#fa1b4718bc5292a71ddd1e5d839c9bea9770f14b"
 
-redux-actions@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-2.0.1.tgz#8bae89938987bd0a446c509dfdac6b64e770765a"
+redux-actions@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-2.0.2.tgz#49b2d9511c240a96cb2c0ca27cb15d016faecec0"
   dependencies:
     invariant "^2.2.1"
     lodash "^4.13.1"
+    lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
 redux-logger@^3.0.1:
@@ -3182,9 +3189,9 @@ redux-normalizr3-middleware@^2.0.1:
     lodash "^4.0.0"
     normalizr "^2.0.0 || ^3.0.0"
 
-redux-persist@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-4.6.0.tgz#3994793d5f2f38bf02591c9e693e16bf8eae2728"
+redux-persist@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-4.8.0.tgz#17fd998949bdeef9275e4cf60ad5bbe1c73675fc"
   dependencies:
     json-stringify-safe "^5.0.1"
     lodash "^4.17.4"

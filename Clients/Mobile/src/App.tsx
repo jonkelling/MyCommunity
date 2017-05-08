@@ -11,11 +11,28 @@ import { Store } from "redux";
 import AppContentContainer from "./AppContentContainer";
 import storeConfig from "./store/ConfigureStore.dev";
 
-export default class App extends React.Component<{}, {}> {
+import { Navigation } from "react-native-navigation";
+
+import { registerScreens } from "./screens/index";
+
+const store = storeConfig({});
+
+const navigatorStyle = {
+    navBarTranslucent: true,
+    drawUnderNavBar: true,
+    navBarTextColor: "white",
+    navBarButtonColor: "white",
+    statusBarTextColorScheme: "light",
+    drawUnderTabBar: true,
+};
+
+registerScreens(store, Provider); // this is where you register all of your app's screens
+
+/*export default class App extends React.Component<{}, {}> {
     private store: Store<any>;
     constructor(props) {
         super(props);
-        this.store = storeConfig({});
+        this.store = store;
     }
     public render() {
         return (
@@ -24,6 +41,41 @@ export default class App extends React.Component<{}, {}> {
                 </AppContentContainer>
             </Provider>
         );
+    }
+}*/
+
+export default class App {
+    constructor() {
+        setTimeout(() => this.startApp(), 0);
+    }
+
+    private startApp() {
+        Navigation.startTabBasedApp({
+            tabs: [
+                {
+                    label: "Posts",
+                    screen: "app.PostList",
+                    // icon: iconsMap["ios-film-outline"],
+                    // selectedIcon: iconsMap["ios-film"],
+                    title: "Posts",
+                    navigatorStyle,
+                    navigatorButtons: {
+                        rightButtons: [
+                            {
+                                title: "Search",
+                                id: "search",
+                                // icon: iconsMap["ios-search"],
+                            },
+                        ],
+                    },
+                },
+            ],
+            tabsStyle: {
+                tabBarButtonColor: "white",
+                tabBarSelectedButtonColor: "white",
+                tabBarBackgroundColor: "black",
+            },
+        });
     }
 }
 
@@ -46,4 +98,4 @@ const styles: any = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent("mycommunity", () => App);
+// AppRegistry.registerComponent("mycommunity", () => App);
