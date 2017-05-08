@@ -20,9 +20,9 @@ const store = storeConfig({});
 const navigatorStyle = {
     navBarTranslucent: true,
     drawUnderNavBar: true,
-    navBarTextColor: "white",
-    navBarButtonColor: "white",
-    statusBarTextColorScheme: "light",
+    navBarTextColor: "black",
+    navBarButtonColor: "black",
+    statusBarTextColorScheme: "dark",
     drawUnderTabBar: true,
 };
 

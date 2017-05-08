@@ -13,6 +13,7 @@ class AppContentContainer extends React.Component<{
     app: any, accessToken: string, actions: any,
     email: string,
     entities: any,
+    navigator: any,
 }, { loadedPosts: boolean }> {
     constructor(props) {
         super(props);
@@ -44,7 +45,7 @@ class AppContentContainer extends React.Component<{
                 <Button
                     onPress={() => this.props.actions.logout()}
                     title="Logout Button">Logout</Button>
-                <PostList />
+                <PostList navigator={this.props.navigator} />
                 {this.props.children}
             </View>
         );

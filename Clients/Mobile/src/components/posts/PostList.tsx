@@ -6,6 +6,7 @@ import {
     TextStyle,
     View,
 } from "react-native";
+import { Navigator } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../../../node_modules/linq/linq";
@@ -38,8 +39,10 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             isRefreshing: false,
             postsDataSource: ds.cloneWithRows(this.getSortedPostsArray()),
         };
+        this._viewPost = this._viewPost.bind(this);
         this._renderSeparator = this._renderSeparator.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.props.navigator.setOnNavigatorEvent(this._onNavigatorEvent.bind(this));
     }
     public componentWillReceiveProps(nextProps: IPostListProps) {
         if (!isEqual(this.props.posts, nextProps.posts)) {
@@ -64,7 +67,8 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
                         author={this.props.users[rowData.author]}
                         style={styles.row}
                         headlineStyle={styles.headline}
-                        contentStyle={styles.content} />
+                        contentStyle={styles.content}
+                        viewPost={this._viewPost} />
                 )}
                 renderSeparator={this._renderSeparator}
                 onEndReached={() => this.props.actions.loadOlderPosts(1, this.getOldestPostDateTime(), 5)}
@@ -117,9 +121,34 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             progressBackgroundColor="#ffff00"
         />;
     }
+    private _onNavigatorEvent(event) {
+        if (event.type === "NavBarButtonPress") {
+            if (event.id === "close") {
+                this.props.navigator.dismissModal();
+            }
+        }
+    }
+    private _viewPost(postId) {
+        this.props.navigator.push({
+            screen: "app.PostDetail",
+            passProps: {
+                postId,
+            },
+            backButtonHidden: false,
+            navigatorButtons: {
+                rightButtons: [
+                    {
+                        id: "close",
+                        title: "close",
+                        // icon: iconsMap["ios-arrow-round-down"],
+                    },
+                ],
+            },
+        });
+    }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: any, ownProps: any) {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
         app: state.app,
@@ -137,6 +166,7 @@ function mapDispatchToProps(dispatch: any) {
 interface IPostListProps {
     actions: any;
     app: any;
+    navigator: Navigator;
     posts: any[];
     users: any[];
 }
