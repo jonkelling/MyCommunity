@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
@@ -26,6 +26,26 @@ class AppContentContainer extends React.Component<{
     public componentWillReceiveProps(nextProps: any) {
         this.loginIfNeeded(nextProps);
         this.loadCurrentUserIfNeeded(nextProps);
+        this.setupScreen(nextProps);
+    }
+    private setupScreen(props) {
+        if (!props.entities.communities) {
+            return;
+        }
+        const currentUser = props.entities && props.entities.users && Enumerable
+            .from(props.entities.users)
+            .select((x) => x.value)
+            .singleOrDefault((x) => x.email === props.email);
+        if (!currentUser) {
+            return;
+        }
+        const currentCommunity = props.entities.communities[currentUser.communityId];
+        if (!currentCommunity) {
+            return;
+        }
+        this.props.navigator.setSubTitle({
+            subtitle: currentCommunity.name,
+        });
     }
     public render() {
         if (this.props.app.loading.app) {
@@ -38,13 +58,16 @@ class AppContentContainer extends React.Component<{
                 style={{ width: 50, height: 50 }}
                 source={{ uri: this.props.app.profile.picture }} />;
         };
+
+        // Old stuff
+        // <ProfileImage />
+        // <Text>{this.props.app.profile && this.props.app.profile.email || "no email"}</Text>
+        // <Button
+        //     onPress={() => this.props.actions.logout()}
+        //     title="Logout Button">Logout</Button>
+
         return (
             <View style={styles.container}>
-                <ProfileImage />
-                <Text>{this.props.app.profile && this.props.app.profile.email || "no email"}</Text>
-                <Button
-                    onPress={() => this.props.actions.logout()}
-                    title="Logout Button">Logout</Button>
                 <PostList navigator={this.props.navigator} />
                 {this.props.children}
             </View>
@@ -87,8 +110,12 @@ const styles: any = StyleSheet.create({
     container: {
         backgroundColor: "transparent",
         flex: 1,
-        flexDirection: "column",
-        justifyContent: "space-between",
+        ...Platform.select({
+            ios: {
+                // paddingTop: 64,
+                // paddingBottom: 49,
+            },
+        }),
     },
     instructions: {
         color: "#333333",

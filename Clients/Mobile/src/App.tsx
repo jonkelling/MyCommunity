@@ -6,6 +6,7 @@ import {
     Text,
     View,
 } from "react-native";
+import { NavigatorStyle } from "react-native-navigation";
 import { Provider } from "react-redux";
 import { Store } from "redux";
 import AppContentContainer from "./AppContentContainer";
@@ -17,13 +18,14 @@ import { registerScreens } from "./screens/index";
 
 const store = storeConfig({});
 
-const navigatorStyle = {
+const navigatorStyle: NavigatorStyle = {
+    navBarHideOnScroll: false,
     navBarTranslucent: true,
-    drawUnderNavBar: true,
+    drawUnderNavBar: false,
     navBarTextColor: "black",
     navBarButtonColor: "black",
     statusBarTextColorScheme: "dark",
-    drawUnderTabBar: true,
+    drawUnderTabBar: false,
 };
 
 registerScreens(store, Provider); // this is where you register all of your app's screens
@@ -53,19 +55,19 @@ export default class App {
         Navigation.startTabBasedApp({
             tabs: [
                 {
-                    label: "Posts",
-                    screen: "app.PostList",
+                    label: "Home",
+                    screen: "app.Home",
                     // icon: iconsMap["ios-film-outline"],
                     // selectedIcon: iconsMap["ios-film"],
-                    title: "Posts",
+                    title: "Home",
                     navigatorStyle,
                     navigatorButtons: {
                         rightButtons: [
-                            {
-                                title: "Search",
-                                id: "search",
-                                // icon: iconsMap["ios-search"],
-                            },
+                            // {
+                            //     title: "Search",
+                            //     id: "search",
+                            //     // icon: iconsMap["ios-search"],
+                            // },
                         ],
                     },
                 },

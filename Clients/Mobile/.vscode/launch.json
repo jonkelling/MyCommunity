@@ -19,7 +19,7 @@
             "type": "reactnative",
             "request": "launch",
             "platform": "ios",
-            "target": "iPhone 5s",
+            "target": "iPhone SE",
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/.vscode/.react",
             "preLaunchTask": "tsc"

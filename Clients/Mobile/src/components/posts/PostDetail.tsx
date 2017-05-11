@@ -1,38 +1,42 @@
 import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
-import { Navigator } from "react-native-navigation";
+import { Navigator, NavigatorStyle } from "react-native-navigation";
 import { connect } from "react-redux";
+import { IPostVm } from "./Post";
 import PostAuthor, { IPostAuthor } from "./PostAuthor";
 import PostContent from "./PostContent";
 import PostHeadline from "./PostHeadline";
 
-interface IPostVm {
-    post: {
-        headline: string,
-        content: string,
-        createdDateTime: string,
-    };
-    author: IPostAuthor;
-    contentStyle: TextStyle;
-    headlineStyle: TextStyle;
-    style: ViewStyle;
+interface IPostDetailVm extends IPostVm {
     navigator: Navigator;
 }
 
-class PostDetail extends React.Component<IPostVm, {}> {
+class PostDetail extends React.Component<IPostDetailVm, {}> {
+    private static navigatorStyle: NavigatorStyle = {
+        navBarHideOnScroll: false,
+        navBarTranslucent: true,
+        drawUnderNavBar: false,
+        navBarTextColor: "black",
+        navBarButtonColor: "black",
+        statusBarTextColorScheme: "dark",
+        drawUnderTabBar: false,
+    };
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this._onNavigatorEvent.bind(this));
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public render() {
-        return <View style={this.props.style}>
+        return <View style={{
+            backgroundColor: "transparent",
+            flex: 1,
+        }}>
             <PostHeadline text={this.props.post.headline} style={this.props.headlineStyle} />
             <Text>{new Date(this.props.post.createdDateTime).toLocaleString()}</Text>
             <PostAuthor author={this.props.author} />
             <PostContent content={this.props.post.content} style={this.props.contentStyle} />
         </View>;
     }
-    private _onNavigatorEvent(event) {
+    private onNavigatorEvent(event) {
         if (event.type === "NavBarButtonPress") {
             if (event.id === "close") {
                 this.props.navigator.pop();

@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../../../node_modules/linq/linq";
 import appActions from "../../appActions";
-import { UPDATE_CONTACT_INFORMATION } from "../../constants/index";
 import Post from "./Post";
 
 const styles = StyleSheet.create({
@@ -24,6 +23,8 @@ const styles = StyleSheet.create({
     },
     headline: {
         fontWeight: "bold",
+        flex: 1,
+        alignSelf: "flex-start",
     },
     content: {
         alignSelf: "auto",
@@ -39,10 +40,10 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             isRefreshing: false,
             postsDataSource: ds.cloneWithRows(this.getSortedPostsArray()),
         };
-        this._viewPost = this._viewPost.bind(this);
-        this._renderSeparator = this._renderSeparator.bind(this);
+        this.viewPost = this.viewPost.bind(this);
+        this.renderSeparator = this.renderSeparator.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
-        this.props.navigator.setOnNavigatorEvent(this._onNavigatorEvent.bind(this));
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public componentWillReceiveProps(nextProps: IPostListProps) {
         if (!isEqual(this.props.posts, nextProps.posts)) {
@@ -62,15 +63,15 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
         // TODO: Use accurate communityId
         return (
             <ListView dataSource={this.state.postsDataSource}
-                renderRow={(rowData) => (
+                enableEmptySections
+                renderRow={(rowData) =>
                     <Post post={rowData}
                         author={this.props.users[rowData.author]}
                         style={styles.row}
                         headlineStyle={styles.headline}
                         contentStyle={styles.content}
-                        viewPost={this._viewPost} />
-                )}
-                renderSeparator={this._renderSeparator}
+                        viewPost={this.viewPost} />}
+                renderSeparator={this.renderSeparator}
                 onEndReached={() => this.props.actions.loadOlderPosts(1, this.getOldestPostDateTime(), 5)}
                 refreshControl={this.getRefreshControl()}
                 style={styles.scrollview} />
@@ -103,7 +104,7 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
         this.setState({ isRefreshing: true });
         setTimeout(() => this.setState({ isRefreshing: false }), 20000);
     }
-    private _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: boolean) {
+    private renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: boolean) {
         return (
             <View
                 key={`${sectionID}-${rowID}`}
@@ -121,14 +122,14 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             progressBackgroundColor="#ffff00"
         />;
     }
-    private _onNavigatorEvent(event) {
+    private onNavigatorEvent(event) {
         if (event.type === "NavBarButtonPress") {
             if (event.id === "close") {
                 this.props.navigator.dismissModal();
             }
         }
     }
-    private _viewPost(postId) {
+    private viewPost(postId) {
         this.props.navigator.push({
             screen: "app.PostDetail",
             passProps: {
@@ -136,13 +137,13 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             },
             backButtonHidden: false,
             navigatorButtons: {
-                rightButtons: [
-                    {
-                        id: "close",
-                        title: "close",
-                        // icon: iconsMap["ios-arrow-round-down"],
-                    },
-                ],
+                // rightButtons: [
+                //     {
+                //         id: "close",
+                //         title: "close",
+                //         // icon: iconsMap["ios-arrow-round-down"],
+                //     },
+                // ],
             },
         });
     }

@@ -3,6 +3,10 @@ package com.mycommunity;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.photoview.PhotoViewPackage;
+import cl.json.RNSharePackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.auth0.lock.react.LockReactPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -43,6 +47,10 @@ public class MainApplication extends NavigationApplication implements ReactAppli
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PhotoViewPackage(),
+            new RNSharePackage(),
+            new LinearGradientPackage(),
+            new VectorIconsPackage(),
             new LockReactPackage()
       );
     }
