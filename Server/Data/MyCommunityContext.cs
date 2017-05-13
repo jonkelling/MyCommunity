@@ -30,6 +30,7 @@ namespace Server.Data
             foreach (var entry in this.ChangeTracker.Entries<Entity>()
                 .Where(e => e.State == Microsoft.EntityFrameworkCore.EntityState.Modified))
             {
+                entry.Property("CreatedDateTime").IsModified = false;
                 entry.Property("ModifiedDateTime").CurrentValue = saveTime;
             }
             return await base.SaveChangesAsync(cancellationToken);
