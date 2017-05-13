@@ -6,6 +6,7 @@ import Enumerable from "../node_modules/linq/linq";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
+import PostGridView from "./components/posts/PostGridView";
 import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
 
@@ -68,7 +69,8 @@ class AppContentContainer extends React.Component<{
 
         return (
             <View style={styles.container}>
-                <PostList navigator={this.props.navigator} />
+                {/*<PostList navigator={this.props.navigator} />*/}
+                <PostGridView navigator={this.props.navigator} />
                 {this.props.children}
             </View>
         );

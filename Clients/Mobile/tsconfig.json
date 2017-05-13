@@ -32,7 +32,8 @@
         "enable": true,
         "include": [
             "lodash",
-            "normalizr"
+            "normalizr",
+            "moment"
         ]
     },
     "include": [
