@@ -1,5 +1,4 @@
 import React from "react";
-import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
@@ -9,6 +8,8 @@ import * as jwtHelper from "./auth/jwtHelper";
 import PostGridView from "./components/posts/PostGridView";
 import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
+// tslint:disable-next-line:no-var-requires
+const { Button, Image, Platform, Text, View } = require("@shoutem/ui");
 
 class AppContentContainer extends React.Component<{
     app: any, accessToken: string, actions: any,
@@ -108,16 +109,16 @@ class AppContentContainer extends React.Component<{
     }
 }
 
-const styles: any = StyleSheet.create({
+const styles: any = {
     container: {
         backgroundColor: "transparent",
         flex: 1,
-        ...Platform.select({
-            ios: {
-                // paddingTop: 64,
-                // paddingBottom: 49,
-            },
-        }),
+        // ...Platform.select({
+        //     ios: {
+        //         // paddingTop: 64,
+        //         // paddingBottom: 49,
+        //     },
+        // }),
     },
     instructions: {
         color: "#333333",
@@ -129,7 +130,7 @@ const styles: any = StyleSheet.create({
         margin: 10,
         textAlign: "center",
     },
-});
+};
 
 const mapStateToProps = (state: any, ownProps: any) => {
     return ({

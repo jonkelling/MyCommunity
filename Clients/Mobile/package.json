@@ -8,6 +8,7 @@
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "prebuild": "rm -rf build",
     "build": "tsc",
+    "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --dev false --entry-file index.ios.js --bundle-output ios/main.jsbundle",
     "watch": "tsc -p . --watch",
     "test": "jest"
   },

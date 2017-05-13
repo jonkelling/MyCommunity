@@ -61,3 +61,6 @@ obj/
 **/.vscode/.react/debuggerWorker.js
 **/.vscode/.react/index.ios.bundle
 **/.vscode/.react/index.ios.map
+Clients/Mobile/ios/main.jsbundle
+
+Clients/Mobile/ios/main.jsbundle.meta

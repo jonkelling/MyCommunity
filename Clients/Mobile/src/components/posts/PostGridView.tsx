@@ -22,6 +22,7 @@ const {
     ListView,
     Caption,
     GridRow,
+    Icon,
     // tslint:disable-next-line:no-var-requires
 } = require("@shoutem/ui");
 // tslint:disable-next-line:no-var-requires
@@ -60,7 +61,7 @@ class PostGridView extends React.Component<any, any> {
             return (
                 <TouchableOpacity key={index}>
                     <Image
-                        styleName="large"
+                        styleName="rounded-corners large"
                         // tslint:disable-next-line:max-line-length
                         source={{ uri: rowData[0].headlineImageUrl || "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
                     >
@@ -80,7 +81,7 @@ class PostGridView extends React.Component<any, any> {
                 <TouchableOpacity key={id} styleName="flexible">
                     <Card styleName="flexible">
                         <Image
-                            styleName="large"
+                            styleName="medium-wide"
                             // tslint:disable-next-line:max-line-length
                             source={{ uri: post.headlineImageUrl || "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
                         />
