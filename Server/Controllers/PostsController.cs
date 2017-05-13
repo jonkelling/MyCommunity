@@ -81,7 +81,9 @@ namespace Server.Controllers
         [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
         public async Task<IActionResult> Put(int communityId, int postId, [FromBody]PostVm value)
         {
-            _dbContext.Posts.Update(_mapper.Map<Post>(value));
+            var post = _mapper.Map<Post>(value);
+            post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
+            _dbContext.Posts.Update(post);
             return Ok(await _dbContext.SaveChangesAsync());
         }
 
