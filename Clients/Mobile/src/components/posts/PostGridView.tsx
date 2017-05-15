@@ -10,19 +10,20 @@ import appActions from "../../appActions";
 import Post from "./Post";
 // import { TouchableOpacity } from "react-native";
 const {
-    Screen,
-    Divider,
-    Image,
-    TouchableOpacity,
-    Title,
-    Subtitle,
-    Tile,
-    View,
-    Card,
-    ListView,
     Caption,
+    Card,
+    Divider,
     GridRow,
     Icon,
+    Image,
+    ListView,
+    Overlay,
+    Screen,
+    Subtitle,
+    Tile,
+    Title,
+    TouchableOpacity,
+    View,
     // tslint:disable-next-line:no-var-requires
 } = require("@shoutem/ui");
 // tslint:disable-next-line:no-var-requires
@@ -61,11 +62,11 @@ class PostGridView extends React.Component<any, any> {
             return (
                 <TouchableOpacity key={index}>
                     <Image
-                        styleName="rounded-corners large"
+                        styleName="rounded-corners large rounded-corners"
                         // tslint:disable-next-line:max-line-length
                         source={{ uri: rowData[0].headlineImageUrl || "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
                     >
-                        <Tile>
+                        <Tile styleName="solid-dark">
                             <Title styleName="md-gutter-bottom">{rowData[0].headline}</Title>
                             <Subtitle styleName="sm-gutter-horizontal" numberOfLines={2}>{rowData[0].content}</Subtitle>
                         </Tile>

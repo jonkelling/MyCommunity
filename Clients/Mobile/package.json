@@ -35,6 +35,7 @@
     "react-redux": "^5.0.4",
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
+    "redux-api-middleware": "github:jonkelling/redux-api-middleware#dist",
     "redux-logger": "^3.0.1",
     "redux-normalizr3-middleware": "^2.0.1",
     "redux-persist": "^4.8.0",

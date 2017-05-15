@@ -3,10 +3,10 @@ import { Store } from "redux";
 const Auth0Lock = require("react-native-lock");
 import { AsyncStorage } from "react-native";
 
-export default class AuthService {
+export class AuthService {
     private lock: any;
     private store: Store<any>;
-    constructor(store: Store<any>) {
+    constructor() {
         // Configure Auth0
         this.lock = new Auth0Lock({
             authParams: { scope: "openid name email nickname" },
@@ -14,9 +14,14 @@ export default class AuthService {
             domain: "mycommunity.auth0.com",
             useBrowser: false,
         });
-        this.store = store;
         this._doAuthentication = this._doAuthentication.bind(this);
         this.login = this.login.bind(this);
+        this.refreshToken = this.refreshToken.bind(this);
+        this.setStore = this.setStore.bind(this);
+    }
+
+    public setStore(store: Store<any>) {
+        this.store = store;
     }
 
     public login(callback?: any) {
@@ -50,10 +55,22 @@ export default class AuthService {
         return this.store.getState().app.idToken;
     }
 
+    public getRefreshToken() {
+        return this.store.getState().app.refreshToken;
+    }
+
     public logout() {
         // Clear user token and profile data from local storage
         // AsyncStorage.removeItem("id_token");
         this.store.dispatch({ type: "REMOVE_AUTH_TOKEN", payload: true });
+    }
+
+    public refreshToken() {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) {
+            return Promise.reject("no refresh token");
+        }
+        return this.lock.authenticationAPI().refreshToken(refreshToken, {});
     }
 
     private _doAuthentication(token) {
@@ -63,3 +80,5 @@ export default class AuthService {
         // browserHistory.replace("/home");
     }
 }
+
+export default new AuthService();

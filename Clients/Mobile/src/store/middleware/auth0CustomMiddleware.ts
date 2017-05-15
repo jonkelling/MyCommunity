@@ -1,9 +1,10 @@
-import AuthService from "../../auth/AuthService";
+import AuthService, { AuthService as AuthServiceType } from "../../auth/AuthService";
 
-let authService: AuthService;
+let authService: AuthServiceType;
 
 export default (store) => {
-    authService = authService || new AuthService(store);
+    authService = AuthService;
+    authService.setStore(store);
 
     return (next) => (action) => {
         if (action.type === "AUTH0_LOGIN") {

@@ -11,10 +11,11 @@ import rootReducer from "../reducers/index";
 // import api from "../middleware/api";
 // import auth from "../middleware/auth";
 import schemas from "../schemas";
+import afterNormalizrMiddleware from "./middleware/afterNormalizrMiddleware";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
-
+import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 // const { apiMiddleware } = require("redux-api-middleware");
 
 // See reducers.ts before changing anything
@@ -27,10 +28,12 @@ export default function storeConfig(preloadedState?: any) {
             applyMiddleware(
                 // auth,
                 auth0CustomMiddleware,
+                refreshTokenMiddleware,
                 apiEndPointMiddleware,
                 apiAuthMiddleware,
                 apiMiddleware,
                 normalizrMiddleware(),
+                afterNormalizrMiddleware,
                 // api,
                 thunk,
                 // createLogger(),

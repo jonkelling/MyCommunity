@@ -80,10 +80,13 @@ const app = handleActions(
             const loadingKey =
                 action.meta.source ||
                 (
-                    action.meta.schema.key ||
+                    action.meta.schema &&
                     (
-                        action.meta.schema.schema &&
-                        action.meta.schema.schema.key
+                        action.meta.schema.key ||
+                        (
+                            action.meta.schema.schema &&
+                            action.meta.schema.schema.key
+                        )
                     )
                 );
             return {
@@ -102,10 +105,13 @@ const app = handleActions(
             const loadingKey =
                 action.meta.source ||
                 (
-                    action.meta.schema.key ||
+                    action.meta.schema &&
                     (
-                        action.meta.schema.schema &&
-                        action.meta.schema.schema.key
+                        action.meta.schema.key ||
+                        (
+                            action.meta.schema.schema &&
+                            action.meta.schema.schema.key
+                        )
                     )
                 );
             return {

@@ -81,7 +81,7 @@ class AppContentContainer extends React.Component<{
             // Maybe skip this component until loading is done?
             return;
         }
-        if (!props.app.idToken || jwtHelper.isTokenExpired(props.app.idToken)) {
+        if (!props.app.idToken && !props.app.refreshToken) {
             this.props.actions.login();
         }
     }
