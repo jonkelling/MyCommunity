@@ -9,6 +9,9 @@
                 "constructor",
                 "instance-method"
             ]
-        }]
+        }],
+        "no-console": [
+            false
+        ]
     }
 }

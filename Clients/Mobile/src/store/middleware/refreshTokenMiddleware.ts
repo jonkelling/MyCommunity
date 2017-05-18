@@ -12,12 +12,16 @@ export default (store) => (next) => (action) => {
         const idToken = AuthService.getToken();
 
         if (!idToken || jwtHelper.isTokenExpired(idToken)) {
-            const refreshToken = AuthService.getRefreshToken();
-            AuthService.refreshToken().then((response) => {
-                AuthService.setToken(response);
-                store.dispatch(action);
-                return;
-            });
+            AuthService.refreshToken()
+                .then((response) => {
+                    AuthService.setToken(response);
+                    store.dispatch(action);
+                    return; // TODO next(...some action about token being refreshing...)
+                })
+                .catch((error) => {
+                    console.error(`refresh token error: ${JSON.stringify(error)}`);
+                    AuthService.login();
+                });
         }
     }
     return next(action);

@@ -2,6 +2,9 @@
 /// <reference path="../../../node_modules/moment/moment.d.ts"/>
 import isEqual from "lodash.isequal";
 import React from "react";
+import {
+    RefreshControl,
+} from "react-native";
 import { Navigator } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -32,6 +35,10 @@ const moment = require("moment");
 class PostGridView extends React.Component<any, any> {
     constructor(props) {
         super(props);
+        this.state = {
+            isRefreshing: false,
+        };
+        this.onRefresh = this.onRefresh.bind(this);
     }
     public render() {
         let isFirstArticle = true;
@@ -48,6 +55,8 @@ class PostGridView extends React.Component<any, any> {
                 <ListView
                     data={groupedData}
                     renderRow={this.renderRow}
+                    onRefresh={this.onRefresh}
+                    loading={this.state.isRefreshing}
                 />
             </Screen>
         );
@@ -106,6 +115,27 @@ class PostGridView extends React.Component<any, any> {
         );
     }
 
+    private getNewestPostDateTime(props = this.props) {
+        return Enumerable.from(props.posts)
+            .orderByDescending((post) => post.createdDateTime)
+            .select((post) => new Date(post.createdDateTime))
+            .defaultIfEmpty(new Date())
+            .firstOrDefault();
+    }
+
+    private onRefresh() {
+        this.props.actions.loadNewerPosts(1, this.getNewestPostDateTime());
+        this.setState({ isRefreshing: true });
+        setTimeout(() => this.setState({ isRefreshing: false }), 20000);
+    }
+
+    private getRefreshControl() {
+        return <RefreshControl
+            refreshing={!!this.state.isRefreshing || !!this.props.app.loading.posts}
+            onRefresh={this.onRefresh}
+            progressBackgroundColor="#ffff00"
+        />;
+    }
 }
 
 function mapStateToProps(state: any, ownProps: any) {

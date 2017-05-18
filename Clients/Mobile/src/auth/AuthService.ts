@@ -1,3 +1,7 @@
+// tslint:disable-next-line:no-reference
+/// <reference path="../../node_modules/react-native-keychain/typings/react-native-keychain.d.ts" />
+
+import * as Keychain from "react-native-keychain";
 import { Store } from "redux";
 // tslint:disable-next-line:no-var-requires
 const Auth0Lock = require("react-native-lock");
@@ -14,7 +18,7 @@ export class AuthService {
             domain: "mycommunity.auth0.com",
             useBrowser: false,
         });
-        this._doAuthentication = this._doAuthentication.bind(this);
+        this.doAuthentication = this.doAuthentication.bind(this);
         this.login = this.login.bind(this);
         this.refreshToken = this.refreshToken.bind(this);
         this.setStore = this.setStore.bind(this);
@@ -28,7 +32,7 @@ export class AuthService {
         // Call the show method to display the widget.
         this.lock.show({}, (err, profile, token) => {
             if (!err) {
-                this._doAuthentication(token);
+                this.doAuthentication(token);
                 this.store.dispatch({ type: "SET_AUTH_PROFILE", payload: profile });
             }
             if (callback) {
@@ -46,7 +50,14 @@ export class AuthService {
     public setToken(token) {
         // Saves user token to local storage
         // AsyncStorage.setItem("id_token", idToken);
-        this.store.dispatch({ type: "SET_AUTH_TOKEN", payload: token });
+        this.store.dispatch({ type: "SET_AUTH_TOKEN", payload: { idToken: token.idToken } });
+        if (token.refreshToken) {
+            Keychain
+                .setGenericPassword("refreshToken", token.refreshToken)
+                .then(() => {
+                    console.log(`Credentials saved successfully!`);
+                });
+        }
     }
 
     public getToken() {
@@ -56,7 +67,15 @@ export class AuthService {
     }
 
     public getRefreshToken() {
-        return this.store.getState().app.refreshToken;
+        return Keychain
+            .getGenericPassword()
+            .then((credentials: any) => {
+                console.log("Credentials successfully loaded for user " + credentials.username);
+                return credentials;
+            }).catch((error) => {
+                console.log("Kefychain couldn't be accessed! Maybe no value set?", error);
+                throw error;
+            });
     }
 
     public logout() {
@@ -66,14 +85,20 @@ export class AuthService {
     }
 
     public refreshToken() {
-        const refreshToken = this.getRefreshToken();
-        if (!refreshToken) {
-            return Promise.reject("no refresh token");
-        }
-        return this.lock.authenticationAPI().refreshToken(refreshToken, {});
+        return this
+            .getRefreshToken()
+            .then((credentials) => {
+                if (!credentials) {
+                    throw new Error("no refresh token");
+                }
+                return credentials.password;
+            })
+            .then((refreshToken) => {
+                return this.lock.authenticationAPI().refreshToken(refreshToken, {});
+            });
     }
 
-    private _doAuthentication(token) {
+    private doAuthentication(token) {
         // Saves the user token
         this.setToken(token);
         // navigate to the home route
