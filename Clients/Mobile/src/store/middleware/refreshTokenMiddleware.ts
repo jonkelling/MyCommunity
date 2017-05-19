@@ -25,14 +25,15 @@ export default (store) => (next) => (action) => {
                         }
                     })
                     .catch((error) => {
-                        console.info(`refresh token error.`);
+                        console.info(`refresh token error ${error}.`);
                         store.dispatch({ type: actions.REFRESHING_TOKEN_FAILURE });
                         AuthService.login();
                     });
             }
             else {
                 // delay and retry CALL_API action
-                setTimeout(() => store.dispatch(action), 500);
+                // setTimeout(() => store.dispatch(action), 500);
+                return;
             }
             store.dispatch({ type: actions.REFRESHING_TOKEN });
             return;

@@ -11,6 +11,7 @@ import { Action, handleActions } from "redux-actions";
 import { REHYDRATE } from "redux-persist/constants";
 import * as actions from "../actions/index";
 import app from "./appReducer";
+import entities from "./entitiesReducer";
 
 function handleApiResponseActions(handlers) {
     return (state, action) => {
@@ -20,20 +21,6 @@ function handleApiResponseActions(handlers) {
         return handlers[action.meta.source](state, action);
     };
 }
-
-const entities = (state = {}, action) => {
-    if (action.type === REHYDRATE) {
-        const incoming = action.payload.entities;
-        if (incoming) { return { ...state, ...incoming, loading: false }; }
-        return { ...state, loading: false };
-    }
-
-    if (action.payload && action.payload.entities) {
-        return merge({}, state, action.payload.entities);
-    }
-
-    return state;
-};
 
 // Updates error message to notify about the failed fetches.
 function errorMessage(state = null, action: Action<any>) {
