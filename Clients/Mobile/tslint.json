@@ -12,6 +12,11 @@
         }],
         "no-console": [
             false
+        ],
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace"
         ]
     }
 }
