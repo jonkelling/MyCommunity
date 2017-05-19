@@ -117,8 +117,8 @@ class PostGridView extends React.Component<any, any> {
 
     private getNewestPostDateTime(props = this.props) {
         return Enumerable.from(props.posts)
-            .orderByDescending((post) => post.createdDateTime)
-            .select((post) => new Date(post.createdDateTime))
+            .orderByDescending((post: any) => post.createdDateTime)
+            .select((post: any) => new Date(post.createdDateTime))
             .defaultIfEmpty(new Date())
             .firstOrDefault();
     }
