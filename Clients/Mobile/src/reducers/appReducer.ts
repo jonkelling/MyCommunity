@@ -6,8 +6,22 @@ export default handleActions(
     {
         [REHYDRATE]: (state, action: any) => {
             const incoming = action.payload.app;
-            if (incoming) { return { ...state, ...incoming, loading: { app: false } }; }
-            return { ...state, loading: { app: false } };
+            const extras = {
+                loading: { app: false },
+                refreshingToken: false,
+                refreshTokenError: null,
+            };
+            if (incoming) {
+                return {
+                    ...state,
+                    ...incoming,
+                    ...extras,
+                };
+            }
+            return {
+                ...state,
+                ...extras,
+            };
         },
         [actions.LOGOUT]: (state) => {
             return { ...state, authToken: null };

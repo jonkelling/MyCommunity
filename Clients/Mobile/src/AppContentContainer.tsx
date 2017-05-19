@@ -81,9 +81,17 @@ class AppContentContainer extends React.Component<{
             // Maybe skip this component until loading is done?
             return;
         }
-        // if (!props.app.idToken && !props.app.refreshToken) {
-        //     this.props.actions.login();
-        // }
+        if (!props.app.idToken) {
+            AuthService.getRefreshToken()
+                .then((token) => {
+                    if (!token) {
+                        this.props.actions.login();
+                    }
+                })
+                .catch((error) => {
+                    throw new Error(JSON.stringify(error));
+                });
+        }
     }
     private loadCurrentUserIfNeeded(props: any) {
         if (!props.email) {

@@ -32,7 +32,7 @@ export default (store) => (next) => (action) => {
             }
             else {
                 // delay and retry CALL_API action
-                // setTimeout(() => store.dispatch(action), 500);
+                setTimeout(() => store.dispatch(action), 500);
                 return;
             }
             store.dispatch({ type: actions.REFRESHING_TOKEN });
