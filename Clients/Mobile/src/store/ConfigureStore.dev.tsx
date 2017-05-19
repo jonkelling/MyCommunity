@@ -1,5 +1,6 @@
 ﻿// tslint:disable:no-var-requires
 import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
+import loggerMiddleware from "./middleware/loggerMiddleware";
 const { apiMiddleware } = require("redux-api-middleware");
 const normalizrMiddleware = require("redux-normalizr3-middleware").default;
 // import * as createLogger from 'redux-logger';
@@ -27,6 +28,7 @@ export default function storeConfig(preloadedState?: any) {
         compose(
             applyMiddleware(
                 // auth,
+                loggerMiddleware,
                 auth0CustomMiddleware,
                 refreshTokenMiddleware,
                 apiEndPointMiddleware,
