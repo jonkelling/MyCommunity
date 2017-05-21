@@ -8,7 +8,6 @@ import {
     Middleware,
 } from "redux";
 import { Action, handleActions } from "redux-actions";
-import { REHYDRATE } from "redux-persist/constants";
 import * as actions from "../actions/index";
 import app from "./appReducer";
 import entities from "./entitiesReducer";

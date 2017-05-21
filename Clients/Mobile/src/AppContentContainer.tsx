@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
@@ -8,6 +9,7 @@ import * as jwtHelper from "./auth/jwtHelper";
 import PostGridView from "./components/posts/PostGridView";
 import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
+import { ScreenId } from "./screens/index";
 // tslint:disable-next-line:no-var-requires
 const { Button, Image, Platform, Text, View } = require("@shoutem/ui");
 

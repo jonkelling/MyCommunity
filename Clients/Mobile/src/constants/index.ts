@@ -1,5 +1,4 @@
 
-export const UPDATE_CONTACT_INFORMATION = "UPDATE_CONTACT_INFORMATION";
 export const LOGIN = "LOGIN";
 export const TESTING = "TEST abc 123 DEF fdsafdsa";
 export const LOGO = "http://www.affirmativeselftalk.com/wp-content/uploads/2016/10/Logo.png";

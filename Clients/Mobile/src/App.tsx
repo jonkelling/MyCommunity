@@ -14,7 +14,7 @@ import storeConfig from "./store/ConfigureStore.dev";
 
 import { Navigation } from "react-native-navigation";
 
-import { registerScreens } from "./screens/index";
+import { registerScreens, ScreenId } from "./screens/index";
 
 const store = storeConfig({});
 
@@ -48,7 +48,9 @@ registerScreens(store, Provider); // this is where you register all of your app'
 
 export default class App {
     constructor() {
-        setTimeout(() => this.startApp(), 0);
+        // setTimeout(() => this.startApp(), 0);
+        // setTimeout(() => this.startNoCommunityAssigned(), 0);
+        setTimeout(() => this.startLoadingScreen(), 0);
     }
 
     private startApp() {
@@ -76,6 +78,32 @@ export default class App {
                 tabBarButtonColor: "white",
                 tabBarSelectedButtonColor: "white",
                 tabBarBackgroundColor: "black",
+            },
+        });
+    }
+
+    private startNoCommunityAssigned() {
+        Navigation.startSingleScreenApp({
+            screen: {
+                screen: ScreenId.NoCommunityAssigned,
+                title: "Welcome!",
+                navigatorStyle: {
+                    navBarHidden: true,
+                    statusBarHidden: true,
+                },
+            },
+        });
+    }
+
+    private startLoadingScreen() {
+         Navigation.startSingleScreenApp({
+            screen: {
+                screen: ScreenId.Loading,
+                title: "Welcome!",
+                navigatorStyle: {
+                    navBarHidden: true,
+                    statusBarHidden: true,
+                },
             },
         });
     }
