@@ -15,7 +15,8 @@ export default (props) => {
         return null;
     }
 
-    const dateString = getFormattedDateString(date);
+    // const dateString = getFormattedDateString(date);
+    const dateString = moment(date).fromNow();
 
     return <Text style={props.style}>{dateString}</Text>;
 };

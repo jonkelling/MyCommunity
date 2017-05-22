@@ -73,8 +73,8 @@ class AppContentContainer extends React.Component<{
 
         return (
             <View style={styles.container}>
-                {/*<PostList navigator={this.props.navigator} />*/}
-                <PostGridView navigator={this.props.navigator} />
+                <PostList navigator={this.props.navigator} />
+                {/*<PostGridView navigator={this.props.navigator} />*/}
                 {this.props.children}
             </View>
         );
