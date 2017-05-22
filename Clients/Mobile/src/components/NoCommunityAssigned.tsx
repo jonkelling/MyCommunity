@@ -6,7 +6,7 @@ import { ColorTheme } from "../constants/index";
 import { community } from "../schemas";
 import * as styles from "../styles";
 
-const {
+import {
     Button,
     Card,
     Divider,
@@ -18,7 +18,7 @@ const {
     TextInput,
     Tile,
     // tslint:disable-next-line:no-var-requires
-} = require("@shoutem/ui");
+} from "../ui";
 
 import Subtitle from "./Subtitle";
 import Text from "./Text";

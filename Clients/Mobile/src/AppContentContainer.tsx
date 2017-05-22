@@ -12,7 +12,7 @@ import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
 import { ScreenId } from "./screens/index";
 // tslint:disable-next-line:no-var-requires
-const { Button, Image, Platform, Text, View } = require("@shoutem/ui");
+import { Button, Image, Text, View } from "./ui";
 
 class AppContentContainer extends React.Component<{
     app: any, accessToken: string, actions: any,

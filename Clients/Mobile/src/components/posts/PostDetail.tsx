@@ -5,12 +5,11 @@ import { ScrollView, TextStyle, View, ViewStyle } from "react-native";
 import { Navigator, NavigatorStyle } from "react-native-navigation";
 import { connect } from "react-redux";
 import { Screen, Subtitle, Text, Title } from "../../ui";
+import { Divider, Image } from "../../ui";
 import { IPostVm } from "./Post";
 import PostAuthor, { IPostAuthor } from "./PostAuthor";
 import PostContent from "./PostContent";
 import PostHeadline from "./PostHeadline";
-// tslint:disable-next-line:no-var-requires
-const { Divider, Image } = require("@shoutem/ui");
 
 interface IPostDetailVm extends IPostVm {
     navigator: Navigator;

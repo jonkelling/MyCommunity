@@ -10,9 +10,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../../../node_modules/linq/linq";
 import appActions from "../../appActions";
-import Post from "./Post";
 // import { TouchableOpacity } from "react-native";
-const {
+import {
     Caption,
     Card,
     Divider,
@@ -27,8 +26,8 @@ const {
     Title,
     TouchableOpacity,
     View,
-    // tslint:disable-next-line:no-var-requires
-} = require("@shoutem/ui");
+} from "../../ui";
+import Post from "./Post";
 // tslint:disable-next-line:no-var-requires
 const moment = require("moment");
 
