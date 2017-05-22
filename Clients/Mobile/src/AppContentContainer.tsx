@@ -48,7 +48,7 @@ class AppContentContainer extends React.Component<{
         if (!currentCommunity) {
             return;
         }
-        this.props.navigator.setSubTitle({
+        this.props.navigator.setTitle({
             subtitle: currentCommunity.name,
         });
     }
