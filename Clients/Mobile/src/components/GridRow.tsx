@@ -7,4 +7,7 @@ export default class GridRow extends React.Component<any, {}> {
     public render() {
         return <Shoutem.GridRow {...this.props} />;
     }
+    public static groupByRows(a, b, c) {
+        return Shoutem.GridRow.groupByRows(a, b, c);
+    }
 }
