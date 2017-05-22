@@ -3,6 +3,7 @@ import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
+import * as actions from "./actions/index";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
@@ -153,8 +154,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
     actions: {
-        login: () => dispatch({ type: "AUTH0_LOGIN" }),
-        logout: () => dispatch({ type: "AUTH0_LOGOUT" }),
+        login: () => dispatch({ type: actions.AUTH0_LOGIN }),
+        logout: () => dispatch({ type: actions.AUTH0_LOGOUT }),
         ...bindActionCreators(appActions, dispatch),
     },
 });

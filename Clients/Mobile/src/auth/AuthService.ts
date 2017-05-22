@@ -3,6 +3,7 @@
 
 import * as Keychain from "react-native-keychain";
 import { Store } from "redux";
+import * as actions from "../actions/index";
 // tslint:disable-next-line:no-var-requires
 const Auth0Lock = require("react-native-lock");
 import { AsyncStorage } from "react-native";
@@ -30,13 +31,15 @@ export class AuthService {
 
     public login(callback?: any) {
         // Call the show method to display the widget.
+        this.store.dispatch({ type: actions.LOGGING_IN });
         this.lock.show({}, (err, profile, token) => {
             if (!err) {
                 this.doAuthentication(token);
-                this.store.dispatch({ type: "SET_AUTH_PROFILE", payload: profile });
+                this.store.dispatch({ type: actions.SET_AUTH_PROFILE, payload: profile });
+                return;
             }
+            this.store.dispatch({ type: actions.AUTH_LOGIN_FAILED, payload: err });
             if (callback) {
-                this.store.dispatch({ type: "AUTH_LOGIN_FAILED", payload: err });
                 callback(err, profile, token);
             }
         });
@@ -50,7 +53,7 @@ export class AuthService {
     public setToken(token) {
         // Saves user token to local storage
         // AsyncStorage.setItem("id_token", idToken);
-        this.store.dispatch({ type: "SET_AUTH_TOKEN", payload: { idToken: token.idToken } });
+        this.store.dispatch({ type: actions.SET_AUTH_TOKEN, payload: { idToken: token.idToken } });
         if (token.refreshToken) {
             Keychain
                 .setGenericPassword("refreshToken", token.refreshToken)
@@ -81,7 +84,7 @@ export class AuthService {
     public logout() {
         // Clear user token and profile data from local storage
         // AsyncStorage.removeItem("id_token");
-        this.store.dispatch({ type: "REMOVE_AUTH_TOKEN", payload: true });
+        this.store.dispatch({ type: actions.REMOVE_AUTH_TOKEN, payload: true });
     }
 
     public refreshToken() {

@@ -1,3 +1,4 @@
+import * as actions from "./actions/index";
 import * as schemas from "./schemas";
 
 // tslint:disable:object-literal-sort-keys
@@ -28,6 +29,9 @@ export default {
         const queryString = `before=${beforeDateTime.toUTCString()}&limit=${limit || ""}`;
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
+    },
+    refreshToken: () => {
+        return { type: actions.REFRESH_TOKEN };
     },
 };
 

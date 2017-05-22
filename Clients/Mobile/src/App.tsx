@@ -12,100 +12,19 @@ import { Store } from "redux";
 import AppContentContainer from "./AppContentContainer";
 import storeConfig from "./store/ConfigureStore.dev";
 
-import { Navigation } from "react-native-navigation";
+import * as appNavigation from "./appNavigation";
 
 import { registerScreens, ScreenId } from "./screens/index";
 
 const store = storeConfig({});
 
-const navigatorStyle: NavigatorStyle = {
-    navBarHideOnScroll: false,
-    navBarTranslucent: true,
-    drawUnderNavBar: false,
-    navBarTextColor: "black",
-    navBarButtonColor: "black",
-    statusBarTextColorScheme: "dark",
-    drawUnderTabBar: false,
-};
-
-registerScreens(store, Provider); // this is where you register all of your app's screens
-
-/*export default class App extends React.Component<{}, {}> {
-    private store: Store<any>;
-    constructor(props) {
-        super(props);
-        this.store = store;
-    }
-    public render() {
-        return (
-            <Provider store={this.store}>
-                <AppContentContainer store={this.store}>
-                </AppContentContainer>
-            </Provider>
-        );
-    }
-}*/
+registerScreens(store, Provider);
 
 export default class App {
     constructor() {
         // setTimeout(() => this.startApp(), 0);
         // setTimeout(() => this.startNoCommunityAssigned(), 0);
-        setTimeout(() => this.startLoadingScreen(), 0);
-    }
-
-    private startApp() {
-        Navigation.startTabBasedApp({
-            tabs: [
-                {
-                    label: "Home",
-                    screen: "app.Home",
-                    // icon: iconsMap["ios-film-outline"],
-                    // selectedIcon: iconsMap["ios-film"],
-                    title: "Home",
-                    navigatorStyle,
-                    navigatorButtons: {
-                        rightButtons: [
-                            // {
-                            //     title: "Search",
-                            //     id: "search",
-                            //     // icon: iconsMap["ios-search"],
-                            // },
-                        ],
-                    },
-                },
-            ],
-            tabsStyle: {
-                tabBarButtonColor: "white",
-                tabBarSelectedButtonColor: "white",
-                tabBarBackgroundColor: "black",
-            },
-        });
-    }
-
-    private startNoCommunityAssigned() {
-        Navigation.startSingleScreenApp({
-            screen: {
-                screen: ScreenId.NoCommunityAssigned,
-                title: "Welcome!",
-                navigatorStyle: {
-                    navBarHidden: true,
-                    statusBarHidden: true,
-                },
-            },
-        });
-    }
-
-    private startLoadingScreen() {
-         Navigation.startSingleScreenApp({
-            screen: {
-                screen: ScreenId.Loading,
-                title: "Welcome!",
-                navigatorStyle: {
-                    navBarHidden: true,
-                    statusBarHidden: true,
-                },
-            },
-        });
+        setTimeout(() => appNavigation.startLoadingScreen(), 0);
     }
 }
 

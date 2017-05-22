@@ -3,21 +3,16 @@ import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from
 import loggerMiddleware from "./middleware/loggerMiddleware";
 const { apiMiddleware } = require("redux-api-middleware");
 const normalizrMiddleware = require("redux-normalizr3-middleware").default;
-// import * as createLogger from 'redux-logger';
 const thunk = require("redux-thunk").default;
 import { AsyncStorage } from "react-native";
 import { autoRehydrate, persistStore } from "redux-persist";
 import rootReducer from "../reducers/index";
-// import DevTools from "../containers/DevTools";
-// import api from "../middleware/api";
-// import auth from "../middleware/auth";
 import schemas from "../schemas";
 import afterNormalizrMiddleware from "./middleware/afterNormalizrMiddleware";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
 import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
-// const { apiMiddleware } = require("redux-api-middleware");
 
 // See reducers.ts before changing anything
 
@@ -60,7 +55,7 @@ function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any
         ),
     );
 
-    persistStore(store, { storage: AsyncStorage });
+    persistStore(store, { storage: AsyncStorage }); // .purge();
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers
