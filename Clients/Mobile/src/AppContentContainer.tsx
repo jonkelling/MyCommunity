@@ -1,4 +1,5 @@
 import React from "react";
+import { Image, Platform } from "react-native";
 import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -11,8 +12,7 @@ import PostGridView from "./components/posts/PostGridView";
 import PostList from "./components/posts/PostList";
 import DemoScreen from "./DemoScreen";
 import { ScreenId } from "./screens/index";
-// tslint:disable-next-line:no-var-requires
-const { Button, Image, Platform, Text, View } = require("@shoutem/ui");
+import { Screen, Text, View } from "./ui";
 
 class AppContentContainer extends React.Component<{
     app: any, accessToken: string, actions: any,
@@ -25,11 +25,9 @@ class AppContentContainer extends React.Component<{
         this.state = { loadedPosts: false };
     }
     public componentWillMount() {
-        this.loginIfNeeded(this.props);
         this.loadCurrentUserIfNeeded(this.props);
     }
     public componentWillReceiveProps(nextProps: any) {
-        this.loginIfNeeded(nextProps);
         this.loadCurrentUserIfNeeded(nextProps);
         this.setupScreen(nextProps);
     }
@@ -48,7 +46,7 @@ class AppContentContainer extends React.Component<{
         if (!currentCommunity) {
             return;
         }
-        this.props.navigator.setSubTitle({
+        this.props.navigator.setTitle({
             subtitle: currentCommunity.name,
         });
     }
@@ -72,11 +70,14 @@ class AppContentContainer extends React.Component<{
         //     title="Logout Button">Logout</Button>
 
         return (
-            <View style={styles.container}>
-                {/*<PostList navigator={this.props.navigator} />*/}
-                <PostGridView navigator={this.props.navigator} />
-                {this.props.children}
-            </View>
+            <Screen>
+                <View style={styles.container}>
+                    <PostList navigator={this.props.navigator} />
+                    {/*<PostGridView navigator={this.props.navigator} />*/}
+                    {/*<PostListViewCards navigator={this.props.navigator} />*/}
+                    {this.props.children}
+                </View>
+            </Screen>
         );
     }
     private loginIfNeeded(props: any) {
@@ -98,9 +99,10 @@ class AppContentContainer extends React.Component<{
     }
     private loadCurrentUserIfNeeded(props: any) {
         if (!props.email) {
-            return;
+            return; // shouldn't be logged in here.
         }
         if (props.app.loading.users) {
+            console.log("Users is currently loading, skipping loadCurrentUser.");
             return;
         }
         const currentUser = props.entities && props.entities.users && Enumerable

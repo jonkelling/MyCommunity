@@ -1,7 +1,10 @@
+// tslint:disable-next-line:no-var-requires
+const moment = require("moment");
 import React from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ScrollView, TextStyle, View, ViewStyle } from "react-native";
 import { Navigator, NavigatorStyle } from "react-native-navigation";
 import { connect } from "react-redux";
+import { Divider, Screen, Subtitle, Text, Title } from "../../ui";
 import { IPostVm } from "./Post";
 import PostAuthor, { IPostAuthor } from "./PostAuthor";
 import PostContent from "./PostContent";
@@ -26,14 +29,25 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public render() {
-        return <View style={{
-            backgroundColor: "transparent",
-            flex: 1,
-        }}>
-            <PostHeadline text={this.props.post.headline} style={this.props.headlineStyle} />
-            <Text>{new Date(this.props.post.createdDateTime).toLocaleString()}</Text>
-            <PostAuthor author={this.props.author} />
-            <PostContent content={this.props.post.content} style={this.props.contentStyle} />
+        return <View style={{ flex: 0, height: 500 }}>
+            <ScrollView style={{ height: 500, flex: 0 }}>
+                <Image
+                    // styleName="large-banner"
+                    source={{
+                        uri: this.props.post.headlineImageUrl ||
+                        "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg",
+                    }} />
+                <View style={{ flex: 0, padding: 20, paddingBottom: 39 }}>
+                    <Title style={{ fontWeight: "600" }}>{this.props.post.headline}</Title>
+                    <Text>{moment(this.props.post.createdDateTime).fromNow()}</Text>
+                    {/*<PostAuthor author={this.props.author} />*/}
+                    <Divider />
+                    <Text
+                        style={{
+                            flex: 0,
+                        }}>{this.props.post.content}. {this.props.post.content}.</Text>
+                </View>
+            </ScrollView>
         </View>;
     }
     private onNavigatorEvent(event) {

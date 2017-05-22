@@ -1,11 +1,9 @@
 import React from "react";
 import { TextProperties } from "react-native";
-// tslint:disable-next-line:no-var-requires
-const Shoutem = require("@shoutem/ui");
-import { ITextPropertiesWrapper } from "./Text";
+import Text from "./Text";
 
-export default class Title extends React.Component<ITextPropertiesWrapper, {}> {
+export default class Title extends React.Component<TextProperties, {}> {
     public render() {
-        return <Shoutem.Title {...this.props} style={{ ...this.props.style, fontFamily: "System" }} />;
+        return <Text {...this.props} style={{ fontFamily: "System", fontSize: 20, ...this.props.style }} />;
     }
 }

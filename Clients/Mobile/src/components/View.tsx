@@ -1,14 +1,8 @@
 import React from "react";
-import { ViewProperties } from "react-native";
-// tslint:disable-next-line:no-var-requires
-const Shoutem = require("@shoutem/ui");
+import { View as RNView, ViewProperties } from "react-native";
 
-export interface IViewPropertiesWrapper extends ViewProperties {
-    styleName?: string;
-}
-
-export default class View extends React.Component<IViewPropertiesWrapper, {}> {
+export default class View extends React.Component<any, {}> {
     public render() {
-        return <Shoutem.View {...this.props} />;
+        return <RNView {...this.props} />;
     }
 }

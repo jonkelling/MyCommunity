@@ -5,32 +5,33 @@ import React from "react";
 import {
     RefreshControl,
 } from "react-native";
+import { ListView, TouchableOpacity } from "react-native";
 import { Navigator } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../../../node_modules/linq/linq";
 import appActions from "../../appActions";
-import Post from "./Post";
-// import { TouchableOpacity } from "react-native";
-const {
-    Caption,
+import {
+    // Caption,
     Card,
     Divider,
-    GridRow,
-    Icon,
+    // GridRow,
+    // Icon,
     Image,
-    ListView,
+    // ListView,
     Overlay,
     Screen,
     Subtitle,
     Tile,
     Title,
-    TouchableOpacity,
+    // TouchableOpacity,
     View,
-    // tslint:disable-next-line:no-var-requires
-} = require("@shoutem/ui");
+} from "../../ui";
+import Post from "./Post";
 // tslint:disable-next-line:no-var-requires
 const moment = require("moment");
+
+const USE_HEADLINE = false;
 
 class PostGridView extends React.Component<any, any> {
     constructor(props) {
@@ -42,7 +43,7 @@ class PostGridView extends React.Component<any, any> {
     }
     public render() {
         let isFirstArticle = true;
-        const groupedData = GridRow.groupByRows(this.props.posts, 2, () => {
+        /*const groupedData = GridRow.groupByRows(this.props.posts, 2, () => {
             if (isFirstArticle) {
                 isFirstArticle = false;
                 return 2;
@@ -59,60 +60,66 @@ class PostGridView extends React.Component<any, any> {
                     loading={this.state.isRefreshing}
                 />
             </Screen>
-        );
+        );*/
+        return null;
     }
 
     private renderRow(rowData, sectionId, index) {
         // rowData contains grouped data for one row,
         // so we need to remap it into cells and pass to GridRow
 
-        if (index === "0") {
+        if (index === "0" && USE_HEADLINE) {
             // tslint:disable:max-line-length
-            return (
+            /*return (
                 <TouchableOpacity key={index}>
                     <Image
                         styleName="rounded-corners large rounded-corners"
                         // tslint:disable-next-line:max-line-length
                         source={{ uri: rowData[0].headlineImageUrl || "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
                     >
-                        <Tile styleName="solid-dark">
+                        <Tile>
                             <Title styleName="md-gutter-bottom">{rowData[0].headline}</Title>
                             <Subtitle styleName="sm-gutter-horizontal" numberOfLines={2}>{rowData[0].content}</Subtitle>
                         </Tile>
                     </Image>
                     <Divider styleName="line" />
                 </TouchableOpacity>
-            );
+            );*/
+            return null;
             // tslint:enable:max-line-length
         }
 
         const cellViews = rowData.map((post, id) => {
-            return (
-                <TouchableOpacity key={id} styleName="flexible">
-                    <Card styleName="flexible">
-                        <Image
-                            styleName="medium-wide"
-                            // tslint:disable-next-line:max-line-length
-                            source={{ uri: post.headlineImageUrl || "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
-                        />
-                        <View styleName="content">
-                            <Subtitle numberOfLines={3}>{post.headline}</Subtitle>
-                            {/*<View styleName="horizontal">
-                                <Caption styleName="collapsible" numberOfLines={2}>{post.content}</Caption>
-                            </View>*/}
-                            <View styleName="horizontal v-center space-between">
-                                <Caption>{moment(rowData[0].createdDateTime).toString()}</Caption>
-                            </View>
-                        </View>
-                    </Card>
-                </TouchableOpacity>
-            );
+            // return (
+            //    <TouchableOpacity key={id} styleName="flexible">
+            //        <Card styleName="flexible">
+            //            <Image
+            //                styleName="medium-wide"
+            //                // tslint:disable-next-line:max-line-length
+            //                source={{
+                // uri: post.headlineImageUrl ||
+                // "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg" }}
+            //            />
+            //            <View styleName="content">
+            //                <Subtitle numberOfLines={3}>{post.headline}</Subtitle>
+            //                {/*<View styleName="horizontal">
+            //                    <Caption styleName="collapsible" numberOfLines={2}>{post.content}</Caption>
+            //                </View>*/}
+            //                <View styleName="horizontal v-center space-between">
+            //                    <Text>{moment(rowData[0].createdDateTime).toString()}</Text>
+            //                </View>
+            //            </View>
+            //        </Card>
+            //    </TouchableOpacity>
+            // );
+            return null;
         });
-        return (
+        /*return (
             <GridRow columns={2}>
                 {cellViews}
             </GridRow>
-        );
+        );*/
+        return null;
     }
 
     private getNewestPostDateTime(props = this.props) {

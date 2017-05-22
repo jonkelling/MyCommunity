@@ -131,7 +131,7 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
     }
     private viewPost(postId) {
         this.props.navigator.push({
-            screen: "app.PostDetail",
+            container: { name: "app.PostDetail" },
             passProps: {
                 postId,
             },

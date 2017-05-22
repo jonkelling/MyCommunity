@@ -9,6 +9,7 @@ export interface IPostVm {
     post: {
         id: number,
         headline: string,
+        headlineImageUrl: string,
         content: string,
         createdDateTime: string,
     };
@@ -21,7 +22,7 @@ export interface IPostVm {
 
 const styles: any = StyleSheet.create({
     date: {
-        flex: 1,
+        flex: 0,
         alignSelf: "flex-end",
     },
 });
@@ -30,8 +31,11 @@ export default class Post extends React.Component<IPostVm, {}> {
     public render() {
         return <View style={this.props.style}>
             <TouchableOpacity activeOpacity={0.9} onPress={this.props.viewPost.bind(this, this.props.post.id)}>
-                <PostHeadline text={this.props.post.headline} style={this.props.headlineStyle} />
-                <FormattedDateText style={styles.date}>{this.props.post.createdDateTime}</FormattedDateText>
+                <View style={{ flexDirection: "row", flex: 1 }}>
+                    <PostHeadline text={this.props.post.headline} style={this.props.headlineStyle} />
+                    <FormattedDateText style={styles.date}>
+                        {this.props.post.createdDateTime}</FormattedDateText>
+                </View>
                 {/*<PostAuthor author={this.props.author} />*/}
                 <PostContent content={this.props.post.content} style={this.props.contentStyle} />
             </TouchableOpacity>

@@ -6,19 +6,17 @@ import { ColorTheme } from "../constants/index";
 import { community } from "../schemas";
 import * as styles from "../styles";
 
-const {
+import {
     Button,
     Card,
     Divider,
-    Heading,
-    Icon,
     Image,
     Overlay,
     Screen,
     TextInput,
     Tile,
     // tslint:disable-next-line:no-var-requires
-} = require("@shoutem/ui");
+} from "../ui";
 
 import Subtitle from "./Subtitle";
 import Text from "./Text";
@@ -56,7 +54,8 @@ class NoCommunityAssigned extends React.Component<{ app: any, entities: any, pro
         return <Screen>
             <Image source={img} style={{ width, height }}>
                 <Tile>
-                    <View styleName="content" style={{ flex: 0 }}>
+                    //styleName="content"
+                    <View  style={{ flex: 0 }}>
                         <ViewWithWhiteBackground>
                             <Title>Hi <Title style={{ fontWeight: "800" }}>{givenName}!  </Title>
                                 You're almost there!</Title>

@@ -1,5 +1,5 @@
 
-import { Navigation, NavigatorStyle } from "react-native-navigation";
+import Navigation, { NavigatorStyle } from "react-native-navigation";
 import { ScreenId } from "./screens/index";
 
 const navigatorStyle: NavigatorStyle = {
@@ -13,11 +13,11 @@ const navigatorStyle: NavigatorStyle = {
 };
 
 export function startApp() {
-    Navigation.startTabBasedApp({
+    Navigation.setRoot({
         tabs: [
             {
                 label: "Home",
-                screen: "app.Home",
+                container: { name: "app.Home" },
                 // icon: iconsMap["ios-film-outline"],
                 // selectedIcon: iconsMap["ios-film"],
                 title: "Home",
@@ -42,9 +42,9 @@ export function startApp() {
 }
 
 export function startNoCommunityAssigned() {
-    Navigation.startSingleScreenApp({
-        screen: {
-            screen: ScreenId.NoCommunityAssigned,
+    Navigation.setRoot({
+        container: {
+            name: ScreenId.NoCommunityAssigned,
             title: "Welcome!",
             navigatorStyle: {
                 navBarHidden: true,
@@ -55,9 +55,9 @@ export function startNoCommunityAssigned() {
 }
 
 export function startLoadingScreen() {
-    Navigation.startSingleScreenApp({
-        screen: {
-            screen: ScreenId.Loading,
+    Navigation.setRoot({
+        container: {
+            name: ScreenId.Loading,
             title: "Welcome!",
             navigatorStyle: {
                 navBarHidden: true,

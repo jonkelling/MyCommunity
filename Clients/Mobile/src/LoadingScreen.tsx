@@ -3,6 +3,7 @@ import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 import * as actions from "./actions/index";
 import appActions from "./appActions";
+import { startApp, startNoCommunityAssigned } from "./appNavigation";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
 import Screen from "./components/Screen";
@@ -39,13 +40,17 @@ class LoadingScreen extends React.Component<ILoadingScreenProps, {}> {
                 props.actions.refreshToken();
             }
         }
+        else {
+            if (props.app.currentUser && !props.app.currentUser.communityId) {
+                startNoCommunityAssigned();
+            }
+            else {
+                startApp();
+            }
+        }
     }
     public render() {
         return <Screen styleName="paper" style={{ paddingTop: 100, paddingHorizontal: 20 }}>
-            <Text>Current User:</Text>
-            <Text>{`${this.props.app.loading.app}`}</Text>
-            <Text>idToken: {this.props.app.idToken}</Text>
-            <Text>{this.props.app.currentUser && this.props.app.currentUser.communityId}</Text>
         </Screen>;
     }
 }
