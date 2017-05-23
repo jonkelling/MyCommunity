@@ -9,6 +9,7 @@ import Image from "./components/Image";
 import ListView from "./components/ListView";
 import Overlay from "./components/Overlay";
 import Screen from "./components/Screen";
+import ScrollView from "./components/ScrollView";
 import Subtitle from "./components/Subtitle";
 import Text from "./components/Text";
 import TextInput from "./components/TextInput";
@@ -29,6 +30,7 @@ export {
     ListView,
     Overlay,
     Screen,
+    ScrollView,
     Subtitle,
     Text,
     TextInput,

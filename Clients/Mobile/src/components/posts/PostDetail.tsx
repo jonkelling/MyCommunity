@@ -1,10 +1,10 @@
 // tslint:disable-next-line:no-var-requires
 const moment = require("moment");
 import React from "react";
-import { ScrollView, TextStyle, View, ViewStyle } from "react-native";
+import { TextStyle, ViewStyle } from "react-native";
 import { Navigator, NavigatorStyle } from "react-native-navigation";
 import { connect } from "react-redux";
-import { Screen, Subtitle, Text, Title } from "../../ui";
+import { Screen, ScrollView, Subtitle, Text, Title, View } from "../../ui";
 import { Divider, Image } from "../../ui";
 import { IPostVm } from "./Post";
 import PostAuthor, { IPostAuthor } from "./PostAuthor";
@@ -30,8 +30,8 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public render() {
-        return <View style={{ flex: 0, height: 500 }}>
-            <ScrollView style={{ height: 500, flex: 0 }}>
+        return <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}>
                 <Image
                     styleName="large-banner"
                     source={{
