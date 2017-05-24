@@ -31,7 +31,7 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
     }
     public render() {
         return <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView>
                 <Image
                     styleName="large-banner"
                     source={{
