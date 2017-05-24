@@ -17,6 +17,7 @@
             true,
             "check-open-brace",
             "check-whitespace"
-        ]
+        ],
+        "no-var-requires": false
     }
 }
