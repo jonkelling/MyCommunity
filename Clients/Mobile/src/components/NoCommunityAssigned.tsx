@@ -1,9 +1,11 @@
+import { FETCH_PROVIDERS, SET_AUTH_PROFILE } from '../actions';
+import { startNoCommunityAssigned } from '../appNavigation';
 import React from "react";
 import { Dimensions } from "react-native";
 import { connect } from "react-redux";
 import { isTokenExpired } from "../auth/jwtHelper";
 import { ColorTheme } from "../constants/index";
-import { community } from "../schemas";
+import { community, communityList } from '../schemas';
 import * as styles from "../styles";
 
 import {
@@ -63,6 +65,13 @@ class NoCommunityAssigned extends React.Component<{ app: any, entities: any, pro
                         </ViewWithWhiteBackground>
                         <ViewWithWhiteBackground>
                             <Text style={{ color: "black", alignSelf: "flex-start" }}>
+                                <BoldText>NOTICE:</BoldText>
+                                You cannot use this app unless
+                                your property has an account.
+                            </Text>
+                        </ViewWithWhiteBackground>
+                        <ViewWithWhiteBackground>
+                            <Text style={{ color: "black", alignSelf: "flex-start" }}>
                                 Next, you need to contact your
                                 community's owner to activate your
                                 account in the My Community app.
@@ -70,6 +79,13 @@ class NoCommunityAssigned extends React.Component<{ app: any, entities: any, pro
                                 or landlord. You only need to provide
                                 them with your email address: <BoldText>
                                     {this.props.profile.email}</BoldText>.
+                            </Text>
+                        </ViewWithWhiteBackground>
+                        <ViewWithWhiteBackground>
+                            <Text style={{ color: "black", alignSelf: "flex-start" }}>
+                                <BoldText>COMING SOON:</BoldText> New ways to
+                                start a community and notify community owners of
+                                a new account.
                             </Text>
                         </ViewWithWhiteBackground>
                     </View>
