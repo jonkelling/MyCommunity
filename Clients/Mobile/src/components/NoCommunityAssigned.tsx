@@ -1,11 +1,12 @@
-import { FETCH_PROVIDERS, SET_AUTH_PROFILE } from '../actions';
-import { startNoCommunityAssigned } from '../appNavigation';
 import React from "react";
 import { Dimensions } from "react-native";
 import { connect } from "react-redux";
+import { FETCH_PROVIDERS, SET_AUTH_PROFILE } from "../actions/index";
+import appActions from "../appActions";
+import { startNoCommunityAssigned } from "../appNavigation";
 import { isTokenExpired } from "../auth/jwtHelper";
 import { ColorTheme } from "../constants/index";
-import { community, communityList } from '../schemas';
+import { community, communityList } from "../schemas";
 import * as styles from "../styles";
 
 import {
@@ -22,6 +23,7 @@ import {
     // tslint:disable-next-line:no-var-requires
 } from "../ui";
 
+import * as appNavigation from "../appNavigation";
 import Subtitle from "./Subtitle";
 import Text from "./Text";
 import Title from "./Title";
@@ -30,9 +32,34 @@ import View from "./View";
 // tslint:disable-next-line:no-var-requires
 const img = require("../../images/clouds.jpg");
 
-class NoCommunityAssigned extends React.Component<{ app: any, entities: any, profile: any }, {}> {
+class NoCommunityAssigned extends React.Component<{
+    app: any,
+    entities: any,
+    profile: any,
+    loadCurrentUser: any,
+}, {}> {
+    private loadCurrentUserIntervalId;
+
     constructor(props) {
         super(props);
+        this.loadCurrentUserIntervalId =
+            setInterval(() => {
+                console.log("Loading current user from timeout callback.");
+                this.props.loadCurrentUser();
+            }, 10000);
+    }
+
+    public componentWillReceiveProps(nextProps: any) {
+        if (nextProps.app.currentUser &&
+            nextProps.app.currentUser.communityId &&
+            nextProps.app.currentUser.communityId > 0) {
+                appNavigation.startApp();
+        }
+    }
+
+    public componentWillUnmount() {
+        console.log("Clearing timeout for loading current user.");
+        clearInterval(this.loadCurrentUserIntervalId);
     }
 
     public render() {
@@ -65,14 +92,15 @@ class NoCommunityAssigned extends React.Component<{ app: any, entities: any, pro
                         </ViewWithWhiteBackground>
                         <ViewWithWhiteBackground>
                             <Text style={{ color: "black", alignSelf: "flex-start" }}>
-                                <BoldText>NOTICE:</BoldText>
+                                <BoldText>NOTICE: </BoldText>
                                 You cannot use this app unless
                                 your property has an account.
                             </Text>
                         </ViewWithWhiteBackground>
                         <ViewWithWhiteBackground>
                             <Text style={{ color: "black", alignSelf: "flex-start" }}>
-                                Next, you need to contact your
+                                <BoldText>NEXT: </BoldText>
+                                You need to contact your
                                 community's owner to activate your
                                 account in the My Community app.
                                 This is usually your property manager
@@ -103,4 +131,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(NoCommunityAssigned);
+function mapDispatchToProps(dispatch) {
+    return {
+        loadCurrentUser: () => dispatch(appActions.loadCurrentUser()),
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NoCommunityAssigned);

@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
 import * as actions from "./actions/index";
 import appActions from "./appActions";
+import * as appNavigation from "./appNavigation";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
 import PostGridView from "./components/posts/PostGridView";
@@ -26,7 +27,7 @@ class AppContentContainer extends React.Component<{
     }
     public componentWillMount() {
         this.loginIfNeeded(this.props);
-        this.loadCurrentUserIfNeeded(this.props);
+        this.loadCurrentUserIfNeeded(this.props, true);
     }
     public componentWillReceiveProps(nextProps: any) {
         this.loginIfNeeded(nextProps);
@@ -42,6 +43,10 @@ class AppContentContainer extends React.Component<{
             .select((x) => x.value)
             .singleOrDefault((x) => x.email === props.email);
         if (!currentUser) {
+            return;
+        }
+        if (!currentUser.communityId) {
+            appNavigation.startNoCommunityAssigned();
             return;
         }
         const currentCommunity = props.entities.communities[currentUser.communityId];
@@ -96,7 +101,7 @@ class AppContentContainer extends React.Component<{
                 });
         }
     }
-    private loadCurrentUserIfNeeded(props: any) {
+    private loadCurrentUserIfNeeded(props: any, force = false) {
         if (!props.email) {
             return;
         }
@@ -107,7 +112,7 @@ class AppContentContainer extends React.Component<{
             .from(props.entities.users)
             .select((x) => x.value)
             .singleOrDefault((x) => x.email === props.email);
-        if (!currentUser) {
+        if (!currentUser || force) {
             props.actions.loadCurrentUser();
             return;
         }
