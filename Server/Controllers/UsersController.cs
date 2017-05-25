@@ -38,22 +38,22 @@ namespace Server.Controllers
         {
             var me = await this.AuthenticatedUser.Value;
             
-            if (me == null) {
-                var userProfile = await this.UserProfile.Value;
+            // if (me == null) {
+            //     var userProfile = await this.UserProfile.Value;
                 
-                if (userProfile == null) {
-                    return NotFound();
-                }
+            //     if (userProfile == null) {
+            //         return NotFound();
+            //     }
 
-                await this.Post(new UserVm {
-                    Email = userProfile.Email,
-                    FirstName = userProfile.GivenName,
-                    LastName = userProfile.FamilyName,
-                    CommunityId = null,
-                });
+            //     await this.Post(new UserVm {
+            //         Email = userProfile.Email,
+            //         FirstName = userProfile.GivenName,
+            //         LastName = userProfile.FamilyName,
+            //         CommunityId = null,
+            //     });
 
-                me = await _dbContext.Users.SingleOrDefaultAsync(user => user.Email == userProfile.Email);
-            }
+            //     me = await _dbContext.Users.SingleOrDefaultAsync(user => user.Email == userProfile.Email);
+            // }
             
             return Ok(_mapper.Map<UserVm>(await this.AuthenticatedUser.Value));
         }
