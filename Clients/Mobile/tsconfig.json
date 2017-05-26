@@ -6,7 +6,7 @@
         "forceConsistentCasingInFileNames": true,
         "pretty": true,
         "allowJs": true,
-        "moduleResolution": "classic",
+        "moduleResolution": "node",
         "jsx": "react",
         "outDir": "build",
         "rootDir": "src",
@@ -25,6 +25,7 @@
             "node_modules/redux-normalizr3-middleware",
             "node_modules/redux",
             "node_modules/redux-persist",
+            "node_modules/redux-saga",
             "node_modules/redux-thunk",
             "node_modules/@types",
             "typings/globals"

@@ -20,7 +20,9 @@
     "@types/react-native": "^0.43.7",
     "@types/react-redux": "^4.4.38",
     "@types/redux-actions": "^1.2.3",
+    "@types/redux-saga": "^0.10.5",
     "immutability-helper": "^2.1.2",
+    "json-stringify-safe": "^5.0.1",
     "jwt-decode": "^2.2.0",
     "linq": "^3.0.8",
     "lodash.isequal": "^4.5.0",
@@ -40,8 +42,9 @@
     "redux-logger": "^3.0.1",
     "redux-normalizr3-middleware": "^2.0.1",
     "redux-persist": "^4.8.0",
+    "redux-saga": "^0.15.3",
     "redux-thunk": "^2.1.0",
-    "typescript": "^2.3.2"
+    "typescript": "2.3.2"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
