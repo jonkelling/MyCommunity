@@ -1,3 +1,4 @@
+const stringify = require("json-stringify-safe");
 import { handleActions } from "redux-actions";
 import { REHYDRATE } from "redux-persist/constants";
 import Enumerable from "../../node_modules/linq/linq";
@@ -16,13 +17,20 @@ export default (state, action) => {
         newState &&
         newState.profile &&
         newState.profile.email) {
-        newState = {
-            ...newState,
-            currentUser: Enumerable
-                .from(action.payload.entities.users)
-                .select((x) => x.value)
-                .singleOrDefault((x) => x.email === newState.profile.email),
-        };
+        console.log("finding current user...");
+        const foundUser = Enumerable
+            .from(action.payload.entities.users)
+            .select((x) => x.value)
+            .singleOrDefault((x) => x.email === newState.profile.email);
+        if (foundUser) {
+            newState = {
+                ...newState,
+                currentUser: Enumerable
+                    .from(action.payload.entities.users)
+                    .select((x) => x.value)
+                    .singleOrDefault((x) => x.email === newState.profile.email),
+            };
+        }
     }
 
     return newState;
@@ -136,6 +144,7 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
+                console.log(`SUCCESS: ${loadingKey}`);
                 return {
                     ...state,
                     loading: {
@@ -146,6 +155,7 @@ function handleActionsFn(_state, _action) {
             },
             // tslint:disable-next-line:object-literal-sort-keys
             [actions.FAILURE]: (state, action: any) => {
+                console.log(`FAILURE REDUCER...`);
                 if (!action.meta) {
                     return state;
                 }
@@ -161,6 +171,7 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
+                console.log(`FAILURE REDUCER: ${stringify(action)}`);
                 return {
                     ...state,
                     loading: {
@@ -189,6 +200,18 @@ function handleActionsFn(_state, _action) {
                     refreshTokenError: action.payload,
                 };
             },
+            [actions.SET_SCREEN]: (state, action: any) => ({
+                ...state,
+                screenId: action.payload,
+            }),
+            [actions.WAITING_TO_LOAD_CURRENT_USER]: (state, action: any) => ({
+                ...state,
+                [actions.WAITING_TO_LOAD_CURRENT_USER]: action.payload,
+            }),
+            [actions.LOADING_CURRENT_USER_PROCESS_VALIDATED]: (state, action: any) => ({
+                ...state,
+                [actions.LOADING_CURRENT_USER_PROCESS_VALIDATED]: action.payload,
+            }),
         }, {
             loading: { app: true },
         },

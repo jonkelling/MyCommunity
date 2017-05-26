@@ -1,11 +1,12 @@
 import React from "react";
+import { InteractionManager } from "react-native";
 import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Enumerable from "../node_modules/linq/linq";
 import * as actions from "./actions/index";
 import appActions from "./appActions";
-import * as appNavigation from "./appNavigation";
+import appNavigation from "./appNavigation";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
 import PostGridView from "./components/posts/PostGridView";
@@ -20,45 +21,69 @@ class AppContentContainer extends React.Component<{
     email: string,
     entities: any,
     navigator: any,
-}, { loadedPosts: boolean }> {
+}, {
+        loadedPosts: boolean,
+        startingUp: boolean,
+    }> {
     constructor(props) {
         super(props);
-        this.state = { loadedPosts: false };
+        this.state = {
+            loadedPosts: false,
+            startingUp: true,
+        };
     }
     public componentWillMount() {
+        if (this.props.app.screenId !== ScreenId.Home) {
+            return;
+        }
         this.loginIfNeeded(this.props);
-        this.loadCurrentUserIfNeeded(this.props, true);
     }
     public componentWillReceiveProps(nextProps: any) {
+        if (this.props.app.screenId !== ScreenId.Home) {
+            return;
+        }
         this.loginIfNeeded(nextProps);
-        this.loadCurrentUserIfNeeded(nextProps);
         this.setupScreen(nextProps);
     }
     private setupScreen(props) {
-        if (!props.entities.communities) {
+        if (this.state.startingUp || !props.email) {
             return;
         }
         const currentUser = props.entities && props.entities.users && Enumerable
             .from(props.entities.users)
             .select((x) => x.value)
             .singleOrDefault((x) => x.email === props.email);
-        if (!currentUser) {
+        if (!currentUser || !currentUser.communityId) {
+            props.actions.startNoCommunityAssigned();
             return;
         }
-        if (!currentUser.communityId) {
-            appNavigation.startNoCommunityAssigned();
+        if (!props.entities.communities) {
+            return;
+        }
+        console.log(`${JSON.stringify(Object.keys(props.entities.communities))}`);
+        console.log(`indexof: ${Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)}`);
+        if (-1 === Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)) {
+            console.log(`    ... community not found`);
+            console.log(`    ... bailing`);
             return;
         }
         const currentCommunity = props.entities.communities[currentUser.communityId];
+        console.log(`setting titleto ${currentCommunity.name}`);
         if (!currentCommunity) {
             return;
         }
-        this.props.navigator.setTitle({
-            subtitle: currentCommunity.name,
-        });
+        this.props.navigator.setTitle({ title: currentCommunity.name });
     }
     public render() {
         if (this.props.app.loading.app) {
+            return null;
+        }
+        console.log(`${!!this.props.email}`);
+        console.log(`${!!this.props.app.currentUser}`);
+        console.log(`${!!this.props.entities.communities}`);
+        if (!this.props.email ||
+            !this.props.app.currentUser ||
+            !this.props.entities.communities) {
             return null;
         }
         const ProfileImage = () => {
@@ -89,39 +114,30 @@ class AppContentContainer extends React.Component<{
             // Maybe skip this component until loading is done?
             return;
         }
+        if (props.app.loading.app || props.app.loggingIn) {
+            // Maybe skip this component until loading is done?
+            return;
+        }
         if (!props.app.idToken) {
-            AuthService.getRefreshToken()
-                .then((token) => {
-                    if (!token) {
-                        this.props.actions.login();
-                    }
-                })
-                .catch((error) => {
-                    throw new Error(JSON.stringify(error));
-                });
+            setTimeout(() => props.actions.login(), 1000);
         }
-    }
-    private loadCurrentUserIfNeeded(props: any, force = false) {
-        if (!props.email) {
-            return;
+        else if (jwtHelper.isTokenExpired(props.app.idToken)) {
+            if (!props.app.refreshingToken) {
+                props.actions.refreshToken();
+            }
         }
-        if (props.app.loading.users) {
-            return;
+        else {
+            if (props.app.currentUser) {
+                this.setState({ startingUp: false });
+                if (!props.app.currentUser.communityId) {
+                    console.log("goto screen nocommunityassigned");
+                    props.actions.startNoCommunityAssigned();
+                }
+                else {
+                    console.log("goto screen backtoapp");
+                }
+            }
         }
-        const currentUser = props.entities && props.entities.users && Enumerable
-            .from(props.entities.users)
-            .select((x) => x.value)
-            .singleOrDefault((x) => x.email === props.email);
-        if (!currentUser || force) {
-            props.actions.loadCurrentUser();
-            return;
-        }
-        if (this.state.loadedPosts) {
-            return;
-        }
-        props.actions.loadCommunity(currentUser.communityId);
-        props.actions.loadNewestPosts(currentUser.communityId);
-        this.setState({ loadedPosts: true });
     }
 }
 
@@ -162,6 +178,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         login: () => dispatch({ type: actions.AUTH0_LOGIN }),
         logout: () => dispatch({ type: actions.AUTH0_LOGOUT }),
         ...bindActionCreators(appActions, dispatch),
+        ...bindActionCreators(appNavigation, dispatch),
     },
 });
 

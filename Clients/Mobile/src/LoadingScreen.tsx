@@ -1,26 +1,29 @@
 import React from "react";
 import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import * as actions from "./actions/index";
 import appActions from "./appActions";
-import { startApp, startNoCommunityAssigned } from "./appNavigation";
+import appNavigation from "./appNavigation";
 import AuthService from "./auth/AuthService";
 import * as jwtHelper from "./auth/jwtHelper";
 import Screen from "./components/Screen";
 import Text from "./components/Text";
 import View from "./components/View";
+import { ScreenId } from "./screens/index";
 
 interface ILoadingScreenProps {
     app: any;
     entities: any;
     profile: any;
-    actions: {
-        login: any,
-        refreshToken: any,
-    };
+    actions: any;
 }
 
-class LoadingScreen extends React.Component<ILoadingScreenProps, {}> {
+class LoadingScreen extends React.Component<ILoadingScreenProps, { done: boolean }> {
+    constructor(props) {
+        super(props);
+        this.state = { done: false };
+    }
     public componentWillMount() {
         this.loginIfNeeded(this.props);
     }
@@ -28,12 +31,20 @@ class LoadingScreen extends React.Component<ILoadingScreenProps, {}> {
         this.loginIfNeeded(nextProps);
     }
     private loginIfNeeded(props: any) {
+        console.log(`loadingscreen: ${this.state.done}`);
+        // if (this.state.done) {
+        //     return;
+        // }
+        console.log("screen: " + this.props.app.screenId);
+        if (this.props.app.screenId !== ScreenId.Loading) {
+            return;
+        }
         if (props.app.loading.app || props.app.loggingIn) {
             // Maybe skip this component until loading is done?
             return;
         }
         if (!props.app.idToken) {
-            props.actions.login();
+            setTimeout(() => props.actions.login(), 1000);
         }
         else if (jwtHelper.isTokenExpired(props.app.idToken)) {
             if (!props.app.refreshingToken) {
@@ -41,11 +52,15 @@ class LoadingScreen extends React.Component<ILoadingScreenProps, {}> {
             }
         }
         else {
-            if (props.app.currentUser && !props.app.currentUser.communityId) {
-                startNoCommunityAssigned();
-            }
-            else {
-                startApp();
+            if (props.app.currentUser) {
+                if (!props.app.currentUser.communityId) {
+                    console.log("goto screen nocommunityassigned");
+                    props.actions.startNoCommunityAssigned();
+                }
+                else {
+                    console.log("goto screen backtoapp");
+                    props.actions.backToApp();
+                }
             }
         }
     }
@@ -67,6 +82,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     actions: {
         login: () => dispatch({ type: actions.AUTH0_LOGIN }),
         refreshToken: () => dispatch(appActions.refreshToken()),
+        ...bindActionCreators(appNavigation, dispatch),
     },
 });
 

@@ -8,7 +8,7 @@ const { CALL_API } = require("redux-api-middleware");
 export default {
     loadCurrentUser: () => {
         const endpoint = `users/me`;
-        return getCallApiAction(endpoint, schemas.user);
+        return getCallApiAction(endpoint, schemas.user, "currentUser");
     },
     loadCommunity: (communityId: number) => {
         const endpoint = `communities/${communityId}`;
@@ -42,16 +42,22 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
             method: "GET",
             types: [
                 {
-                    meta: {
-                        schema: responseSchema,
-                        ...(source && { source }),
+                    meta: (action, state) => {
+                        console.log(`REQUEST: ${endpoint}`);
+                        return {
+                            schema: responseSchema,
+                            ...(source && { source }),
+                        };
                     },
                     type: "REQUEST",
                 },
                 {
-                    meta: {
-                        schema: responseSchema,
-                        ...(source && { source }),
+                    meta: (action, state, res) => {
+                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
+                        return {
+                            schema: responseSchema,
+                            ...(source && { source }),
+                        };
                     },
                     type: "SUCCESS",
                 },
@@ -59,19 +65,15 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
                     meta: (action, state, res) => {
                         if (res) {
                             return {
-                                meta: {
-                                    schema: responseSchema,
-                                    ...(source && { source }),
-                                },
+                                schema: responseSchema,
+                                ...(source && { source }),
                                 status: res.status,
                                 statusText: res.statusText,
                             };
                         } else {
                             return {
-                                meta: {
-                                    schema: responseSchema,
-                                    ...(source && { source }),
-                                },
+                                schema: responseSchema,
+                                ...(source && { source }),
                                 status: "Network request failed",
                             };
                         }

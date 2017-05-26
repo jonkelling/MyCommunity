@@ -46,6 +46,9 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public componentWillReceiveProps(nextProps: IPostListProps) {
+        console.log("====================================");
+        console.log(`this.state.isRefreshing: ${this.state.isRefreshing}`);
+        console.log(`this.props.app.loading.posts: ${this.props.app.loading.posts}`);
         if (!isEqual(this.props.posts, nextProps.posts)) {
             const newPosts = this.getSortedPostsArray(nextProps);
             this.setState({
@@ -100,9 +103,10 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
             .firstOrDefault();
     }
     private onRefresh() {
-        this.props.actions.loadNewerPosts(1, this.getNewestPostDateTime());
+        console.log(`Newest post date/time: ${this.getNewestPostDateTime()}`);
+        console.log(JSON.stringify(this.props.app));
+        this.props.actions.loadNewerPosts(this.props.app.currentUser.communityId, this.getNewestPostDateTime());
         this.setState({ isRefreshing: true });
-        setTimeout(() => this.setState({ isRefreshing: false }), 20000);
     }
     private renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: boolean) {
         return (
@@ -116,8 +120,11 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
         );
     }
     private getRefreshControl() {
+        console.log("====================================");
+        console.log(`this.state.isRefreshing: ${this.state.isRefreshing}`);
+        console.log(`this.props.app.loading.posts: ${this.props.app.loading.posts}`);
         return <RefreshControl
-            refreshing={!!this.state.isRefreshing || !!this.props.app.loading.posts}
+            refreshing={!!this.state.isRefreshing && !!this.props.app.loading.posts}
             onRefresh={this.onRefresh}
             progressBackgroundColor="#ffff00"
         />;

@@ -1,6 +1,8 @@
+const stringify = require("json-stringify-safe");
+
 export default (store) => (next) => (action) => {
     try {
-        console.log(JSON.stringify(action));
+        console.log(stringify(action));
         // console.warn(`ACTION: ${JSON.stringify(action)}`);
     }
     catch (e) {

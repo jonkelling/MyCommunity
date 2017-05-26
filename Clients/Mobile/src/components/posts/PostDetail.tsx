@@ -60,9 +60,14 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
     }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => ({
-    post: state.entities.posts[ownProps.postId],
-    author: state.entities.users[state.entities.posts[ownProps.postId].author],
-});
+const mapStateToProps = (state: any, ownProps: any) => {
+    console.log("====================================");
+    console.log("PostDetail");
+    console.log("====================================");
+    return {
+        post: state.entities.posts[ownProps.postId],
+        author: state.entities.users[state.entities.posts[ownProps.postId].author],
+    };
+};
 
 export default connect(mapStateToProps)(PostDetail);

@@ -1,12 +1,13 @@
 import React from "react";
 import { Dimensions } from "react-native";
 import { connect } from "react-redux";
-import { FETCH_PROVIDERS, SET_AUTH_PROFILE } from "../actions/index";
+import { bindActionCreators } from "redux";
 import appActions from "../appActions";
-import { startNoCommunityAssigned } from "../appNavigation";
+import appNavigation from "../appNavigation";
 import { isTokenExpired } from "../auth/jwtHelper";
 import { ColorTheme } from "../constants/index";
 import { community, communityList } from "../schemas";
+import { ScreenId } from "../screens/index";
 import * as styles from "../styles";
 
 import {
@@ -23,7 +24,7 @@ import {
     // tslint:disable-next-line:no-var-requires
 } from "../ui";
 
-import * as appNavigation from "../appNavigation";
+import { Navigation } from "react-native-navigation";
 import Subtitle from "./Subtitle";
 import Text from "./Text";
 import Title from "./Title";
@@ -37,23 +38,27 @@ class NoCommunityAssigned extends React.Component<{
     entities: any,
     profile: any,
     loadCurrentUser: any,
+    actions: any,
 }, {}> {
     private loadCurrentUserIntervalId;
 
     constructor(props) {
         super(props);
-        this.loadCurrentUserIntervalId =
-            setInterval(() => {
-                console.log("Loading current user from timeout callback.");
-                this.props.loadCurrentUser();
-            }, 10000);
+        // this.loadCurrentUserIntervalId =
+        //     setInterval(() => {
+        //         console.log("Loading current user from timeout callback.");
+        //         this.props.loadCurrentUser();
+        //     }, 10000);
     }
 
     public componentWillReceiveProps(nextProps: any) {
+        if (this.props.app.screenId !== ScreenId.NoCommunityAssigned) {
+            return;
+        }
         if (nextProps.app.currentUser &&
             nextProps.app.currentUser.communityId &&
             nextProps.app.currentUser.communityId > 0) {
-                appNavigation.startApp();
+            nextProps.actions.backToApp();
         }
     }
 
@@ -134,6 +139,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         loadCurrentUser: () => dispatch(appActions.loadCurrentUser()),
+        actions: bindActionCreators(appNavigation, dispatch),
     };
 }
 

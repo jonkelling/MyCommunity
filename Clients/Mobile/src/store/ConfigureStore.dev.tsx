@@ -1,11 +1,13 @@
 ﻿// tslint:disable:no-var-requires
 import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
+import loginSaga from "../sagas/loginSaga";
 import loggerMiddleware from "./middleware/loggerMiddleware";
 const { apiMiddleware } = require("redux-api-middleware");
 const normalizrMiddleware = require("redux-normalizr3-middleware").default;
 const thunk = require("redux-thunk").default;
 import { AsyncStorage } from "react-native";
 import { autoRehydrate, persistStore } from "redux-persist";
+import createSagaMiddleware from "redux-saga";
 import rootReducer from "../reducers/index";
 import schemas from "../schemas";
 import afterNormalizrMiddleware from "./middleware/afterNormalizrMiddleware";
@@ -18,12 +20,14 @@ import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
 declare const module: any;
 
+const sagaMiddleware = createSagaMiddleware();
+
 export default function storeConfig(preloadedState?: any) {
+
     const store = configureStore(
         compose(
             applyMiddleware(
                 // auth,
-                loggerMiddleware,
                 auth0CustomMiddleware,
                 refreshTokenMiddleware,
                 apiEndPointMiddleware,
@@ -31,8 +35,10 @@ export default function storeConfig(preloadedState?: any) {
                 apiMiddleware,
                 normalizrMiddleware(),
                 afterNormalizrMiddleware,
+                sagaMiddleware,
                 // api,
                 thunk,
+                loggerMiddleware,
                 // createLogger(),
             ),
             autoRehydrate(),
@@ -55,7 +61,9 @@ function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any
         ),
     );
 
-    persistStore(store, { storage: AsyncStorage }); // .purge();
+    sagaMiddleware.run(loginSaga, store.dispatch);
+
+    persistStore(store, { storage: AsyncStorage }).purge();
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers

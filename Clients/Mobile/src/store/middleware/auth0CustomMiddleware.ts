@@ -19,11 +19,6 @@ export default (store) => {
             authService.logout();
         }
 
-        else if (action.type === actions.SET_AUTH_TOKEN) {
-            returnValue = next(action);
-            store.dispatch(appActions.loadCurrentUser());
-        }
-
         else if (action.type === actions.REMOVE_AUTH_TOKEN) {
             returnValue = next(action);
         }

@@ -12,7 +12,7 @@ import { Store } from "redux";
 import AppContentContainer from "./AppContentContainer";
 import storeConfig from "./store/ConfigureStore.dev";
 
-import * as appNavigation from "./appNavigation";
+import appNavigation from "./appNavigation";
 
 import { registerScreens, ScreenId } from "./screens/index";
 
@@ -22,9 +22,12 @@ registerScreens(store, Provider);
 
 export default class App {
     constructor() {
-        // setTimeout(() => this.startApp(), 0);
+        setTimeout(() => {
+            store.dispatch(appNavigation.startApp());
+            // store.dispatch(appNavigation.startLoadingScreen());
+        }, 0);
         // setTimeout(() => this.startNoCommunityAssigned(), 0);
-        setTimeout(() => appNavigation.startLoadingScreen(), 0);
+        // setTimeout(() => appNavigation.startLoadingScreen(), 0);
     }
 }
 

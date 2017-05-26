@@ -1,6 +1,8 @@
 
 import * as constants from "../constants/index";
 
+export const SET_SCREEN = "SET_SCREEN";
+
 export const LOGOUT = "LOGOUT";
 export const AUTHENTICATED = "AUTHENTICATED";
 export const FETCH_PROVIDERS = "FETCH_PROVIDERS";
@@ -9,6 +11,9 @@ export const REMOVE_AUTH_TOKEN = "REMOVE_AUTH_TOKEN";
 export const SET_AUTH_PROFILE = "SET_AUTH_PROFILE";
 export const SET_AUTH_TOKEN = "SET_AUTH_TOKEN";
 export const AUTH_LOGIN_FAILED = "AUTH_LOGIN_FAILED";
+
+export const WAITING_TO_LOAD_CURRENT_USER = "WAITING_TO_LOAD_CURRENT_USER";
+export const LOADING_CURRENT_USER_PROCESS_VALIDATED = "LOADING_CURRENT_USER_PROCESS_VALIDATED";
 
 export const REQUEST = "REQUEST";
 export const SUCCESS = "SUCCESS";

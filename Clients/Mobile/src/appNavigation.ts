@@ -1,5 +1,6 @@
 
 import { Navigation, NavigatorStyle } from "react-native-navigation";
+import * as actions from "./actions/index";
 import { ScreenId } from "./screens/index";
 
 const navigatorStyle: NavigatorStyle = {
@@ -12,7 +13,18 @@ const navigatorStyle: NavigatorStyle = {
     drawUnderTabBar: false,
 };
 
-export function startApp() {
+const backToApp = () => {
+    Navigation.dismissAllModals();
+    return {
+        type: actions.SET_SCREEN,
+        payload: ScreenId.Home,
+    };
+};
+
+const startApp = () => {
+    console.log("====================================");
+    console.log("  startApp");
+    console.log("====================================");
     Navigation.startTabBasedApp({
         tabs: [
             {
@@ -39,30 +51,53 @@ export function startApp() {
             tabBarBackgroundColor: "white",
         },
     });
-}
+    return {
+        type: actions.SET_SCREEN,
+        payload: ScreenId.Home,
+    };
+};
 
-export function startNoCommunityAssigned() {
-    Navigation.startSingleScreenApp({
-        screen: {
-            screen: ScreenId.NoCommunityAssigned,
-            title: "Welcome!",
-            navigatorStyle: {
-                navBarHidden: true,
-                statusBarHidden: true,
-            },
+const startNoCommunityAssigned = () => {
+    console.log("====================================");
+    console.log("  startNoCommunityAssigned");
+    console.log("====================================");
+    Navigation.showModal({
+        screen: ScreenId.NoCommunityAssigned,
+        title: "Welcome!",
+        navigatorStyle: {
+            navBarHidden: true,
+            statusBarHidden: true,
         },
     });
-}
+    return {
+        type: actions.SET_SCREEN,
+        payload: ScreenId.NoCommunityAssigned,
+    };
+};
 
-export function startLoadingScreen() {
-    Navigation.startSingleScreenApp({
-        screen: {
-            screen: ScreenId.Loading,
-            title: "Welcome!",
-            navigatorStyle: {
-                navBarHidden: true,
-                statusBarHidden: true,
-            },
+const startLoadingScreen = () => {
+    console.log("====================================");
+    console.log("  startLoadingScreen");
+    console.log("====================================");
+    Navigation.showModal({
+        screen: ScreenId.Loading,
+        title: "Welcome!",
+        navigatorStyle: {
+            navBarHidden: true,
+            statusBarHidden: true,
         },
     });
-}
+    return {
+        type: actions.SET_SCREEN,
+        payload: ScreenId.Loading,
+    };
+};
+
+const appNavigation = {
+    backToApp,
+    startLoadingScreen,
+    startNoCommunityAssigned,
+    startApp,
+};
+
+export default appNavigation;
