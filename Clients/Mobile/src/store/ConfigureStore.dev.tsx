@@ -16,6 +16,8 @@ import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
 import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
+const PURGE = true;
+
 // See reducers.ts before changing anything
 
 declare const module: any;
@@ -63,7 +65,11 @@ function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any
 
     sagaMiddleware.run(loginSaga, store.dispatch);
 
-    persistStore(store, { storage: AsyncStorage }).purge();
+    const persistedStore = persistStore(store, { storage: AsyncStorage });
+
+    if (PURGE) {
+        persistedStore.purge();
+    }
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers
