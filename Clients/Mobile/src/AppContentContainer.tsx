@@ -27,6 +27,7 @@ class AppContentContainer extends React.Component<{
             return;
         }
         this.loginIfNeeded(this.props);
+        this.setupScreen(this.props);
     }
     public componentWillReceiveProps(nextProps: any) {
         if (this.props.app.screenId !== ScreenId.Home) {

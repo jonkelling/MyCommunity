@@ -46,7 +46,7 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
                     <Text
                         style={{
                             flex: 0,
-                        }}>{this.props.post.content}. {this.props.post.content}.</Text>
+                        }}>{this.props.post.content}</Text>
                 </View>
             </ScrollView>
         </View>;

@@ -17,7 +17,7 @@ import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
 import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
-const PURGE = true;
+const PURGE = false;
 
 // See reducers.ts before changing anything
 
