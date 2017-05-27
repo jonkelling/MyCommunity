@@ -23,6 +23,10 @@ export default function* noCommunityScreenSaga() {
             return;
         }
 
+        if (!currentUser || !currentUser.communityId) {
+            return;
+        }
+
         yield put(appNavigation.backToApp());
     }
 }
@@ -35,7 +39,7 @@ function* waitForCurrentUserCommunity() {
             return currentUser;
         }
 
-        yield call(delay, 5000);
+        yield call(delay, 300000);
     }
 }
 

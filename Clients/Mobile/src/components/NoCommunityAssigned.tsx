@@ -54,16 +54,29 @@ class NoCommunityAssigned extends React.Component<{
         const { width, height } = Dimensions.get("window");
 
         const givenName =
-            this.props.app.profile &&
-            this.props.app.profile.extraInfo &&
-            this.props.app.profile.extraInfo.given_name;
+            (
+                this.props.app.profile &&
+                this.props.app.profile.extraInfo &&
+                this.props.app.profile.extraInfo.given_name
+            ) ||
+            (
+                this.props.app.currentUser &&
+                `${this.props.app.currentUser.firstName} ${this.props.app.currentUser.lastName}`
+            );
+
+        const greeting = () => {
+            if (!givenName || !(givenName.trim())) {
+                return null;
+            }
+            return (<Title>Hi <Title style={{ fontWeight: "800" }}>{givenName}!  </Title></Title>);
+        };
 
         return <Screen>
             <Image source={img} style={{ width, height }}>
                 <Tile>
                     <View styleName="content" style={{ flex: 0 }}>
                         <ViewWithWhiteBackground>
-                            <Title>Hi <Title style={{ fontWeight: "800" }}>{givenName}!  </Title>
+                            <Title>{greeting()}
                                 You're almost there!</Title>
                         </ViewWithWhiteBackground>
                         <ViewWithWhiteBackground>
