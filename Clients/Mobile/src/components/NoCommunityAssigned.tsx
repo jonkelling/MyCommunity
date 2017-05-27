@@ -38,19 +38,6 @@ class NoCommunityAssigned extends React.Component<{
     entities: any,
     profile: any,
 }, {}> {
-    private loadCurrentUserIntervalId;
-
-    public componentWillReceiveProps(nextProps: any) {
-        if (this.props.app.screenId !== ScreenId.NoCommunityAssigned) {
-            return;
-        }
-    }
-
-    public componentWillUnmount() {
-        console.log("Clearing timeout for loading current user.");
-        clearInterval(this.loadCurrentUserIntervalId);
-    }
-
     public render() {
         const ViewWithWhiteBackground = (props) => <View style={{
             backgroundColor: "#ffffff33",

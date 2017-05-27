@@ -21,17 +21,7 @@ class AppContentContainer extends React.Component<{
     email: string,
     entities: any,
     navigator: any,
-}, {
-        loadedPosts: boolean,
-        startingUp: boolean,
-    }> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loadedPosts: false,
-            startingUp: true,
-        };
-    }
+}, {}> {
     public componentWillMount() {
         if (this.props.app.screenId !== ScreenId.Home) {
             return;
@@ -46,30 +36,20 @@ class AppContentContainer extends React.Component<{
         this.setupScreen(nextProps);
     }
     private setupScreen(props) {
-        if (this.state.startingUp || !props.email) {
+        if (!props.email) {
             return;
         }
-        const currentUser = props.entities && props.entities.users && Enumerable
-            .from(props.entities.users)
-            .select((x) => x.value)
-            .singleOrDefault((x) => x.email === props.email);
-        if (!props.entities.communities ||
-            -1 === Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)) {
-            // InteractionManager.runAfterInteractions(() => {
-            //     this.props.actions.loadCommunity(currentUser.communityId);
-            //     this.props.actions.loadNewestPosts(currentUser.communityId);
-            // });
+        if (!props.entities.communities) {
             return;
         }
-        console.log(`${JSON.stringify(Object.keys(props.entities.communities))}`);
-        console.log(`indexof: ${Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)}`);
-        if (-1 === Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)) {
-            console.log(`    ... community not found`);
-            console.log(`    ... bailing`);
+        const currentUser = props.app.currentUser;
+        if (!currentUser) {
             return;
         }
         const currentCommunity = props.entities.communities[currentUser.communityId];
-        console.log(`setting titleto ${currentCommunity.name}`);
+        if (!currentCommunity) {
+            return;
+        }
         this.props.navigator.setTitle({ title: currentCommunity.name });
     }
     public render() {
@@ -117,22 +97,11 @@ class AppContentContainer extends React.Component<{
             return;
         }
         if (!props.app.idToken) {
-            setTimeout(() => props.actions.login(), 1000);
+            setTimeout(() => props.actions.login(), 500);
         }
         else if (jwtHelper.isTokenExpired(props.app.idToken)) {
             if (!props.app.refreshingToken) {
                 props.actions.refreshToken();
-            }
-        }
-        else {
-            if (props.app.currentUser) {
-                this.setState({ startingUp: false });
-                if (!props.app.currentUser.communityId) {
-                    console.log("goto screen nocommunityassigned");
-                }
-                else {
-                    console.log("goto screen backtoapp");
-                }
             }
         }
     }
