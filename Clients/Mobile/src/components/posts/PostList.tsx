@@ -2,7 +2,8 @@ import isEqual from "lodash.isequal";
 import React from "react";
 import {
     Button,
-    Image, ListView, ListViewDataSource, RefreshControl, StyleSheet, Text,
+    Image, InteractionManager, ListView, ListViewDataSource, RefreshControl, StyleSheet,
+    Text,
     TextStyle,
     View,
 } from "react-native";
@@ -43,6 +44,7 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
         this.viewPost = this.viewPost.bind(this);
         this.renderSeparator = this.renderSeparator.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.onEndReached = this.onEndReached.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public componentWillReceiveProps(nextProps: IPostListProps) {
@@ -75,10 +77,17 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
                         contentStyle={styles.content}
                         viewPost={this.viewPost} />}
                 renderSeparator={this.renderSeparator}
-                onEndReached={() => this.props.actions.loadOlderPosts(1, this.getOldestPostDateTime(), 5)}
+                onEndReached={this.onEndReached}
                 refreshControl={this.getRefreshControl()}
                 style={styles.scrollview} />
         );
+    }
+    private onEndReached() {
+        InteractionManager.runAfterInteractions(() => {
+            this.props.actions.loadOlderPosts(
+                this.props.app.currentUser.communityId,
+                this.getOldestPostDateTime(), 4);
+        });
     }
     private getSortedPostsArray(props = this.props) {
         return Enumerable.from(props.posts)

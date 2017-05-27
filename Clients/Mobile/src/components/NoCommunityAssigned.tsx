@@ -37,28 +37,12 @@ class NoCommunityAssigned extends React.Component<{
     app: any,
     entities: any,
     profile: any,
-    loadCurrentUser: any,
-    actions: any,
 }, {}> {
     private loadCurrentUserIntervalId;
-
-    constructor(props) {
-        super(props);
-        // this.loadCurrentUserIntervalId =
-        //     setInterval(() => {
-        //         console.log("Loading current user from timeout callback.");
-        //         this.props.loadCurrentUser();
-        //     }, 10000);
-    }
 
     public componentWillReceiveProps(nextProps: any) {
         if (this.props.app.screenId !== ScreenId.NoCommunityAssigned) {
             return;
-        }
-        if (nextProps.app.currentUser &&
-            nextProps.app.currentUser.communityId &&
-            nextProps.app.currentUser.communityId > 0) {
-            nextProps.actions.backToApp();
         }
     }
 
@@ -136,11 +120,4 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        loadCurrentUser: () => dispatch(appActions.loadCurrentUser()),
-        actions: bindActionCreators(appNavigation, dispatch),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NoCommunityAssigned);
+export default connect(mapStateToProps)(NoCommunityAssigned);

@@ -1,3 +1,4 @@
+import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
 import * as schemas from "./schemas";
 
@@ -34,6 +35,10 @@ export default {
         return { type: actions.REFRESH_TOKEN };
     },
 };
+
+export function getCallApiFSA(action) {
+    return { type: CALL_API_FSA, payload: action };
+}
 
 function getCallApiAction(endpoint: string, responseSchema, source = null) {
     return ({

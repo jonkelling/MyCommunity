@@ -53,11 +53,12 @@ class AppContentContainer extends React.Component<{
             .from(props.entities.users)
             .select((x) => x.value)
             .singleOrDefault((x) => x.email === props.email);
-        if (!currentUser || !currentUser.communityId) {
-            props.actions.startNoCommunityAssigned();
-            return;
-        }
-        if (!props.entities.communities) {
+        if (!props.entities.communities ||
+            -1 === Object.keys(props.entities.communities).indexOf(`${currentUser.communityId}`)) {
+            // InteractionManager.runAfterInteractions(() => {
+            //     this.props.actions.loadCommunity(currentUser.communityId);
+            //     this.props.actions.loadNewestPosts(currentUser.communityId);
+            // });
             return;
         }
         console.log(`${JSON.stringify(Object.keys(props.entities.communities))}`);
@@ -69,9 +70,6 @@ class AppContentContainer extends React.Component<{
         }
         const currentCommunity = props.entities.communities[currentUser.communityId];
         console.log(`setting titleto ${currentCommunity.name}`);
-        if (!currentCommunity) {
-            return;
-        }
         this.props.navigator.setTitle({ title: currentCommunity.name });
     }
     public render() {
@@ -131,7 +129,6 @@ class AppContentContainer extends React.Component<{
                 this.setState({ startingUp: false });
                 if (!props.app.currentUser.communityId) {
                     console.log("goto screen nocommunityassigned");
-                    props.actions.startNoCommunityAssigned();
                 }
                 else {
                     console.log("goto screen backtoapp");

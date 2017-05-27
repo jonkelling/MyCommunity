@@ -25,7 +25,11 @@ namespace Server.Controllers
 
         [HttpGet]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        public async Task<IActionResult> Get(int communityId, [FromQuery] DateTime? before = null, [FromQuery] DateTime? after = null, [FromQuery] int? limit = null)
+        public async Task<IActionResult> Get(
+            int communityId,
+            [FromQuery] DateTime? before = null,
+            [FromQuery] DateTime? after = null,
+            [FromQuery] int? limit = null)
         {
             var results = from post in _dbContext.Posts.Include(post => post.Author)
                           where post.Author.CommunityId == communityId
@@ -38,7 +42,8 @@ namespace Server.Controllers
                           orderby post.CreatedDateTime descending
                           select post;
             }
-            else if (after.HasValue)
+            
+            if (after.HasValue)
             {
                 results = from post in results
                           where post.CreatedDateTime > after.Value.ToUniversalTime()
@@ -50,7 +55,7 @@ namespace Server.Controllers
             {
                 results = results.Take(limit.Value);
             }
-            
+
             return Ok(_mapper.Map<IEnumerable<PostVm>>(await results.ToListAsync()));
         }
 

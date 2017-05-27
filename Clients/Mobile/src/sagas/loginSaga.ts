@@ -38,13 +38,7 @@ export default function* loginSaga(dispatch) {
                 .singleOrDefault((x) => x.email === email);
 
             if (!currentUser || !currentUser.communityId) {
-                dispatch(appNavigation.startNoCommunityAssigned());
-            }
-            else {
-                InteractionManager.runAfterInteractions(() => {
-                    dispatch(appActions.loadCommunity(currentUser.communityId));
-                    dispatch(appActions.loadNewestPosts(currentUser.communityId));
-                });
+                yield put(appNavigation.startNoCommunityAssigned());
             }
         }
     }
