@@ -62,5 +62,5 @@ obj/
 **/.vscode/.react/index.ios.bundle
 **/.vscode/.react/index.ios.map
 Clients/Mobile/ios/main.jsbundle
-
 Clients/Mobile/ios/main.jsbundle.meta
+Clients/Mobile/android/local.properties
