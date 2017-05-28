@@ -30,6 +30,9 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
     public render() {
+        if (!this.props.post) {
+            return null;
+        }
         return <View style={{ flex: 1 }}>
             <ScrollView>
                 <Image
@@ -65,8 +68,9 @@ const mapStateToProps = (state: any, ownProps: any) => {
     console.log("PostDetail");
     console.log("====================================");
     return {
-        post: state.entities.posts[ownProps.postId],
-        author: state.entities.users[state.entities.posts[ownProps.postId].author],
+        post: state.entities && state.entities.posts && state.entities.posts[ownProps.postId],
+        // tslint:disable-next-line:max-line-length
+        author: state.entities && state.entities.users && state.entities.users[state.entities && state.entities.posts && state.entities.posts[ownProps.postId].author],
     };
 };
 

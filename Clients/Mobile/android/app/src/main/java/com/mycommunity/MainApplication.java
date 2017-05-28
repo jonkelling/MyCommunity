@@ -3,6 +3,12 @@ package com.mycommunity;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.auth0.lock.react.LockReactPackage;
+import com.oblador.keychain.KeychainPackage;
+import com.reactnative.photoview.PhotoViewPackage;
+import cl.json.RNSharePackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import cl.json.RNSharePackage;
@@ -18,7 +24,7 @@ import com.reactnativenavigation.NavigationApplication;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends NavigationApplication implements ReactApplication {
+public class MainApplication extends NavigationApplication {
 
     @Override
     public boolean isDebug() {
@@ -28,26 +34,29 @@ public class MainApplication extends NavigationApplication implements ReactAppli
 
     @Override
     public List<ReactPackage> createAdditionalReactPackages() {
-        // Add additional packages you require here
-        return Arrays.<ReactPackage>asList(
-            // eg. new VectorIconsPackage()
-        );
+        return getPackages();
+    }
 
-        // No need to add RnnPackage and MainReactPackage
-        // Simply return null if you do not have additional packages:
-        return null;
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+                new KeychainPackage(),
+                new PhotoViewPackage(),
+                new RNSharePackage(),
+                new LinearGradientPackage(),
+                new VectorIconsPackage(),
+                new LockReactPackage()
+        );
     }
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+        return BuildConfig.DEBUG;
     }
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+        return Arrays.<ReactPackage>asList(
             new KeychainPackage(),
             new PhotoViewPackage(),
             new RNSharePackage(),

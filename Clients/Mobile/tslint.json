@@ -18,6 +18,9 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "no-var-requires": false
+        "no-var-requires": false,
+        "trailing-comma": [
+            false
+        ]
     }
 }

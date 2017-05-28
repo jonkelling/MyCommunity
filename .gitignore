@@ -64,3 +64,4 @@ obj/
 Clients/Mobile/ios/main.jsbundle
 Clients/Mobile/ios/main.jsbundle.meta
 Clients/Mobile/android/local.properties
+Clients/Mobile/android/app/src/main/assets/

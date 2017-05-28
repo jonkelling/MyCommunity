@@ -15,6 +15,7 @@ import storeConfig from "./store/ConfigureStore.dev";
 import appNavigation from "./appNavigation";
 
 import { registerScreens, ScreenId } from "./screens/index";
+import { iconsLoaded } from "./utils/AppIcons";
 
 const store = storeConfig({});
 
@@ -22,12 +23,9 @@ registerScreens(store, Provider);
 
 export default class App {
     constructor() {
-        setTimeout(() => {
-            store.dispatch(appNavigation.startApp());
-            // store.dispatch(appNavigation.startLoadingScreen());
-        }, 0);
-        // setTimeout(() => this.startNoCommunityAssigned(), 0);
-        // setTimeout(() => appNavigation.startLoadingScreen(), 0);
+        iconsLoaded.then(() => {
+            appNavigation.startApp();
+        });
     }
 }
 

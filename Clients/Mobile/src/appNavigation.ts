@@ -2,6 +2,7 @@
 import { Navigation, NavigatorStyle } from "react-native-navigation";
 import * as actions from "./actions/index";
 import { ScreenId } from "./screens/index";
+import { iconsMap } from "./utils/AppIcons";
 
 const navigatorStyle: NavigatorStyle = {
     navBarHideOnScroll: false,
@@ -10,7 +11,7 @@ const navigatorStyle: NavigatorStyle = {
     navBarTextColor: "black",
     navBarButtonColor: "black",
     statusBarTextColorScheme: "dark",
-    drawUnderTabBar: false,
+    drawUnderTabBar: true,
 };
 
 const backToApp = () => {
@@ -30,8 +31,8 @@ const startApp = () => {
             {
                 label: "Home",
                 screen: "app.Home",
-                // icon: iconsMap["ios-film-outline"],
-                // selectedIcon: iconsMap["ios-film"],
+                icon: iconsMap["ios-home-outline"],
+                selectedIcon: iconsMap["ios-home"],
                 title: "Home",
                 navigatorStyle,
                 navigatorButtons: {
@@ -46,9 +47,11 @@ const startApp = () => {
             },
         ],
         tabsStyle: {
-            tabBarButtonColor: "white",
-            tabBarSelectedButtonColor: "white",
+            tabBarButtonColor: "black",
+            tabBarSelectedButtonColor: "darkgray",
             tabBarBackgroundColor: "white",
+            tabBarHideShadow: false,
+            tabBarTranslucent: false,
         },
     });
     return {

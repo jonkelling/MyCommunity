@@ -46,6 +46,9 @@ declare module 'react-native-navigation' {
       tabBarButtonColor: string;
       tabBarSelectedButtonColor: string;
       tabBarBackgroundColor: string;
+      tabBarHideShadow?: boolean;
+      tabBarTranslucent?: boolean;
+      forceTitlesDisplay?: boolean;
     };
     drawer?: Drawer;
     passProps?: Object;
