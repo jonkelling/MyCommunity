@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">mycommunity</string>
+    <string name="app_name">My Community</string>
     <string name="auth0_client_id">b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn</string>
     <string name="auth0_domain">mycommunity.auth0.com</string>
 </resources>
