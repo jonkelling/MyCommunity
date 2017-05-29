@@ -24,7 +24,7 @@ registerScreens(store, Provider);
 export default class App {
     constructor() {
         iconsLoaded.then(() => {
-            appNavigation.startApp();
+            store.dispatch(appNavigation.startApp());
         });
     }
 }
