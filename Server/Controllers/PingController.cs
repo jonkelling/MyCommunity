@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers
 {
-    [Route("api")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     public class PingController : Controller
     {
         [HttpGet]
