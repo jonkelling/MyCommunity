@@ -11,14 +11,7 @@ function getCurrentUserActionPattern(actionType) {
 }
 
 export default function* waitCurrentUserSaga() {
-    const { success, failure } = yield race({
-        success: take(getCurrentUserActionPattern(actions.SUCCESS)),
-        failure: take(getCurrentUserActionPattern(actions.FAILURE)),
-    });
-
-    if (!success) {
-        return null;
-    }
+    yield take(actions.GET_CURRENT_USER_SUCCESS);
 
     const state = yield select();
     const email = state.app && state.app.profile && state.app.profile.email;

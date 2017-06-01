@@ -92,12 +92,14 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
     private getSortedPostsArray(props = this.props) {
         return Enumerable.from(props.posts)
             .select((x) => x.value)
+            .where((post) => props.users[post.author].communityId === props.app.currentUser.communityId)
             .orderByDescending((post) => post.createdDateTime)
             .toArray();
     }
     private getNewestPostDateTime(props = this.props) {
         return Enumerable.from(props.posts)
             .select((x) => x.value)
+            .where((post) => props.users[post.author].communityId === props.app.currentUser.communityId)
             .orderByDescending((post) => post.createdDateTime)
             .select((post) => new Date(post.createdDateTime))
             .defaultIfEmpty(new Date())
@@ -106,6 +108,7 @@ class PostList extends React.Component<IPostListProps, { postsDataSource: ListVi
     private getOldestPostDateTime(props = this.props) {
         return Enumerable.from(props.posts)
             .select((x) => x.value)
+            .where((post) => props.users[post.author].communityId === props.app.currentUser.communityId)
             .orderBy((post) => post.createdDateTime)
             .select((post) => new Date(post.createdDateTime))
             .defaultIfEmpty(new Date())

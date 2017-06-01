@@ -30,3 +30,5 @@ export const AUTH0_LOGIN = "AUTH0_LOGIN";
 export const AUTH0_LOGOUT = "AUTH0_LOGOUT";
 
 export const LOGGING_IN = "LOGGING_IN";
+
+export const GET_CURRENT_USER_SUCCESS = "GET_CURRENT_USER_SUCCESS";
