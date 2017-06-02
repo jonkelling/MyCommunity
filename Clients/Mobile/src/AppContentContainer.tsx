@@ -15,6 +15,7 @@ import DemoScreen from "./DemoScreen";
 import { ScreenId } from "./screens/index";
 // tslint:disable-next-line:no-var-requires
 import { Button, Image, Text, View } from "./ui";
+const stringify = require("json-stringify-safe");
 
 class AppContentContainer extends React.Component<{
     app: any, accessToken: string, actions: any,
@@ -23,16 +24,10 @@ class AppContentContainer extends React.Component<{
     navigator: any,
 }, {}> {
     public componentWillMount() {
-        if (this.props.app.screenId !== ScreenId.Home) {
-            return;
-        }
         this.loginIfNeeded(this.props);
         this.setupScreen(this.props);
     }
     public componentWillReceiveProps(nextProps: any) {
-        if (this.props.app.screenId !== ScreenId.Home) {
-            return;
-        }
         this.loginIfNeeded(nextProps);
         this.setupScreen(nextProps);
     }

@@ -14,7 +14,7 @@ import noCommunityScreenSaga from "./noCommunityScreenSaga";
 
 export default function* rootSaga(dispatch) {
     yield take(REHYDRATE);
-    yield fork(loginSaga, dispatch);
+    yield fork(loginSaga);
     yield fork(noCommunityScreenSaga);
     yield fork(loadCurrentUserDataSaga);
 }

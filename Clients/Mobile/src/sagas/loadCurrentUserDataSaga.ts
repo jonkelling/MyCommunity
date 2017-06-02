@@ -4,6 +4,8 @@ import { takeEvery } from "redux-saga/effects";
 import { call, put, select } from "redux-saga/effects";
 import { GET_CURRENT_USER_SUCCESS } from "../actions";
 import appActions, { getCallApiFSA } from "../appActions";
+import appNavigation from "../appNavigation";
+import { ScreenId } from "../screens/index";
 import waitCurrentUserSaga from "./waitCurrentUserSaga";
 
 export default function* loadCurrentUserDataSaga() {
@@ -25,11 +27,10 @@ function* alwaysLoadCurrentUserDataSaga() {
         .select((x) => x.value)
         .singleOrDefault((x) => x.email === email);
 
-    if (!currentUser) {
-        return;
-    }
-
-    if (!currentUser.communityId) {
+    if (!currentUser || !currentUser.communityId) {
+        if ((yield select()).app.screenId !== ScreenId.NoCommunityAssigned) {
+            yield put(appNavigation.startNoCommunityAssigned());
+        }
         return;
     }
 

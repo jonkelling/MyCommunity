@@ -61,6 +61,8 @@ class LoadingScreen extends React.Component<ILoadingScreenProps, { done: boolean
                     console.log("goto screen backtoapp");
                     props.actions.backToApp();
                 }
+            } else {
+                props.actions.startNoCommunityAssigned();
             }
         }
     }

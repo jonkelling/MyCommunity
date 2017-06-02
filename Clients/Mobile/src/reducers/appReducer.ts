@@ -40,13 +40,14 @@ export default (state, action) => {
 function handleActionsFn(_state, _action) {
     const handler = handleActions(
         {
-            [REHYDRATE]: (state, action: any) => {
+            [REHYDRATE]: (state: any, action: any) => {
                 const incoming = action.payload.app;
                 const extras = {
                     loading: { app: false },
                     loggingIn: false,
                     refreshingToken: false,
                     refreshTokenError: null,
+                    screenId: state.screenId || null,
                 };
                 if (incoming) {
                     return {
@@ -58,6 +59,7 @@ function handleActionsFn(_state, _action) {
                 return {
                     ...state,
                     ...extras,
+                    screenId: state.screenId || null,
                 };
             },
             [actions.LOGGING_IN]: (state) => {
