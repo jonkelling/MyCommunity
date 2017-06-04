@@ -1,7 +1,8 @@
 const path = require("path");
 const autoprefixer = require("autoprefixer");
 
-const debug = process.env.NODE_ENV !== "production";
+// const debug = process.env.NODE_ENV !== "production";
+const debug = true;
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
