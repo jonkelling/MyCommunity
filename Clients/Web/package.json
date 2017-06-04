@@ -42,9 +42,7 @@
         "typescript": "^2.3.4",
         "url-loader": "^0.5.8",
         "webpack": "^2.6.1",
-        "webpack-merge": "^4.1.0"
-    },
-    "devDependencies": {
+        "webpack-merge": "^4.1.0",
         "@types/node": "^7.0.27",
         "@types/react": "^15.0.26",
         "babel-loader": "^7.0.0",
