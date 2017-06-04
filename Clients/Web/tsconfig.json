@@ -1,0 +1,46 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "forceConsistentCasingInFileNames": true,
+        "pretty": true,
+        "allowJs": true,
+        "moduleResolution": "node",
+        "jsx": "react",
+        "outDir": "build",
+        "rootDir": "src",
+        "experimentalDecorators": true,
+        "stripInternal": true,
+        "sourceMap": false,
+        "inlineSourceMap": true,
+        "noImplicitAny": false,
+        "allowSyntheticDefaultImports": true,
+        "sourceRoot": "src",
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "node_modules/linq",
+            "node_modules/normalizr",
+            "node_modules/redux-api-middleware",
+            "node_modules/redux-normalizr3-middleware",
+            "node_modules/redux",
+            "node_modules/redux-saga",
+            "node_modules/redux-thunk",
+            "node_modules/@types"
+        ]
+    },
+    "typeAcquisition": {
+        "enable": false
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "__tests__",
+        "dist",
+        "node_modules"
+    ]
+}

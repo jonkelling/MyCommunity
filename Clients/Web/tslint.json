@@ -1,0 +1,26 @@
+{
+    "extends": ["tslint:recommended", "react"],
+    "rules": {
+        "object-literal-sort-keys": false,
+        "member-ordering": [true, {
+            "order": [
+                "static-field",
+                "instance-field",
+                "constructor",
+                "instance-method"
+            ]
+        }],
+        "no-console": [
+            false
+        ],
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace"
+        ],
+        "no-var-requires": false,
+        "trailing-comma": [
+            false
+        ]
+    }
+}
