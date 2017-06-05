@@ -1,15 +1,14 @@
 {
     "version": "0.1.0",
-    "configurations": [
-        {
+    "configurations": [{
             "name": "Launch localhost",
             "type": "chrome",
             "request": "launch",
             "sourceMaps": true,
             "url": "http://localhost:3000/",
             "webRoot": "${workspaceRoot}/dist",
-             "sourceMapPathOverrides": {
-                "webpack:///*": "/*"
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/src/*"
             }
         },
         {
