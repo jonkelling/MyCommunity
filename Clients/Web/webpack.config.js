@@ -238,10 +238,10 @@ module.exports = {
         new webpack.EnvironmentPlugin([
             "NODE_ENV"
         ]),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: false,
-            sourcemap: false
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: false,
+        //     sourcemap: false
+        // }),
         extractSASS,
         htmlPlugins[0],
         htmlPlugins[1]
