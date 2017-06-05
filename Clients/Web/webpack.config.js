@@ -38,8 +38,7 @@ const vender = {
         "material-ui/Dialog",
         "material-ui/RaisedButton",
         "material-ui/FlatButton",
-        "material-ui/Tabs",
-        "config"
+        "material-ui/Tabs"
     ]
 };
 
