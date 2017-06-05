@@ -10,22 +10,21 @@ const store = configureStore({});
 
 declare const module: any;
 
-const renderApp = (renderProps) => ReactDOM.render(
+const renderApp = (Cmp) => ReactDOM.render(
     <AppContainer>
-        <Index store={store} history={history} />
+        <Cmp store={store} history={history} />
     </AppContainer>,
     document.getElementById("app")
 );
 
-renderApp({});
+const injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
+
+renderApp(Index);
 
 if (module.hot) {
-    module.hot.accept(() => {
-        ReactDOM.render(
-            <AppContainer>
-                <Index store={store} history={history} />
-            </AppContainer>,
-            document.getElementById("app")
-        );
+    module.hot.accept("./index", () => {
+        // const { NewIndex = Index } = require("./index");
+        renderApp(Index);
     });
 }

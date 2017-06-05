@@ -1,8 +1,7 @@
 const path = require("path");
 const autoprefixer = require("autoprefixer");
 
-// const debug = process.env.NODE_ENV !== "production";
-const debug = true;
+const debug = process.env.NODE_ENV !== "production";
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -85,7 +84,7 @@ module.exports = {
         app: [
             "babel-polyfill",
             "react-hot-loader/patch",
-            "webpack/hot/only-dev-server",
+            // "webpack/hot/only-dev-server",
             path.resolve(SRC_ROOT, "index.dev.tsx")
         ]
     } : merge(vender, {
@@ -115,13 +114,7 @@ module.exports = {
         rules: [{
                 test: /\.ts(x?)$/,
                 use: [
-                    "babel-loader",
-                    {
-                        loader: "ts-loader",
-                        options: {
-                            configFileName: "./tsconfig.json"
-                        }
-                    }
+                    "react-hot-loader/webpack", "ts-loader"
                 ],
                 include: [SRC_ROOT],
                 exclude: [

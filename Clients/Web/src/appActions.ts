@@ -31,8 +31,13 @@ export default {
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
-    refreshToken: () => {
-        return { type: actions.REFRESH_TOKEN };
+    createPost: (communityId: number, title: string, content: string) => {
+        const endpoint = `communities/${communityId}/posts`;
+        return getCallApiActionPost(endpoint, schemas.postList, {
+            headline: title,
+            content,
+            author: { id: 1 }
+        });
     },
 };
 
@@ -41,10 +46,25 @@ export function getCallApiFSA(action) {
 }
 
 function getCallApiAction(endpoint: string, responseSchema, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "GET");
+}
+
+function getCallApiActionPost(endpoint: string, responseSchema, body: any, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "POST", {
+        body: JSON.stringify(body),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+    });
+}
+
+function getCallApiAction2(endpoint: string, responseSchema, source, method, extra = null) {
     return ({
         [CALL_API]: {
             endpoint,
-            method: "GET",
+            method: "POST",
+            ...extra,
             types: [
                 {
                     meta: (action, state) => {

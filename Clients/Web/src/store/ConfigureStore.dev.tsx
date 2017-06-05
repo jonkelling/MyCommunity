@@ -9,6 +9,11 @@ import reducers from "../reducers/index";
 import routes from "../routes";
 import rootSaga from "../sagas/rootSaga";
 import * as schemas from "../schemas";
+import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
+import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
+import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
+import callApiConvertFsaMiddleware from "./middleware/callApiConvertFsaMiddleware";
+import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
 declare const module: any;
 
@@ -25,7 +30,6 @@ const littleRouter = routerForBrowser({
     // basename: '/app'
 });
 
-
 const routerEnhancer: Redux.StoreEnhancer<any> = littleRouter.enhancer;
 const routerMiddleware: Redux.Middleware = littleRouter.middleware;
 
@@ -38,7 +42,12 @@ export default (preloadedState?: any) => {
             applyMiddleware(
                 // auth,
                 routerMiddleware,
-                // apiMiddleware,
+                callApiConvertFsaMiddleware,
+                auth0CustomMiddleware,
+                refreshTokenMiddleware,
+                apiEndPointMiddleware,
+                apiAuthMiddleware,
+                apiMiddleware,
                 normalizrMiddleware(),
                 // api,
                 thunk,
@@ -75,16 +84,16 @@ function configureStore<S>(storeEnhancer: Redux.StoreEnhancer<S>, preloadedState
 
     sagaMiddleware.run(rootSaga, store.dispatch);
 
-    if (module.hot) {
-        // Enable Webpack hot module replacement for reducers
-        module.hot.accept("../App.tsx", () => {
-            const nextRootReducer = require("../reducers/index").default;
-            store.replaceReducer(combineReducers({
-                ...nextRootReducer,
-                router: littleRouter.reducer
-            }));
-        });
-    }
+    // if (module.hot) {
+    //     // Enable Webpack hot module replacement for reducers
+    //     module.hot.accept(() => {
+    //         const nextRootReducer = require("../reducers/index").default;
+    //         store.replaceReducer(combineReducers({
+    //             ...nextRootReducer,
+    //             router: littleRouter.reducer
+    //         }));
+    //     });
+    // }
 
     return store;
 }

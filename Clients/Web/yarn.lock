@@ -4708,6 +4708,14 @@ redux-actions@^2.0.3:
     lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
+redux-api-middleware@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/redux-api-middleware/-/redux-api-middleware-1.0.3.tgz#e49cd393d21c3ba640350f141eaa82298deba7a2"
+  dependencies:
+    babel-runtime "^5.8.25"
+    isomorphic-fetch "^2.1.1"
+    lodash.isplainobject "^3.2.0"
+
 "redux-api-middleware@github:jonkelling/redux-api-middleware#dist":
   version "1.0.2"
   resolved "https://codeload.github.com/jonkelling/redux-api-middleware/tar.gz/64718fa0b7fc87ac99a9bb5eb015af8e6838c230"

@@ -45,8 +45,6 @@ function handleActionsFn(_state, _action) {
                 const extras = {
                     loading: { app: false },
                     loggingIn: false,
-                    refreshingToken: false,
-                    refreshTokenError: null,
                     screenId: state.screenId || null,
                 };
                 if (incoming) {
@@ -182,26 +180,26 @@ function handleActionsFn(_state, _action) {
                     },
                 };
             },
-            [actions.REFRESHING_TOKEN]: (state, action: any) => {
-                return {
-                    ...state,
-                    refreshingToken: true,
-                };
-            },
-            [actions.REFRESHING_TOKEN_SUCCESS]: (state, action: any) => {
-                return {
-                    ...state,
-                    refreshingToken: false,
-                    refreshTokenError: null,
-                };
-            },
-            [actions.REFRESHING_TOKEN_FAILURE]: (state, action: any) => {
-                return {
-                    loading: { app: false },
-                    refreshingToken: false,
-                    refreshTokenError: action.payload,
-                };
-            },
+            // [actions.REFRESHING_TOKEN]: (state, action: any) => {
+            //     return {
+            //         ...state,
+            //         refreshingToken: true,
+            //     };
+            // },
+            // [actions.REFRESHING_TOKEN_SUCCESS]: (state, action: any) => {
+            //     return {
+            //         ...state,
+            //         refreshingToken: false,
+            //         refreshTokenError: null,
+            //     };
+            // },
+            // [actions.REFRESHING_TOKEN_FAILURE]: (state, action: any) => {
+            //     return {
+            //         loading: { app: false },
+            //         refreshingToken: false,
+            //         refreshTokenError: action.payload,
+            //     };
+            // },
             [actions.SET_SCREEN]: (state, action: any) => ({
                 ...state,
                 screenId: action.payload,
