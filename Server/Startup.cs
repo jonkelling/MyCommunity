@@ -37,6 +37,17 @@ namespace Server
         // called by the runtime before the Configure method, below.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsPolicy",
+                        builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+                });
+            }
+
             // Add services to the collection.
             services.AddMemoryCache();
             services.AddMvc();
@@ -71,18 +82,19 @@ namespace Server
             //     }
             // });
 
-            // Create the container builder.
-            var builder = new ContainerBuilder();
+            {  // Create the container builder.
+                var builder = new ContainerBuilder();
 
-            // Register dependencies, populate the services from
-            // the collection, and build the container. If you want
-            // to dispose of the container at the end of the app,
-            // be sure to keep a reference to it as a property or field.
-            builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
-            builder.RegisterType<Auth0Service>().AsImplementedInterfaces();
+                // Register dependencies, populate the services from
+                // the collection, and build the container. If you want
+                // to dispose of the container at the end of the app,
+                // be sure to keep a reference to it as a property or field.
+                builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
+                builder.RegisterType<Auth0Service>().AsImplementedInterfaces();
 
-            builder.Populate(services);
-            this.ApplicationContainer = builder.Build();
+                builder.Populate(services);
+                this.ApplicationContainer = builder.Build();
+            }
 
             // Create the IServiceProvider based on the container.
             return new AutofacServiceProvider(this.ApplicationContainer);
@@ -99,10 +111,14 @@ namespace Server
             loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseCors("CorsPolicy");
+
             var options = new JwtBearerOptions
             {
                 Audience = Configuration["Auth0:ApiIdentifier"],
-                Authority = $"https://{Configuration["Auth0:Domain"]}/"
+                Authority = $"https://{Configuration["Auth0:Domain"]}/",
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
             };
             app.UseJwtBearerAuthentication(options);
 
