@@ -10,7 +10,7 @@ import routes from "../routes";
 import rootSaga from "../sagas/rootSaga";
 import * as schemas from "../schemas";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
-import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
+import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.prod";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
 import callApiConvertFsaMiddleware from "./middleware/callApiConvertFsaMiddleware";
 import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
