@@ -78,7 +78,8 @@ namespace Server.Controllers
             var post = _mapper.Map<Post>(value);
             post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
             await _dbContext.Posts.AddAsync(post);
-            return Ok(await _dbContext.SaveChangesAsync());
+            await _dbContext.SaveChangesAsync();
+            return Ok(_mapper.Map<PostVm>(post));
         }
 
         [HttpPut("{postId}")]

@@ -33,7 +33,7 @@ export default {
     },
     createPost: (communityId: number, title: string, content: string) => {
         const endpoint = `communities/${communityId}/posts`;
-        return getCallApiActionPost(endpoint, schemas.postList, {
+        return getCallApiActionPost(endpoint, schemas.post, {
             headline: title,
             content,
             author: { id: 1 }

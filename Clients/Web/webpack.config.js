@@ -113,8 +113,10 @@ module.exports = {
     module: {
         rules: [{
                 test: /\.ts(x?)$/,
-                use: [
+                use: debug ? [
                     "react-hot-loader/webpack", "ts-loader"
+                ] : [
+                    "ts-loader"
                 ],
                 include: [SRC_ROOT],
                 exclude: [
@@ -239,7 +241,7 @@ module.exports = {
         commonsChunkPlugin,
         providePlugin,
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
+        // new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             //'process.env': {
             //    'NODE_ENV': '"production"'
