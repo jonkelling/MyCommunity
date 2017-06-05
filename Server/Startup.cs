@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
@@ -21,6 +22,7 @@ namespace Server
     {
         public Startup(IHostingEnvironment env)
         {
+            Console.WriteLine($"Environment: {env.EnvironmentName}");
             var config = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -38,13 +40,24 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             {
+
                 services.AddCors(options =>
                 {
-                    options.AddPolicy("CorsPolicy",
-                        builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
+                    var allowOrigins = Configuration
+                        .GetSection("Cors")
+                        .GetValue<string>("AllowOrigins")
+                        ?.Split(',')
+                        .Where(x => x != null)
+                        .Select(x => x.Trim())
+                        .ToArray();
+                    if (allowOrigins != null)
+                    {
+                        options.AddPolicy("CorsPolicy",
+                            builder => builder.WithOrigins(allowOrigins)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
+                    }
                 });
             }
 
