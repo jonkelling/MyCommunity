@@ -240,7 +240,6 @@ module.exports = {
         //new webpack.optimize.AggressiveMergingPlugin({moveToParent: true}),
         commonsChunkPlugin,
         providePlugin,
-        new webpack.optimize.DedupePlugin(),
         // new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             //'process.env': {
