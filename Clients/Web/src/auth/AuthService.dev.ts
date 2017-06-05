@@ -6,12 +6,12 @@ import * as actions from "../actions/index";
 export class AuthService {
     private auth0: any;
     private store: Store<any>;
-    constructor() {
+    constructor(redirectUri: string) {
         // Configure Auth0
         this.auth0 = new auth0.WebAuth({
             domain: "mycommunity.auth0.com",
             clientID: "b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn",
-            redirectUri: "http://localhost:3000",
+            redirectUri,
             audience: "https://mycommunity.auth0.com/userinfo",
             responseType: "token id_token",
             scope: "openid name email nickname"
@@ -76,4 +76,4 @@ export class AuthService {
     }
 }
 
-export default new AuthService();
+export default new AuthService("http://localhost:3000");
