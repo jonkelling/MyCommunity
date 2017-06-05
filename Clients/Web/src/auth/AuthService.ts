@@ -6,7 +6,18 @@ import * as actions from "../actions/index";
 export class AuthService {
     private auth0: any;
     private store: Store<any>;
-    constructor(redirectUri: string) {
+
+    constructor() {
+        this.configure = this.configure.bind(this);
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.handleAuthentication = this.handleAuthentication.bind(this);
+        this.isAuthenticated = this.isAuthenticated.bind(this);
+        this.setSession = this.setSession.bind(this);
+        this.setStore = this.setStore.bind(this);
+    }
+
+    public configure(redirectUri: string) {
         // Configure Auth0
         this.auth0 = new auth0.WebAuth({
             domain: "mycommunity.auth0.com",
@@ -16,12 +27,6 @@ export class AuthService {
             responseType: "token id_token",
             scope: "openid name email nickname"
         });
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-        this.handleAuthentication = this.handleAuthentication.bind(this);
-        this.isAuthenticated = this.isAuthenticated.bind(this);
-        this.setSession = this.setSession.bind(this);
-        this.setStore = this.setStore.bind(this);
     }
 
     public setStore(store: Store<any>) {
@@ -76,4 +81,4 @@ export class AuthService {
     }
 }
 
-export default new AuthService("http://localhost:3000");
+export default new AuthService();
