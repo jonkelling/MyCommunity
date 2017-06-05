@@ -61,13 +61,6 @@ const commonsChunkPlugin = new webpack.optimize.CommonsChunkPlugin({
 
 });
 
-const providePlugin = new webpack.ProvidePlugin({
-    keycode: "keycode",
-    classNames: "classnames/bind",
-    update: "react-addons-update",
-    config: "config"
-});
-
 const htmlPlugins = [
     new HtmlWebpackPlugin({
         filename: "../index.html",
@@ -228,7 +221,6 @@ module.exports = {
     plugins: debug ? [
         //new webpack.HotModuleReplacementPlugin(),
         //new webpack.optimize.AggressiveMergingPlugin({ moveToParent: true }),
-        providePlugin,
         // new webpack.EnvironmentPlugin([
         //     "NODE_ENV"
         // ]),
@@ -239,7 +231,6 @@ module.exports = {
     ] : [
         //new webpack.optimize.AggressiveMergingPlugin({moveToParent: true}),
         commonsChunkPlugin,
-        providePlugin,
         // new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             //'process.env': {
