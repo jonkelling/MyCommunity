@@ -1,4 +1,3 @@
-// tslint:disable-next-line:no-var-requires
 import auth0 from "auth0-js";
 import { Store } from "redux";
 import * as actions from "../actions/index";
@@ -6,6 +5,7 @@ import * as actions from "../actions/index";
 export class AuthService {
     private auth0: any;
     private store: Store<any>;
+    private redirectUri: string;
 
     constructor() {
         this.configure = this.configure.bind(this);
@@ -15,9 +15,11 @@ export class AuthService {
         this.isAuthenticated = this.isAuthenticated.bind(this);
         this.setSession = this.setSession.bind(this);
         this.setStore = this.setStore.bind(this);
+        this.renew = this.renew.bind(this);
     }
 
     public configure(redirectUri: string) {
+        this.redirectUri = redirectUri;
         // Configure Auth0
         this.auth0 = new auth0.WebAuth({
             domain: "mycommunity.auth0.com",
@@ -47,11 +49,12 @@ export class AuthService {
             } else if (err) {
                 // history.replace("/home");
                 console.log(err);
+                this.renew();
             }
         });
     }
 
-    public setSession(authResult) {
+    private setSession(authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
             // Set the time that the access token will expire at
             const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
@@ -78,6 +81,28 @@ export class AuthService {
         // access token's expiry time
         const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
         return new Date().getTime() < expiresAt;
+    }
+
+    public renew() {
+        return new Promise((resolve, reject) => {
+            this.auth0.renewAuth({
+                audience: "https://mycommunity.auth0.com/userinfo",
+                scope: "openid name email nickname",
+                redirectUri: `${this.redirectUri}/auth-silent-callback.html`,
+                responseType: "token id_token",
+
+                // this will use postMessage to comunicate between the silent callback
+                // and the SPA. When false the SDK will attempt to parse the url hash
+                // should ignore the url hash and no extra behaviour is needed.
+                usePostMessage: true
+            }, (err, authResult) => {
+                if (err) {
+                    return reject(err);
+                }
+                this.setSession(authResult);
+                return resolve();
+            });
+        });
     }
 }
 

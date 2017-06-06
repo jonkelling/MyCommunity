@@ -11,10 +11,17 @@ export default (store) => (next) => (action) => {
     if (action && (action[CALL_API])) {
         const idToken = localStorage.getItem("id_token"); // AuthService.getToken();
 
-        if (!idToken || jwtHelper.isTokenExpired(idToken)) {
+        if (!idToken) {
             AuthService.login();
-            if (!store.getState().app.loggingIn &&
-                !store.getState().app.refreshingToken) {
+        } else if (jwtHelper.isTokenExpired(idToken)) {
+            AuthService.renew()
+                .then(() => next(action))
+                .catch(() => {
+                    AuthService.login();
+                });
+            return;
+            // if (!store.getState().app.loggingIn &&
+            //     !store.getState().app.refreshingToken) {
                 // AuthService.refreshToken()
                 //     .then((token) => {
                 //         AuthService.setToken(token);
@@ -33,14 +40,14 @@ export default (store) => (next) => (action) => {
                 //         store.dispatch({ type: actions.REFRESHING_TOKEN_FAILURE });
                 //     });
                 // store.dispatch({ type: actions.REFRESHING_TOKEN });
-            }
-            else {
-                // delay and retry CALL_API action
-                if (action.type !== actions.REFRESH_TOKEN) {
-                    setTimeout(() => store.dispatch(action), 500);
-                    return;
-                }
-            }
+            // }
+            // else {
+            //     // delay and retry CALL_API action
+            //     if (action.type !== actions.REFRESH_TOKEN) {
+            //         setTimeout(() => store.dispatch(action), 500);
+            //         return;
+            //     }
+            // }
         }
     }
     return next(action);

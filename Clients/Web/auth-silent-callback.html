@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://cdn.auth0.com/js/auth0/8.7.0/auth0.min.js"></script>
+    <script type="text/javascript">
+        var auth0 = new auth0.WebAuth({
+            domain: 'mycommunity.auth0.com',
+            clientID: 'b9qXtslkn3dQpk4ZVhqNTBBaN8o3VUtn'
+        });
+        auth0.parseHash(window.location.hash, function (err, result) {
+            parent.postMessage(err || result, window.location.origin);
+        });
+    </script>
+</head>
+
+<body></body>
+
+</html>
