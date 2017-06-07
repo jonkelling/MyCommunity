@@ -1,5 +1,7 @@
+import { replace } from "redux-little-router";
 import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
+import AuthService from "./auth/AuthService";
 import IPost from "./IPost";
 import * as schemas from "./schemas";
 
@@ -46,6 +48,11 @@ export default {
             ...post,
             author: { id: post.author },
         });
+    },
+    logout: () => {
+        AuthService.logout();
+        replace("/");
+        AuthService.login();
     },
 };
 

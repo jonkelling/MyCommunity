@@ -37,6 +37,7 @@ class App extends React.Component<any, any> {
 
         return <MuiThemeProvider>
             <div>
+                <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
                 <EditPost
                     post={selectedPost}
                     updateEdits={this.props.editsActions.updateEdits}
