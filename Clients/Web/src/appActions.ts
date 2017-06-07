@@ -63,7 +63,7 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
     return ({
         [CALL_API]: {
             endpoint,
-            method: "POST",
+            method,
             ...extra,
             types: [
                 {

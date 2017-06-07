@@ -15,7 +15,7 @@ export default (store) => (next) => (action) => {
             AuthService.login();
         } else if (jwtHelper.isTokenExpired(idToken)) {
             AuthService.renew()
-                .then(() => next(action))
+                .then(() => store.dispatch(action))
                 .catch(() => {
                     AuthService.login();
                 });
