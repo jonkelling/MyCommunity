@@ -242,7 +242,7 @@ module.exports = {
         //     mangle: false,
         //     sourcemap: false
         // }),
-        extractSASS,
+        // extractSASS,
         htmlPlugins[0],
         htmlPlugins[1]
     ]
