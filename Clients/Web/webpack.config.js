@@ -189,8 +189,15 @@ module.exports = {
                     }
                 ] : ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: [
-                        "css-loader",
+                    use: [{
+                            loader: "css-loader",
+                            options: {
+                                minimize: false,
+                                modules: true,
+                                importLoaders: 1,
+                                localIdentName: "[name]__[local]__[hash:base64:5]",
+                            }
+                        },
                         {
                             loader: "postcss-loader",
                             options: {
@@ -201,7 +208,15 @@ module.exports = {
                             }
                         },
                         "resolve-url-loader",
-                        "sass-loader",
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                includePaths: [
+                                    SRC_ROOT
+                                    //path.resolve(APP_ROOT, "styles/sass-resources.scss")
+                                ]
+                            }
+                        },
                         {
                             loader: "sass-resources-loader",
                             options: {
@@ -242,7 +257,7 @@ module.exports = {
         //     mangle: false,
         //     sourcemap: false
         // }),
-        // extractSASS,
+        extractSASS,
         htmlPlugins[0],
         htmlPlugins[1]
     ]
