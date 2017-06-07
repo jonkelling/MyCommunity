@@ -49,7 +49,14 @@ export class AuthService {
             } else if (err) {
                 // history.replace("/home");
                 console.log(err);
-                this.renew();
+                this.renew()
+                    .then((authResult2) => {
+                        this.setSession(authResult2);
+                    })
+                    .catch(() => {
+                        console.log("err");
+                        setTimeout(() => this.login(), 2000);
+                    });
             }
         });
     }

@@ -1,5 +1,6 @@
 import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
+import IPost from "./IPost";
 import * as schemas from "./schemas";
 
 // tslint:disable:object-literal-sort-keys
@@ -39,6 +40,13 @@ export default {
             author: { id: 1 }
         });
     },
+    savePost: (post: IPost) => {
+        const endpoint = `communities/1/posts/${post.id}`;
+        return getCallApiActionPut(endpoint, schemas.post, {
+            ...post,
+            author: { id: post.author },
+        });
+    },
 };
 
 export function getCallApiFSA(action) {
@@ -51,6 +59,16 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
 
 function getCallApiActionPost(endpoint: string, responseSchema, body: any, source = null) {
     return getCallApiAction2(endpoint, responseSchema, source, "POST", {
+        body: JSON.stringify(body),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+    });
+}
+
+function getCallApiActionPut(endpoint: string, responseSchema, body: any, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "PUT", {
         body: JSON.stringify(body),
         headers: {
             "Accept": "application/json",

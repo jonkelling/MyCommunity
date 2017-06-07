@@ -1,5 +1,6 @@
 ﻿
 import Redux, { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 import * as createLogger from "redux-logger";
 import { persistStore } from "redux-persist";
 import createSagaMiddleware from "redux-saga";
@@ -76,7 +77,7 @@ function configureStore<S>(storeEnhancer: Redux.StoreEnhancer<S>, preloadedState
             router: littleRouter.reducer,
         }),
         preloadedState,
-        compose(
+        composeWithDevTools(
             storeEnhancer,
             // DevTools.instrument()
         ),

@@ -2,11 +2,24 @@
 # yarn lockfile v1
 
 
+"@types/material-ui@^0.17.10":
+  version "0.17.10"
+  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.17.10.tgz#29e4b4e5863bfa85a3bd8fd3b9e521b7ee5bf3ad"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-addons-linked-state-mixin" "*"
+
 "@types/node@^7.0.27":
   version "7.0.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.27.tgz#ba5e1a87aca2b4f5817289615ffe56472927687e"
 
-"@types/react@^15.0.26":
+"@types/react-addons-linked-state-mixin@*":
+  version "0.14.17"
+  resolved "https://registry.yarnpkg.com/@types/react-addons-linked-state-mixin/-/react-addons-linked-state-mixin-0.14.17.tgz#2e82b5b0882410279a7ab6b675e6f49eb3de8419"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@^15.0.26":
   version "15.0.26"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.26.tgz#19d8969edcabb2aa6d10ccfba807e67a93a0a8f4"
 
@@ -4718,6 +4731,10 @@ redux-devtools-dock-monitor@^1.1.2:
     prop-types "^15.5.8"
     react-dock "^0.2.4"
     react-pure-render "^1.0.2"
+
+redux-devtools-extension@^2.13.2:
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.2.tgz#e0f9a8e8dfca7c17be92c7124958a3b94eb2911d"
 
 redux-devtools-instrument@^1.0.1:
   version "1.8.2"
