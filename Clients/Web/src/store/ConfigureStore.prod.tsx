@@ -4,7 +4,7 @@ import * as createLogger from "redux-logger";
 import { persistStore } from "redux-persist";
 import createSagaMiddleware from "redux-saga";
 import thunk from "redux-thunk";
-import DevTools from "../containers/DevTools";
+// import DevTools from "../containers/DevTools";
 import reducers from "../reducers/index";
 import routes from "../routes";
 import rootSaga from "../sagas/rootSaga";
