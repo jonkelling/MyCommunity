@@ -1,8 +1,9 @@
 import classNames from "classnames/bind";
-import { Divider, RaisedButton, TextField } from "material-ui";
+import { Divider } from "material-ui";
 import React from "react";
 import IPost from "../IPost";
 import ScrollableDialog from "./ScrollableDialog";
+import { RaisedButton, TextField } from "./ui";
 
 const cx = classNames.bind(require("./EditPost.scss"));
 

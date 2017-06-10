@@ -71,7 +71,12 @@
         "cleanall": "rimraf dist node_modules",
         "cleanquick": "rimraf dist",
         "devserver": "rimraf dist/*&&webpack-dev-server --hot --history-api-fallback --inline",
-        "postinstall": "webpack --config webpack.config.js --display-error-details"
+        "postinstall": "webpack --config webpack.config.js --display-error-details",
+        "remotedevserver": "node remotedevserver.js"
     },
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "devDependencies": {
+        "remote-redux-devtools": "^0.5.11",
+        "remotedev-server": "^0.2.2"
+    }
 }

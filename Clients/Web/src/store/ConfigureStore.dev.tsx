@@ -5,6 +5,7 @@ import * as createLogger from "redux-logger";
 import { persistStore } from "redux-persist";
 import createSagaMiddleware from "redux-saga";
 import thunk from "redux-thunk";
+import { composeWithDevTools as devtoolsComposeWithDevTools } from "remote-redux-devtools";
 // import DevTools from "../containers/DevTools";
 import reducers from "../reducers/index";
 import routes from "../routes";
@@ -60,7 +61,7 @@ export default (preloadedState?: any) => {
         preloadedState
     );
 
-    // ...after creating your store
+    // for redux-saga
     const initialLocation = store.getState().router;
     if (initialLocation) {
         store.dispatch(initializeCurrentLocation(initialLocation));
@@ -71,13 +72,20 @@ export default (preloadedState?: any) => {
 
 function configureStore<S>(storeEnhancer: Redux.StoreEnhancer<S>, preloadedState?: any) {
 
+    const composeEnhancers = devtoolsComposeWithDevTools({
+        realtime: true,
+        name: "My Community",
+        host: "127.0.0.1",
+        port: 8000, // the port your remotedev server is running at
+    });
+
     const store = createStore(
         combineReducers({
             ...reducers,
             router: littleRouter.reducer,
         }),
         preloadedState,
-        composeWithDevTools(
+        composeEnhancers(
             storeEnhancer,
             // DevTools.instrument()
         ),

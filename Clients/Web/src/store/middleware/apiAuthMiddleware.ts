@@ -14,7 +14,7 @@ export default (store) => (next) => (action) => {
                 authorization: `Bearer ${localStorage.getItem("id_token")}`,
             },
         };
-        console.log(stringify(callApiAction));
+        // console.log(stringify(callApiAction));
         return next({ [CALL_API]: callApiAction });
     }
     return next(action);

@@ -1,0 +1,23 @@
+{
+	// See http://go.microsoft.com/fwlink/?LinkId=827846
+	// for the documentation about the extensions.json format
+	"recommendations": [
+		// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+		"jingkaizhao.vscode-redux-devtools",
+        "gabrielgrinberg.auto-run-command",
+        "HookyQR.beautify",
+        "msjsdiag.debugger-for-chrome",
+        "dbaeumer.vscode-eslint",
+        "leizongmin.node-module-intellisense",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "nwallace.peep",
+        "WallabyJs.quokka-vscode",
+        "robinbentley.sass-indented",
+        "mrmlnc.vscode-scss",
+        "eg2.tslint",
+        "rbbit.typescript-hero",
+        "DSKWRK.vscode-generate-getter-setter",
+        "WallabyJs.wallaby-vscode"
+	]
+}

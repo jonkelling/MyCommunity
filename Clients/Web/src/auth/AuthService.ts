@@ -1,5 +1,6 @@
 import auth0 from "auth0-js";
 import { Store } from "redux";
+import { go, goBack, goForward, push, replace } from "redux-little-router";
 import * as actions from "../actions/index";
 
 export class AuthService {
@@ -45,7 +46,7 @@ export class AuthService {
         this.auth0.parseHash((err, authResult) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
-                // history.replace("/home");
+                // replace("/home");
             } else if (err) {
                 // history.replace("/home");
                 console.log(err);

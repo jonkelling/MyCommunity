@@ -44,13 +44,13 @@ export default function* loginSaga() {
 function* apiSuccess(action) {
     const source = (action && action.meta && action.meta.source);
     if (source === "currentUser") {
-        yield put({ type: GET_CURRENT_USER_SUCCESS });
+        yield put({ type: GET_CURRENT_USER_SUCCESS, payload: action.payload });
     }
 }
 
 function* apiFailure(action) {
     const source = (action && action.meta && action.meta.source);
     if (source === "currentUser") {
-        yield put({ type: GET_CURRENT_USER_FAILURE });
+        yield put({ type: GET_CURRENT_USER_FAILURE, payload: action.payload });
     }
 }

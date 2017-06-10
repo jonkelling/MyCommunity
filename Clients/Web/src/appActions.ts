@@ -1,4 +1,4 @@
-import { replace } from "redux-little-router";
+import { push } from "redux-little-router";
 import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
 import AuthService from "./auth/AuthService";
@@ -50,9 +50,7 @@ export default {
         });
     },
     logout: () => {
-        AuthService.logout();
-        replace("/");
-        AuthService.login();
+        return push("/logout");
     },
 };
 
@@ -93,7 +91,7 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
             types: [
                 {
                     meta: (action, state) => {
-                        console.log(`REQUEST: ${endpoint}`);
+                        // console.log(`REQUEST: ${endpoint}`);
                         return {
                             schema: responseSchema,
                             ...(source && { source }),
@@ -103,7 +101,7 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
                 },
                 {
                     meta: (action, state, res) => {
-                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
+                        // console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
                         return {
                             schema: responseSchema,
                             ...(source && { source }),

@@ -144,7 +144,7 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
-                console.log(`SUCCESS: ${loadingKey}`);
+                // console.log(`SUCCESS: ${loadingKey}`);
                 return {
                     ...state,
                     loading: {
@@ -212,6 +212,14 @@ function handleActionsFn(_state, _action) {
                 ...state,
                 [actions.LOADING_CURRENT_USER_PROCESS_VALIDATED]: action.payload,
             }),
+            [actions.GET_CURRENT_USER_SUCCESS]: (state, action: any) => {
+                const userId = action.payload.result;
+                const currentUser = action.payload.entities.users[userId];
+                return {
+                    ...state,
+                    currentUser
+                };
+            },
         }, {
             loading: { app: true },
         },

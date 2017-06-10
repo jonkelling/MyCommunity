@@ -93,7 +93,9 @@ module.exports = {
         publicPath: "/dist/",
         host: "localhost",
         port: 3000,
-        historyApiFallback: true
+        historyApiFallback: {
+            index: "/dist/index.html"
+        }
     },
     context: path.resolve(__dirname, "src"),
     devtool: 'inline-source-map',

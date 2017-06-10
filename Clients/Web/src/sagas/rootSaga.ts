@@ -1,4 +1,3 @@
-import { REHYDRATE } from "redux-persist/constants";
 import {
     call,
     fork,
@@ -8,13 +7,14 @@ import {
     takeEvery,
     takeLatest,
 } from "redux-saga/effects";
+import handleAuthWithRoutesSaga from "./handleAuthWithRoutesSaga";
 import loadCurrentUserDataSaga from "./loadCurrentUserDataSaga";
 import loginSaga from "./loginSaga";
 import noCommunityScreenSaga from "./noCommunityScreenSaga";
 
 export default function* rootSaga(dispatch) {
-    yield take(REHYDRATE);
+    yield fork(handleAuthWithRoutesSaga);
     yield fork(loginSaga);
-    yield fork(noCommunityScreenSaga);
+    // yield fork(noCommunityScreenSaga);
     yield fork(loadCurrentUserDataSaga);
 }

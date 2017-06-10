@@ -5,16 +5,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
+import ActiveUser from "./components/ActiveUser";
 import EditPost from "./components/EditPost";
 import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
+import View from "./components/View";
 import editsActions from "./editsActions";
-
-function handleAuthentication(nextState) {
-    if (/access_token|id_token|error/.test(nextState.location.hash)) {
-        AuthService.handleAuthentication();
-    }
-}
 
 class App extends React.Component<any, any> {
     constructor(props) {
@@ -29,14 +25,13 @@ class App extends React.Component<any, any> {
         this.props.loadOlderPosts(1, new Date());
     }
     public render() {
-        handleAuthentication(window);
-
         const selectedPost =
             this.state.selectedPostId &&
             this.props.edits.post;
 
         return <MuiThemeProvider>
-            <div>
+            <View>
+                <ActiveUser />
                 <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
                 <EditPost
                     post={selectedPost}
@@ -47,7 +42,7 @@ class App extends React.Component<any, any> {
                         this.props.loadOlderPosts(1, new Date());
                     }} />
                 <PostList posts={this.props.entities.posts} selectPost={this.selectPost} />
-            </div>
+            </View>
         </MuiThemeProvider>;
     }
     private createPost(event) {

@@ -11,13 +11,11 @@ export default (store) => (next) => (action) => {
     if (action && (action[CALL_API])) {
         const idToken = localStorage.getItem("id_token"); // AuthService.getToken();
 
-        if (!idToken) {
-            AuthService.login();
-        } else if (jwtHelper.isTokenExpired(idToken)) {
+        if (idToken && jwtHelper.isTokenExpired(idToken)) {
             AuthService.renew()
                 .then(() => store.dispatch(action))
                 .catch(() => {
-                    AuthService.login();
+                    // AuthService.login();
                 });
             return;
             // if (!store.getState().app.loggingIn &&
