@@ -22,6 +22,7 @@ class App extends React.Component<any, any> {
         this.selectPost = this.selectPost.bind(this);
     }
     public componentWillMount() {
+        this.props.appActions.loadCurrentUser();
         this.props.loadOlderPosts(1, new Date());
     }
     public render() {

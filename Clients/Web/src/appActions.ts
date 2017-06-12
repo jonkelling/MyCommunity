@@ -1,13 +1,8 @@
 import { push } from "redux-little-router";
-import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
 import AuthService from "./auth/AuthService";
 import IPost from "./IPost";
 import * as schemas from "./schemas";
-
-// tslint:disable:object-literal-sort-keys
-// tslint:disable-next-line:no-var-requires
-const { CALL_API } = require("redux-api-middleware");
 
 export default {
     loadCurrentUser: () => {
@@ -54,10 +49,6 @@ export default {
     },
 };
 
-export function getCallApiFSA(action) {
-    return { type: CALL_API_FSA, payload: action };
-}
-
 function getCallApiAction(endpoint: string, responseSchema, source = null) {
     return getCallApiAction2(endpoint, responseSchema, source, "GET");
 }
@@ -84,7 +75,8 @@ function getCallApiActionPut(endpoint: string, responseSchema, body: any, source
 
 function getCallApiAction2(endpoint: string, responseSchema, source, method, extra = null) {
     return ({
-        [CALL_API]: {
+        type: actions.CALL_API_FSA,
+        payload: {
             endpoint,
             method,
             ...extra,
@@ -129,6 +121,6 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
                     type: "FAILURE",
                 },
             ],
-        },
+        }
     });
 }

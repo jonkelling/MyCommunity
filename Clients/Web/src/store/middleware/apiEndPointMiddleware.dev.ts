@@ -12,7 +12,7 @@ export default (store) => {
 
     return (next) => (action) => {
         const callApiAction = action && action[CALL_API];
-        if (callApiAction) {
+        if (callApiAction && !/^http/i.test(callApiAction.endpoint)) {
             // console.log(stringify({
             //     ...callApiAction,
             //     endpoint: `${baseUrl}/${callApiAction.endpoint}`,

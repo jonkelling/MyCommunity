@@ -64,7 +64,13 @@ function handleActionsFn(_state, _action) {
                 return { ...state, loggingIn: true };
             },
             [actions.LOGOUT]: (state) => {
-                return { ...state, authToken: null };
+                return {
+                    ...state,
+                    authToken: null,
+                    idToken: null,
+                    profile: null,
+                    currentUser: null,
+                };
             },
             [actions.AUTHENTICATED]: (state, action) => {
                 if (action.payload) {
@@ -180,26 +186,26 @@ function handleActionsFn(_state, _action) {
                     },
                 };
             },
-            // [actions.REFRESHING_TOKEN]: (state, action: any) => {
-            //     return {
-            //         ...state,
-            //         refreshingToken: true,
-            //     };
-            // },
-            // [actions.REFRESHING_TOKEN_SUCCESS]: (state, action: any) => {
-            //     return {
-            //         ...state,
-            //         refreshingToken: false,
-            //         refreshTokenError: null,
-            //     };
-            // },
-            // [actions.REFRESHING_TOKEN_FAILURE]: (state, action: any) => {
-            //     return {
-            //         loading: { app: false },
-            //         refreshingToken: false,
-            //         refreshTokenError: action.payload,
-            //     };
-            // },
+            [actions.REFRESHING_TOKEN]: (state, action: any) => {
+                return {
+                    ...state,
+                    refreshingToken: true,
+                };
+            },
+            [actions.REFRESHING_TOKEN_SUCCESS]: (state, action: any) => {
+                return {
+                    ...state,
+                    refreshingToken: false,
+                    refreshTokenError: null,
+                };
+            },
+            [actions.REFRESHING_TOKEN_FAILURE]: (state, action: any) => {
+                return {
+                    loading: { app: false },
+                    refreshingToken: false,
+                    refreshTokenError: action.payload,
+                };
+            },
             [actions.SET_SCREEN]: (state, action: any) => ({
                 ...state,
                 screenId: action.payload,

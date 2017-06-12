@@ -3,8 +3,13 @@ import { REHYDRATE } from "redux-persist/constants";
 import * as actions from "../actions/index";
 
 export default (state = {}, action) => {
-    if (action.type === actions.REMOVE_AUTH_TOKEN ||
-        action.type === actions.REFRESHING_TOKEN_FAILURE) {
+    const resetActions = [
+        actions.REMOVE_AUTH_TOKEN,
+        actions.REFRESHING_TOKEN_FAILURE,
+        actions.LOGOUT
+    ];
+
+    if (resetActions.some((x) => x === action.type)) {
         return {};
     }
 

@@ -2,14 +2,14 @@ import Enumerable from "linq";
 import { takeEvery } from "redux-saga/effects";
 import { call, put, select } from "redux-saga/effects";
 import { GET_CURRENT_USER_SUCCESS } from "../actions";
-import appActions, { getCallApiFSA } from "../appActions";
+import appActions from "../appActions";
 import waitCurrentUserSaga from "./waitCurrentUserSaga";
 
 export default function* loadCurrentUserDataSaga() {
     const state = yield select();
 
     if (state.app.idToken) {
-        yield put(getCallApiFSA(appActions.loadCurrentUser()));
+        yield put(appActions.loadCurrentUser());
     }
 
     yield takeEvery(GET_CURRENT_USER_SUCCESS, alwaysLoadCurrentUserDataSaga);

@@ -1,54 +1,118 @@
-import { getCallApiFSA } from "../appActions";
-import appActions from "../appActions";
-const { CALL_API } = require("redux-api-middleware");
-import { call, put, race, select, take, takeEvery, takeLatest } from "redux-saga/effects";
-import * as actions from "../actions/index";
-const stringify = require("json-stringify-safe");
-import { replace } from "redux-little-router";
+import stringify from "json-stringify-safe";
+import { CALL_API } from "redux-api-middleware";
+import { push, replace } from "redux-little-router";
 import * as router from "redux-little-router";
+import { delay } from "redux-saga";
+import {
+    actionChannel, call, fork, put,
+    race, select, take, takeEvery
+} from "redux-saga/effects";
 import Enumerable from "../../node_modules/linq/linq";
+import * as actions from "../actions/index";
+import appActions from "../appActions";
 import AuthService from "../auth/AuthService";
+import {
+    authShouldRenewPattern,
+    callApiPattern,
+    locationChangedPattern,
+    locationChangedToPathNamePattern,
+    locationRequiresAuthPattern
+} from "../sagaPatterns";
 
-export default function* handleAuthWithRoutesSaga() {
-    while (true) {
-        const raceResult = yield race({
-            loginPath: take((action) =>
-                action.type === actions.ROUTER_LOCATION_CHANGED &&
-                action.payload && action.payload.pathname === "/login"
-            ),
-            logoutPath: take((action) =>
-                action.type === actions.ROUTER_LOCATION_CHANGED &&
-                action.payload && action.payload.pathname === "/logout"
-            ),
-            authResponse: take((action) =>
-                action.type === actions.ROUTER_LOCATION_CHANGED &&
-                /access_token|id_token|error/.test(window.location.hash)
-            ),
-            setAuthToken: take(actions.SET_AUTH_TOKEN),
-        });
-
-        if (raceResult.loginPath) {
+export default function* handleAuthWithRoutesSaga(dispatch) {
+    yield takeEvery(
+        locationChangedToPathNamePattern("/login"),
+        function* (action) {
             AuthService.login();
         }
-        else if (raceResult.logoutPath) {
+    );
+    yield takeEvery(
+        locationChangedToPathNamePattern("/logout"),
+        function* (action) {
             AuthService.logout();
+            yield put({ type: actions.LOGOUT });
             yield put(router.replace("/"));
         }
-        else if (raceResult.authResponse) {
-            console.log(stringify(raceResult.authResponse));
+    );
+    // yield takeEvery(
+    //     locationChangedPattern((action) =>
+    //         action.payload.result &&
+    //         action.payload.result.auth &&
+    //         !AuthService.isAuthenticated()
+    //     ),
+    //     function* (action) {
+    //         yield put(replace("/login"));
+    //     }
+    // );
+    yield fork(handleRenewals, dispatch);
+    // yield takeEvery(
+    //     actions.SET_AUTH_TOKEN,
+    //     function* () {
+    //         yield put(getCallApiFSA(appActions.loadCurrentUser()));
+    //         yield put(replace("/dashboard"));
+    //     }
+    // );
+    yield takeEvery(
+        locationChangedPattern((action) =>
+            /access_token|id_token|error/.test(window.location.hash)
+        ),
+        function* (action) {
             console.log("Calling AuthService.handleAuthentication.");
             AuthService.handleAuthentication();
         }
-        else if (raceResult.setAuthToken) {
-            yield put(getCallApiFSA(appActions.loadCurrentUser()));
+    );
+}
+
+function* handleRenewals(dispatch) {
+    yield takeEvery(
+        locationChangedPattern((action) =>
+            locationRequiresAuthPattern()(action) &&
+            authShouldRenewPattern()(action)
+        ),
+        renewAuthToken,
+        dispatch,
+        false
+    );
+    const callApiChannel = yield actionChannel(actions.CALL_API_FSA);
+    while (true) {
+        const callApiAction = yield take(callApiChannel);
+
+        if (authShouldRenewPattern()(callApiAction)) {
+            const { success, failure } = yield call(renewAuthToken, dispatch, false, callApiAction);
+            if (success) {
+                dispatch({ [CALL_API]: callApiAction.payload });
+            }
         }
-
-        // function handleAuthentication(nextState) {
-        //     if (/access_token|id_token|error/.test(nextState.location.hash)) {
-        //         AuthService.handleAuthentication();
-        //     }
-        // }
-
-        continue;
+        else {
+            dispatch({ [CALL_API]: callApiAction.payload });
+        }
     }
+}
+
+function* renewAuthToken(dispatch) {
+    const state = yield select();
+    if (state.app.refreshingToken) {
+        yield put({ type: `WAIT_FOR_${actions.REFRESHING_TOKEN}`});
+    }
+    else {
+        yield put({
+            type: actions.REFRESHING_TOKEN,
+            payload: { reason: "halfway to token expiration." }
+        });
+        AuthService.renew()
+            .then(() => {
+                console.log("Successfully renewed token.");
+                dispatch({ type: actions.REFRESHING_TOKEN_SUCCESS });
+            })
+            .catch((err) => {
+                console.log(`Failed to renew token: ${stringify(err)}`);
+                dispatch({ type: actions.REFRESHING_TOKEN_FAILURE });
+                dispatch(push("/logout"));
+                dispatch(push("/login"));
+            });
+    }
+    return yield race({
+        success: take(actions.REFRESHING_TOKEN_SUCCESS),
+        failure: take(actions.REFRESHING_TOKEN_FAILURE),
+    });
 }

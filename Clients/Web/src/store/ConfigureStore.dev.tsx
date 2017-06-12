@@ -14,8 +14,6 @@ import * as schemas from "../schemas";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
-import callApiConvertFsaMiddleware from "./middleware/callApiConvertFsaMiddleware";
-import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
 declare const module: any;
 
@@ -44,16 +42,14 @@ export default (preloadedState?: any) => {
             applyMiddleware(
                 // auth,
                 routerMiddleware,
-                callApiConvertFsaMiddleware,
                 auth0CustomMiddleware,
-                refreshTokenMiddleware,
                 apiEndPointMiddleware,
                 apiAuthMiddleware,
                 apiMiddleware,
                 normalizrMiddleware(),
                 // api,
                 thunk,
-                sagaMiddleware
+                sagaMiddleware,
                 // createLogger()
             ),
             // DevTools.instrument()

@@ -2,7 +2,6 @@ const { CALL_API } = require("redux-api-middleware");
 import { call, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
 import * as actions from "../actions/index";
 const stringify = require("json-stringify-safe");
-import Enumerable from "../../node_modules/linq/linq";
 
 const GET_CURRENT_USER_SUCCESS = "GET_CURRENT_USER_SUCCESS";
 const GET_CURRENT_USER_FAILURE = "GET_CURRENT_USER_FAILURE";

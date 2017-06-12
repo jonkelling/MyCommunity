@@ -12,7 +12,7 @@ export default (store) => {
 
     return (next) => (action) => {
         const callApiAction = action && action[CALL_API];
-        if (callApiAction) {
+        if (callApiAction && !/^http/i.test(callApiAction.endpoint)) {
             return next({
                 [CALL_API]: {
                     ...callApiAction,
