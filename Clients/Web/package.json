@@ -51,6 +51,8 @@
         "redux-saga": "^0.15.3",
         "redux-slider-monitor": "^2.0.0-0",
         "redux-thunk": "^2.2.0",
+        "remote-redux-devtools": "^0.5.11",
+        "remotedev-server": "^0.2.2",
         "resolve-url-loader": "^2.0.2",
         "sass-loader": "^6.0.5",
         "sass-resources-loader": "^1.2.1",
@@ -74,9 +76,5 @@
         "postinstall": "webpack --config webpack.config.js --display-error-details",
         "remotedevserver": "node remotedevserver.js"
     },
-    "version": "1.0.0",
-    "devDependencies": {
-        "remote-redux-devtools": "^0.5.11",
-        "remotedev-server": "^0.2.2"
-    }
+    "version": "1.0.0"
 }
