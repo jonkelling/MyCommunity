@@ -35,3 +35,5 @@ export const UPDATE_EDITS = "UPDATE_EDITS";
 export const CLEAR_EDITS = "CLEAR_EDITS";
 
 export const ROUTER_LOCATION_CHANGED = "ROUTER_LOCATION_CHANGED";
+
+export const LOG = "LOG";

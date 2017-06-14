@@ -22,19 +22,23 @@ export function locationChangedPattern(predicate: ActionPredicateType) {
     );
 }
 
-export function locationChangedToPathNamePattern(pathname: string) {
+export function locationChangedToPathNamePattern(pathname) {
     return locationChangedPattern((action) =>
         action &&
-        action.payload.pathname === pathname
+        (
+            (typeof pathname === "string" && action.payload.pathname === pathname) ||
+            (typeof pathname === "function" && pathname(action.payload.pathname)) ||
+            (hasTestFunction(pathname) && pathname.test(action.payload.pathname))
+        )
     );
 }
 
-export function metaSourcePattern(source: string, type?: string) {
+export function metaSourcePattern(source: string | string[], ...type: string[]) {
     return (action) => (
         action &&
-        (!type || action.type === type) &&
+        (!type || equalsOrIn(action.type, type)) &&
         action.meta &&
-        action.meta.source === source
+        equalsOrIn(action.meta.source, source)
     );
 }
 
@@ -54,4 +58,41 @@ export function authShouldRenewPattern() {
         !AuthService.isAuthenticated() ||
         AuthService.isHalfWayToExpiration()
     );
+}
+
+export function metaSchemaOrSourcePattern(key: string | string[], ...type: string[]) {
+    return (action) =>
+        (!type || equalsOrIn(action.type, type)) &&
+        action.meta && (
+            metaSourcePattern(key)(action) ||
+            equalsOrIn(
+                action.meta.schema &&
+                (
+                    action.meta.schema.key ||
+                    (
+                        action.meta.schema.schema &&
+                        action.meta.schema.schema.key
+                    )
+                ),
+                key
+            )
+        );
+}
+
+function hasTestFunction(value: any) {
+    const test = value && value.test;
+    return test && typeof test === "function";
+}
+
+function equalsOrIn(value: string, match: string | string[]) {
+    if (!value) {
+        return false;
+    }
+    if (typeof match === "string") {
+        return value === match;
+    }
+    if (Array.isArray(match)) {
+        return match.some((x) => x === value);
+    }
+    return false;
 }

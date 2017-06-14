@@ -19,16 +19,13 @@ class App extends React.Component<any, any> {
             selectedPostId: null
         };
         this.createPost = this.createPost.bind(this);
-        this.selectPost = this.selectPost.bind(this);
     }
     public componentWillMount() {
         this.props.appActions.loadCurrentUser();
         this.props.loadOlderPosts(1, new Date());
     }
     public render() {
-        const selectedPost =
-            this.state.selectedPostId &&
-            this.props.edits.post;
+        const selectedPost = this.props.edits.post;
 
         return <MuiThemeProvider>
             <View>
@@ -42,18 +39,12 @@ class App extends React.Component<any, any> {
                         this.props.editsActions.clearEdits("post");
                         this.props.loadOlderPosts(1, new Date());
                     }} />
-                <PostList posts={this.props.entities.posts} selectPost={this.selectPost} />
+                <PostList posts={this.props.entities.posts} />
             </View>
         </MuiThemeProvider>;
     }
     private createPost(event) {
         this.props.createPost({ headline: this.state.headline, content: this.state.content });
-    }
-    private selectPost(postId) {
-        this.setState({ selectedPostId: postId });
-        this.props.editsActions.updateEdits(
-            "post",
-            this.props.entities.posts[postId]);
     }
 }
 
@@ -61,6 +52,7 @@ const mapStateToProps = (state) => {
     return {
         entities: state.entities,
         edits: state.edits,
+        router: state.router,
     };
 };
 

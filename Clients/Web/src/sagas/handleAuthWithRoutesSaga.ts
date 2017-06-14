@@ -45,13 +45,16 @@ export default function* handleAuthWithRoutesSaga(dispatch) {
     //     }
     // );
     yield fork(handleRenewals, dispatch);
-    // yield takeEvery(
-    //     actions.SET_AUTH_TOKEN,
-    //     function* () {
-    //         yield put(getCallApiFSA(appActions.loadCurrentUser()));
-    //         yield put(replace("/dashboard"));
-    //     }
-    // );
+    yield takeEvery(
+        actions.SET_AUTH_TOKEN,
+        function* () {
+            if (!(yield select()).app.refreshingToken) {
+                yield call(delay, 1); // give time for auth token to get set
+                yield put(appActions.loadCurrentUser());
+                yield put(replace("/dashboard"));
+            }
+        }
+    );
     yield takeEvery(
         locationChangedPattern((action) =>
             /access_token|id_token|error/.test(window.location.hash)
@@ -92,7 +95,7 @@ function* handleRenewals(dispatch) {
 function* renewAuthToken(dispatch) {
     const state = yield select();
     if (state.app.refreshingToken) {
-        yield put({ type: `WAIT_FOR_${actions.REFRESHING_TOKEN}`});
+        yield put({ type: `WAIT_FOR_${actions.REFRESHING_TOKEN}` });
     }
     else {
         yield put({

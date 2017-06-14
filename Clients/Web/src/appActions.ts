@@ -13,6 +13,10 @@ export default {
         const endpoint = `communities/${communityId}`;
         return getCallApiAction(endpoint, schemas.community);
     },
+    loadPost: (communityId: number, postId: number) => {
+        const endpoint = `communities/${communityId}/posts/${postId}`;
+        return getCallApiAction(endpoint, schemas.post);
+    },
     loadNewestPosts: (communityId: number, limit = null) => {
         const now = new Date().toUTCString();
         const endpoint = `communities/${communityId}/posts/?before=${now}&limit=${limit || ""}`;
@@ -93,7 +97,7 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
                 },
                 {
                     meta: (action, state, res) => {
-                        // console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
+                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
                         return {
                             schema: responseSchema,
                             ...(source && { source }),
