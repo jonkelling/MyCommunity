@@ -24,7 +24,8 @@ export class AuthService {
             redirectUri,
             audience: "https://mycommunity.auth0.com/userinfo",
             responseType: "token id_token",
-            scope: "openid name email nickname"
+            scope: "openid name email nickname",
+            leeway: 30
         });
     }
     public setStore(store: Store<any>) {
