@@ -74,3 +74,6 @@ Clients/Web/dist/
 
 # scriptcs
 Server/scriptcs_bin
+
+# Other
+Server/tests.http
