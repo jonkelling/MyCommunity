@@ -19,8 +19,16 @@ namespace Server.Controllers
     [Route("api/v{version:apiVersion}/communities/{communityId}/[controller]")]
     public class PostsController : BaseController
     {
-        public PostsController(IMyCommunityContext dbContext, IMapper mapper, IAuth0Service auth0Service) : base(dbContext, mapper, auth0Service)
+        private readonly IAzureBlobStorageService azureBlobStorageService;
+
+        public PostsController(
+            IMyCommunityContext dbContext,
+            IMapper mapper,
+            IAuth0Service auth0Service,
+            IAzureBlobStorageService azureBlobStorageService
+        ) : base(dbContext, mapper, auth0Service)
         {
+            this.azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -42,7 +50,7 @@ namespace Server.Controllers
                           orderby post.CreatedDateTime descending
                           select post;
             }
-            
+
             if (after.HasValue)
             {
                 results = from post in results
@@ -79,7 +87,12 @@ namespace Server.Controllers
             post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
             await _dbContext.Posts.AddAsync(post);
             await _dbContext.SaveChangesAsync();
-            return Ok(_mapper.Map<PostVm>(post));
+            return CreatedAtAction(nameof(Get), new
+            {
+                CommunityId = communityId,
+                PostId = post.Id
+            }, _mapper.Map<PostVm>(post));
+            // return Ok(_mapper.Map<PostVm>(post));
         }
 
         [HttpPut("{postId}")]
@@ -90,7 +103,8 @@ namespace Server.Controllers
             var post = _mapper.Map<Post>(value);
             post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
             _dbContext.Posts.Update(post);
-            return Ok(await _dbContext.SaveChangesAsync());
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete("{postId}")]
@@ -100,7 +114,8 @@ namespace Server.Controllers
         {
             var post = await _dbContext.Posts.FindAsync(postId);
             _dbContext.Posts.Remove(post);
-            return Ok(await _dbContext.SaveChangesAsync());
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

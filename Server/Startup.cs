@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Server.Controllers;
 using Server.Data;
+using Server.Helpers;
 using Server.Services;
 
 namespace Server
@@ -28,6 +29,12 @@ namespace Server
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                config.AddUserSecrets<Startup>();
+            }
+
             Configuration = config.Build();
         }
 
@@ -40,7 +47,6 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             {
-
                 services.AddCors(options =>
                 {
                     var allowOrigins = Configuration
@@ -62,6 +68,7 @@ namespace Server
             }
 
             // Add services to the collection.
+            services.AddOptions();
             services.AddMemoryCache();
             services.AddMvc();
             services.AddApiVersioning();
@@ -76,6 +83,10 @@ namespace Server
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddTransient<IAuth0Service, Auth0Service>();
+
+            System.Diagnostics.Debug.WriteLine($"SASToken: {Configuration["SASToken"]}");
+
+            services.Configure<AzureStorageSettings>(Configuration);
 
             // services.AddScoped<ValidateCommunityUserAttribute>();
 
@@ -104,6 +115,8 @@ namespace Server
                 // be sure to keep a reference to it as a property or field.
                 builder.RegisterType<MyCommunityContext>().AsImplementedInterfaces();
                 builder.RegisterType<Auth0Service>().AsImplementedInterfaces();
+                builder.RegisterType<AzureBlobStorageHelper>().AsImplementedInterfaces();
+                builder.RegisterType<AzureBlobStorageService>().AsImplementedInterfaces();
 
                 builder.Populate(services);
                 this.ApplicationContainer = builder.Build();
