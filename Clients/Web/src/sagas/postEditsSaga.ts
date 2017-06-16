@@ -24,10 +24,9 @@ export default function* postEditsSaga() {
 
         yield call(waitForPost, postId);
 
-        yield put(editsActions.updateEdits(
-            "post",
-            (yield select()).entities.posts[postId])
-        );
+        const state = yield select();
+        const data = state.entities.posts[postId];
+        yield put(editsActions.updateEdits("post", data));
     }
 }
 
