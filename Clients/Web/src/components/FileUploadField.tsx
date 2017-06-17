@@ -12,6 +12,7 @@ import React, { CSSProperties } from "react";
 import Dropzone from "react-dropzone";
 import {
     FlatButton,
+    Image,
     LinkButton,
     RaisedButton,
     Text,
@@ -19,24 +20,27 @@ import {
     View
 } from "./ui";
 
-const cx = classNames.bind(require("./EditPost.scss"));
+const cx = classNames.bind(require("./FileUploadField.scss"));
 
-export default class FileUploadField extends React.Component<IFileUploadFieldProps, {}> {
+const iconStyle: CSSProperties = {
+    height: "30%",
+    width: "30%",
+    margin: "auto",
+    verticalAlign: "middle",
+    position: "absolute",
+    left: 0, right: 0, top: 0, bottom: 0
+};
+
+export default class FileUploadField extends React.Component<IFileUploadFieldProps, { acceptedFiles: any[] }> {
     constructor(props) {
         super(props);
-        this.fileChanged = this.fileChanged.bind(this);
+        this.state = {
+            acceptedFiles: []
+        };
+        this.attachFile = this.attachFile.bind(this);
     }
 
     public render() {
-        const iconStyle: CSSProperties = {
-            height: "30%",
-            width: "30%",
-            margin: "auto",
-            verticalAlign: "middle",
-            position: "absolute",
-            left: 0, right: 0, top: 0, bottom: 0
-        };
-
         const IconWrapper = (children) => <View>
             <Text defaultCursor>
                 Drag an image or <LinkButton>
@@ -50,7 +54,6 @@ export default class FileUploadField extends React.Component<IFileUploadFieldPro
                 margin: "auto",
             }}>
                 <ImageCropFree style={{
-                    color: "lightgray",
                     position: "relative",
                     height: "100%",
                     width: "100%",
@@ -59,7 +62,7 @@ export default class FileUploadField extends React.Component<IFileUploadFieldPro
             </View>
         </View>;
 
-        return <View>
+        return <View className={cx("component")}>
             <Dropzone accept="image/png,image/jpeg"
                 style={{
                     width: 150,
@@ -67,23 +70,26 @@ export default class FileUploadField extends React.Component<IFileUploadFieldPro
                     position: "relative",
                     textAlign: "center",
                 }}
+                activeClassName={cx("dropzone-active")}
+                rejectClassName={cx("dropzone-reject")}
+                className={cx(["dropzone", { "dropzone-done": this.state.acceptedFiles.length }])}
+                onDrop={this.attachFile}
             >
-                {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => {
-                    if (isDragActive) {
-                        return IconWrapper(<FileCloudUpload style={iconStyle} />);
-                    }
-                    if (isDragReject) {
-                        return IconWrapper(<NavigationCancel style={iconStyle} color="red" />);
-                    }
-                    return acceptedFiles.length || rejectedFiles.length
-                        ? `Accepted ${acceptedFiles.length}, rejected ${rejectedFiles.length} files`
-                        : IconWrapper(<ImageAddAPhoto style={iconStyle} color="lightgray" />);
-                }}
+                {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => (
+                    (isDragActive && IconWrapper(<FileCloudUpload style={iconStyle} />)) ||
+                    (isDragReject && IconWrapper(<NavigationCancel style={iconStyle} />)) ||
+                    (acceptedFiles.length && <Image src={acceptedFiles[0].preview} />) ||
+                    IconWrapper(<ImageAddAPhoto style={iconStyle} />)
+                )}
             </Dropzone>
         </View>;
     }
 
-    private fileChanged(event) {
+    private attachFile(acceptedFiles, rejectedFiles) {
+        console.log("====================================");
+        console.log(acceptedFiles);
+        console.log("====================================");
+        this.setState({ acceptedFiles });
         return;
     }
 }

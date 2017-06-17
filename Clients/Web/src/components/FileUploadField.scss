@@ -1,0 +1,20 @@
+.component {
+    .dropzone svg {
+        color: lightgray !important;
+    }
+    .dropzone-active svg {
+        color: black !important;
+    }
+    .dropzone-reject svg {
+        color: red !important;
+    }
+    .dropzone-done {
+        svg {
+            color: green !important;
+        }
+        img {
+            width: 100%;
+            height: 100%
+        }
+    }
+}
