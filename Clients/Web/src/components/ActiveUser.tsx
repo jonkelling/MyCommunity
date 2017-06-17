@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import View from "./View";
+import { View } from "./ui";
 
 class ActiveUser extends React.Component<IActiveUserProps, {}> {
     public render() {

@@ -1,9 +1,10 @@
 import classNames from "classnames/bind";
 import { Divider } from "material-ui";
 import React from "react";
-import IPost from "../IPost";
-import ScrollableDialog from "./ScrollableDialog";
-import { RaisedButton, TextField } from "./ui";
+import IPost from '../IPost';
+import FileUploadField from './FileUploadField';
+import ScrollableDialog from './ScrollableDialog';
+import { RaisedButton, TextField } from './ui';
 
 const cx = classNames.bind(require("./EditPost.scss"));
 
@@ -27,6 +28,7 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     value={this.props.post.content}
                     onChange={this.updateField}
                     fullWidth /><br />
+                <FileUploadField /><br/>
             </div>;
         };
         return <ScrollableDialog

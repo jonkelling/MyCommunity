@@ -9,7 +9,7 @@ import ActiveUser from "./components/ActiveUser";
 import EditPost from "./components/EditPost";
 import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
-import View from "./components/View";
+import { View } from "./components/ui";
 import editsActions from "./editsActions";
 
 class App extends React.Component<any, any> {
