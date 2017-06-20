@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -30,13 +32,23 @@ namespace Server.Controllers
             return File(await azureBlobStorageService.GetBlob(filename), MimeTypeMap.GetMimeType(filename));
         }
 
-        [HttpPut("{filename}")]
+        [HttpPost("")]
+        [HttpPut("")]
         // [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        // [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
-        public async Task<IActionResult> Put(int communityId, string filename, [FromBody]IFormFile file)
+        public async Task<IActionResult> Put(int communityId, IFormFile file)
         {
-            var newFilename = await azureBlobStorageService.PutBlob(filename, data);
-            return CreatedAtAction(nameof(Get), new { newFilename });
+            if (file == null && Request.Form.Files.Count == 0)
+            {
+                return BadRequest("Files missing from request.");
+            }
+            file = file ?? Request.Form.Files[0];
+            using (var ms = new MemoryStream())
+            {
+                await file.CopyToAsync(ms);
+                ms.Position = 0;
+                var newFilename = await azureBlobStorageService.PutBlob(file.FileName, ms.ReadAllBytes());
+                return CreatedAtAction(nameof(Get), new { communityId, filename = newFilename }, new { filename = newFilename });
+            }
         }
 
         // [HttpDelete("{filename}")]

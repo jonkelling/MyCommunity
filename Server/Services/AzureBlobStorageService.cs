@@ -46,23 +46,35 @@ namespace Server.Services
 
         public async Task<string> PutBlob(string filename, byte[] data)
         {
-            var newFilename = $"{filename}_{Guid.NewGuid()}.{System.IO.Path.GetExtension(filename)}";
-            var uriBuilder = new UriBuilder($"{baseurl}/{newFilename}");
-            uriBuilder.Query = azureStorageSettings.SASToken;
-            var req = HttpWebRequest.CreateHttp(uriBuilder.Uri);
-            req.Method = "PUT";
-            req.ContentType = "application/octet-stream";
-            using (var s = await req.GetRequestStreamAsync())
+            try
             {
-                var bytes = File.ReadAllBytes("/Users/jonkelling/Desktop/clouds_building.jpg");
-                await s.WriteAsync(bytes, 0, bytes.Length);
+                var baseFilename = Path.GetFileNameWithoutExtension(filename);
+                var guid = Guid.NewGuid();
+                var fileExtension = Path.GetExtension(filename);
+                var newFilename = $"{baseFilename}_{guid}{fileExtension}";
+                var uriBuilder = new UriBuilder($"{baseurl}/{newFilename}")
+                {
+                    Query = azureStorageSettings.SASToken
+                };
+                var req = HttpWebRequest.CreateHttp(uriBuilder.Uri);
+                req.Headers["x-ms-blob-type"] = "BlockBlob";
+                req.Headers["x-ms-date"] = DateTime.UtcNow.ToString("r");
+                req.Headers["x-ms-version"] = "2016-05-31";
+                req.Method = "PUT";
+                req.ContentType = "application/octet-stream";
+                using (var s = await req.GetRequestStreamAsync())
+                    await s.WriteAsync(data, 0, data.Length);
+                using (var response = (HttpWebResponse)(await req.GetResponseAsync()))
+                using (var rs = response.GetResponseStream())
+                {
+                    var bytes = rs.ReadAllBytes();
+                }
+                return newFilename;
             }
-            using (var response = (HttpWebResponse)(await req.GetResponseAsync()))
-            using (var rs = response.GetResponseStream())
+            catch (Exception ex)
             {
-                var bytes = rs.ReadAllBytes();
+                throw ex;
             }
-            return newFilename;
         }
 
         // public async Task<byte[]> PutBlob(string filename)
