@@ -1,4 +1,5 @@
 const stringify = require("json-stringify-safe");
+import omit from "lodash.omit";
 import { handleActions } from "redux-actions";
 import { REHYDRATE } from "redux-persist/constants";
 import Enumerable from "../../node_modules/linq/linq";
@@ -126,6 +127,9 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
+                if (!loadingKey) {
+                    return state;
+                }
                 return {
                     ...state,
                     loading: {
@@ -150,13 +154,13 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
+                if (!loadingKey) {
+                    return state;
+                }
                 // console.log(`SUCCESS: ${loadingKey}`);
                 return {
                     ...state,
-                    loading: {
-                        ...state.loading,
-                        [loadingKey]: false,
-                    },
+                    loading: omit(state.loading, [loadingKey]),
                 };
             },
             // tslint:disable-next-line:object-literal-sort-keys
@@ -177,13 +181,13 @@ function handleActionsFn(_state, _action) {
                             )
                         )
                     );
+                if (!loadingKey) {
+                    return state;
+                }
                 console.log(`FAILURE REDUCER: ${stringify(action)}`);
                 return {
                     ...state,
-                    loading: {
-                        ...state.loading,
-                        [loadingKey]: false,
-                    },
+                    loading: omit(state.loading, [loadingKey]),
                 };
             },
             [actions.REFRESHING_TOKEN]: (state, action: any) => {

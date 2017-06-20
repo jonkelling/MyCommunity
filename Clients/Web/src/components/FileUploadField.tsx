@@ -10,15 +10,10 @@ import {
 } from "material-ui/svg-icons";
 import React, { CSSProperties } from "react";
 import Dropzone from "react-dropzone";
-import {
-    FlatButton,
-    Image,
-    LinkButton,
-    RaisedButton,
-    Text,
-    TextField,
-    View
-} from "./ui";
+import { connect } from "react-redux";
+import uuidv1 from "uuid/v1";
+import appActions from "../appActions";
+import { FlatButton, Image, LinkButton, RaisedButton, Text, TextField, View } from "./ui";
 
 const cx = classNames.bind(require("./FileUploadField.scss"));
 
@@ -31,11 +26,12 @@ const iconStyle: CSSProperties = {
     left: 0, right: 0, top: 0, bottom: 0
 };
 
-export default class FileUploadField extends React.Component<IFileUploadFieldProps, { acceptedFiles: any[] }> {
+class FileUploadField extends React.Component<IFileUploadFieldProps, { acceptedFiles: any[], trackingId: string }> {
     constructor(props) {
         super(props);
         this.state = {
-            acceptedFiles: []
+            acceptedFiles: [],
+            trackingId: uuidv1(),
         };
         this.attachFile = this.attachFile.bind(this);
     }
@@ -65,8 +61,6 @@ export default class FileUploadField extends React.Component<IFileUploadFieldPro
         return <View className={cx("component")}>
             <Dropzone accept="image/png,image/jpeg"
                 style={{
-                    width: 150,
-                    minHeight: 100,
                     position: "relative",
                     textAlign: "center",
                 }}
@@ -78,23 +72,72 @@ export default class FileUploadField extends React.Component<IFileUploadFieldPro
                 {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => (
                     (isDragActive && IconWrapper(<FileCloudUpload style={iconStyle} />)) ||
                     (isDragReject && IconWrapper(<NavigationCancel style={iconStyle} />)) ||
-                    (acceptedFiles.length && <Image src={acceptedFiles[0].preview} />) ||
+                    (acceptedFiles.length && <Image src={acceptedFiles[0].preview} cover />) ||
                     IconWrapper(<ImageAddAPhoto style={iconStyle} />)
                 )}
             </Dropzone>
         </View>;
     }
 
+    public componentWillUnmount() {
+        this.destroyActivePreview();
+    }
+
     private attachFile(acceptedFiles, rejectedFiles) {
-        console.log("====================================");
         console.log(acceptedFiles);
-        console.log("====================================");
+        this.destroyActivePreview();
+        this.destroyActivePreview(rejectedFiles);
         this.setState({ acceptedFiles });
+        if (acceptedFiles.length) {
+            this.props.uploadFile(1, acceptedFiles[0], "fileUpload", this.onSuccess, this.onFailure);
+        }
         return;
+    }
+
+    private destroyActivePreview(files = this.state.acceptedFiles) {
+        if (files.length) {
+            window.URL.revokeObjectURL(files[0].preview);
+        }
+    }
+
+    private onSuccess(response) {
+        console.log("============ SUCCESS ===============");
+        console.log(response);
+        console.log("====================================");
+    }
+
+    private onFailure(response) {
+        console.log("============ FAILURE ===============");
+        console.log(response.body);
+        console.log("====================================");
     }
 }
 
 interface IFileUploadFieldProps {
-    save?: any;
-    cancel?: any;
+    uploadFile: (
+        commnityId: number,
+        file: File,
+        source: string,
+        onSuccess: (response) => any,
+        onFailure: (response) => any) => any;
+    onFileReady: (url: string) => any;
+    loading: boolean;
+    trackingId: string;
 }
+
+function mapStateToProps(state) {
+    return {
+        loading: state.app.loading.fileUpload,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        uploadFile: (
+            communityId: number, file: File, source: string,
+            onSuccess: (response) => any, onFailure: (response) => any) =>
+            dispatch(appActions.uploadFile(communityId, file, source, onSuccess, onFailure))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FileUploadField);

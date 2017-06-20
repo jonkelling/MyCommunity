@@ -106,7 +106,7 @@ module.exports = {
         rules: [{
                 test: /\.ts(x?)$/,
                 use: debug ? [
-                    "react-hot-loader/webpack", "ts-loader"
+                    "react-hot-loader/webpack", "awesome-typescript-loader"
                 ] : [
                     "ts-loader"
                 ],

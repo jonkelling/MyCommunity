@@ -41,12 +41,18 @@ export default {
             author: { id: 1 }
         });
     },
-    savePost: (post: IPost) => {
-        const endpoint = `communities/1/posts/${post.id}`;
+    savePost: (communityId: number, post: IPost) => {
+        const endpoint = `communities/${communityId}/posts/${post.id}`;
         return getCallApiActionPut(endpoint, schemas.post, {
             ...post,
             author: { id: post.author },
         });
+    },
+    uploadFile: (
+        communityId: number, file: File, source: string,
+        onSuccess: (response) => any, onFailure: (response) => any) => {
+        const endpoint = `communities/${communityId}/images/`;
+        return getCallApiActionPutFile(endpoint, null, file, source, onSuccess, onFailure);
     },
     logout: () => {
         return push("/logout");
@@ -67,6 +73,20 @@ function getCallApiActionPost(endpoint: string, responseSchema, body: any, sourc
     });
 }
 
+function getCallApiActionPutFile(
+    endpoint: string, responseSchema, file: File, source = null,
+    onSuccess: (response: any) => any = null,
+    onFailure: (response: any) => any = null) {
+    const body = new FormData();
+    body.append(file.name, file);
+
+    return getCallApiAction2(endpoint, responseSchema, source, "POST", {
+        body,
+        headers: {
+        },
+    }, onSuccess, onFailure);
+}
+
 function getCallApiActionPut(endpoint: string, responseSchema, body: any, source = null) {
     return getCallApiAction2(endpoint, responseSchema, source, "PUT", {
         body: JSON.stringify(body),
@@ -77,7 +97,10 @@ function getCallApiActionPut(endpoint: string, responseSchema, body: any, source
     });
 }
 
-function getCallApiAction2(endpoint: string, responseSchema, source, method, extra = null) {
+function getCallApiAction2(
+    endpoint: string, responseSchema, source, method, extra = null,
+    onSuccess: (response: any) => any = null,
+    onFailure: (response: any) => any = null) {
     return ({
         type: actions.CALL_API_FSA,
         payload: {
@@ -97,7 +120,10 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
                 },
                 {
                     meta: (action, state, res) => {
-                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
+                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res.body)}`);
+                        if (onSuccess) {
+                            onSuccess(res);
+                        }
                         return {
                             schema: responseSchema,
                             ...(source && { source }),
@@ -107,6 +133,9 @@ function getCallApiAction2(endpoint: string, responseSchema, source, method, ext
                 },
                 {
                     meta: (action, state, res) => {
+                        if (onFailure) {
+                            onFailure(res);
+                        }
                         if (res) {
                             return {
                                 schema: responseSchema,

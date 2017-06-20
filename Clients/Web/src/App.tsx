@@ -32,6 +32,7 @@ class App extends React.Component<any, any> {
                 <ActiveUser />
                 <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
                 <EditPost
+                    communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
                     post={selectedPost}
                     updateEdits={this.props.editsActions.updateEdits}
                     save={this.props.appActions.savePost}
@@ -50,6 +51,7 @@ class App extends React.Component<any, any> {
 
 const mapStateToProps = (state) => {
     return {
+        app: state.app,
         entities: state.entities,
         edits: state.edits,
         router: state.router,

@@ -1,6 +1,7 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
+        "removeComments": true,
         "target": "es6",
         "module": "es6",
         "forceConsistentCasingInFileNames": true,
@@ -42,5 +43,9 @@
         "__tests__",
         "dist",
         "node_modules"
-    ]
+    ],
+    "awesomeTypescriptLoaderOptions": {
+        "useBabel": true,
+        "useCache": true
+    }
 }

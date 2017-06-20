@@ -2,6 +2,7 @@ import { Action } from "redux-actions";
 import app from "./appReducer";
 import edits from "./editsReducer";
 import entities from "./entitiesReducer";
+import fileUploads from "./fileUploadsReducer";
 
 // Updates error message to notify about the failed fetches.
 function errorMessage(state = null, action: Action<any>) {
@@ -19,6 +20,7 @@ function errorMessage(state = null, action: Action<any>) {
 export default {
     app,
     entities,
+    fileUploads,
     edits,
     // pagination,
     errorMessage,
