@@ -71,6 +71,7 @@ Clients/Mobile/android/app/src/main/res/assets/
 Clients/Web/index.html
 Clients/Web/test.html
 Clients/Web/dist/
+Clients/Web/.awcache/
 
 # scriptcs
 Server/scriptcs_bin
