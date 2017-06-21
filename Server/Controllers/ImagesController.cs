@@ -27,9 +27,10 @@ namespace Server.Controllers
 
         [HttpGet("{filename}")]
         // [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        public async Task<IActionResult> Get(int communityId, string filename)
+        public IActionResult Get(int communityId, string filename)
         {
-            return File(await azureBlobStorageService.GetBlob(filename), MimeTypeMap.GetMimeType(filename));
+            // return File(await azureBlobStorageService.GetBlob(filename), MimeTypeMap.GetMimeType(filename));
+            return Redirect(azureBlobStorageService.GetImageUrl(filename));
         }
 
         [HttpPost("")]

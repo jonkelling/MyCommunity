@@ -17,11 +17,12 @@ namespace Server.Services
     {
         Task<byte[]> GetBlob(string filename);
         Task<string> PutBlob(string filename, byte[] data);
+        string GetImageUrl(string filename);
     }
 
     public class AzureBlobStorageService : IAzureBlobStorageService
     {
-        private const string baseurl = "https://ksocial.blob.core.windows.net/mycommunityuploads";
+        public const string baseurl = "https://ksocial.blob.core.windows.net/mycommunityuploads";
         private readonly IAzureBlobStorageHelper azureBlobStorageHelper;
         private readonly AzureStorageSettings azureStorageSettings;
 
@@ -42,6 +43,12 @@ namespace Server.Services
             using (var response = await req.GetResponseAsync())
             using (var rs = response.GetResponseStream())
                 return rs.ReadAllBytes();
+        }
+
+        public string GetImageUrl(string filename) {
+            var uriBuilder = new UriBuilder($"{baseurl}/{filename}");
+            uriBuilder.Query = azureStorageSettings.SASToken;
+            return uriBuilder.ToString();
         }
 
         public async Task<string> PutBlob(string filename, byte[] data)
