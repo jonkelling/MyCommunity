@@ -47,7 +47,10 @@ namespace Server.Controllers
                 await file.CopyToAsync(ms);
                 ms.Position = 0;
                 var newFilename = await azureBlobStorageService.PutBlob(file.FileName, ms.ReadAllBytes());
-                return CreatedAtAction(nameof(Get), new { communityId, filename = newFilename }, new { filename = newFilename });
+                var response = CreatedAtAction(nameof(Get),
+                    new { communityId, filename = newFilename },
+                    new { filename = $"https://api.mycommunity.ksocial.io/api/v1/communities/{communityId}/images/{newFilename}" });
+                return response;
             }
         }
 
