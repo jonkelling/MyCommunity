@@ -11,23 +11,32 @@ import {
 import * as actions from "../actions/index";
 import appActions from "../appActions";
 import editsActions from "../editsActions";
-import {
-    locationChangedToPathNamePattern,
-    metaSchemaOrSourcePattern,
-} from "../sagaPatterns";
+import { locationChangedPattern, locationChangedToPathNamePattern, metaSchemaOrSourcePattern } from "../sagaPatterns";
 
 export default function* postEditsSaga() {
     while (true) {
-        const action = yield take(locationChangedToPathNamePattern(/\/post\/(\d+)$/));
+        const action = yield take(locationChangedPattern());
 
-        const postId = /\/post\/(\d+)$/.exec(action.payload.pathname)[1];
-
-        yield call(waitForPost, postId);
-
-        const state = yield select();
-        const data = state.entities.posts[postId];
-        yield put(editsActions.updateEdits("post", data));
+        if (locationChangedToPathNamePattern(/\/post\/(\d+)$/)(action)) {
+            yield call(editPost, action);
+        } else {
+            yield call(clearEditPost);
+        }
     }
+}
+
+function* editPost(action) {
+    const postId = /\/post\/(\d+)$/.exec(action.payload.pathname)[1];
+
+    yield call(waitForPost, postId);
+
+    const state = yield select();
+    const data = state.entities.posts[postId];
+    yield put(editsActions.updateEdits("post", data));
+}
+
+function* clearEditPost() {
+    yield put(editsActions.clearEdits("post"));
 }
 
 function* waitForPost(postId) {

@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { Divider } from "material-ui";
+import { CircularProgress, Divider } from "material-ui";
 import {
     FileCloudDone,
     FileCloudQueue,
@@ -35,7 +35,17 @@ class FileUploadField extends React.Component<IFileUploadFieldProps, { acceptedF
         };
         this.attachFile = this.attachFile.bind(this);
     }
-
+    public componentWillReceiveProps(nextProps: IFileUploadFieldProps) {
+        const newFileName =
+            nextProps.uploadedFileNames.length &&
+            nextProps.uploadedFileNames[0];
+        const oldFileName =
+            this.props.uploadedFileNames.length &&
+            this.props.uploadedFileNames[0];
+        if (newFileName !== oldFileName) {
+            this.props.onFileReady(newFileName);
+        }
+    }
     public render() {
         const IconWrapper = (children) => <View>
             <Text defaultCursor>
@@ -66,13 +76,14 @@ class FileUploadField extends React.Component<IFileUploadFieldProps, { acceptedF
                 }}
                 activeClassName={cx("dropzone-active")}
                 rejectClassName={cx("dropzone-reject")}
+                disablePreview
                 className={cx(["dropzone", { "dropzone-done": this.state.acceptedFiles.length }])}
                 onDrop={this.attachFile}
             >
                 {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => (
                     (isDragActive && IconWrapper(<FileCloudUpload style={iconStyle} />)) ||
                     (isDragReject && IconWrapper(<NavigationCancel style={iconStyle} />)) ||
-                    (acceptedFiles.length && <Image src={acceptedFiles[0].preview} cover />) ||
+                    (acceptedFiles.length && IconWrapper(<CircularProgress />)) ||
                     IconWrapper(<ImageAddAPhoto style={iconStyle} />)
                 )}
             </Dropzone>
@@ -120,14 +131,16 @@ interface IFileUploadFieldProps {
         source: string,
         onSuccess: (response) => any,
         onFailure: (response) => any) => any;
-    onFileReady: (url: string) => any;
+    onFileReady?: (url: string) => any;
     loading: boolean;
     trackingId: string;
+    uploadedFileNames: string[];
 }
 
 function mapStateToProps(state) {
     return {
         loading: state.app.loading.fileUpload,
+        uploadedFileNames: state.fileUploads.uploadedFileNames,
     };
 }
 

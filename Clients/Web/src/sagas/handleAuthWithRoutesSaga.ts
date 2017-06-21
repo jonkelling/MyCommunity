@@ -29,11 +29,13 @@ export default function* handleAuthWithRoutesSaga(dispatch) {
     yield takeEvery(
         locationChangedToPathNamePattern("/logout"),
         function* (action) {
-            AuthService.logout();
             yield put({ type: actions.LOGOUT });
-            yield put(router.replace("/"));
         }
     );
+    yield takeEvery(actions.LOGOUT, function* () {
+        AuthService.logout();
+        yield put(router.replace("/"));
+    });
     // yield takeEvery(
     //     locationChangedPattern((action) =>
     //         action.payload.result &&
@@ -68,13 +70,14 @@ export default function* handleAuthWithRoutesSaga(dispatch) {
 
 function* handleRenewals(dispatch) {
     yield takeEvery(
-        locationChangedPattern((action) =>
-            locationRequiresAuthPattern()(action) &&
-            authShouldRenewPattern()(action)
-        ),
-        renewAuthToken,
-        dispatch,
-        false
+        locationChangedPattern(locationRequiresAuthPattern()),
+        function* (action) {
+            if (authShouldRenewPattern()(action)) {
+                yield call(renewAuthToken, dispatch, false);
+            } else if (!AuthService.isAuthenticated()) {
+                yield put(replace("/login"));
+            }
+        }
     );
     const callApiChannel = yield actionChannel(actions.CALL_API_FSA);
     while (true) {

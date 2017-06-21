@@ -3,6 +3,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Fragment } from "redux-little-router";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import ActiveUser from "./components/ActiveUser";
@@ -28,20 +29,22 @@ class App extends React.Component<any, any> {
         const selectedPost = this.props.edits.post;
 
         return <MuiThemeProvider>
-            <View>
-                <ActiveUser />
-                <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
-                <EditPost
-                    communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
-                    post={selectedPost}
-                    updateEdits={this.props.editsActions.updateEdits}
-                    save={this.props.appActions.savePost}
-                    cancel={() => {
-                        this.props.editsActions.clearEdits("post");
-                        this.props.loadOlderPosts(1, new Date());
-                    }} />
-                <PostList posts={this.props.entities.posts} />
-            </View>
+            <Fragment forRoute="/dashboard">
+                <View>
+                    <ActiveUser />
+                    <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
+                    <EditPost
+                        communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
+                        post={selectedPost}
+                        updateEdits={this.props.editsActions.updateEdits}
+                        save={this.props.appActions.savePost}
+                        cancel={() => {
+                            this.props.appActions.push("/dashboard");
+                            this.props.loadOlderPosts(1, new Date());
+                        }} />
+                    <PostList posts={this.props.entities.posts} />
+                </View>
+            </Fragment>
         </MuiThemeProvider>;
     }
     private createPost(event) {

@@ -14,11 +14,11 @@ export function locationRequiresAuthPattern() {
     );
 }
 
-export function locationChangedPattern(predicate: ActionPredicateType) {
+export function locationChangedPattern(predicate?: ActionPredicateType) {
     return (action) => (
         action &&
         action.type === ROUTER_LOCATION_CHANGED &&
-        predicate(action)
+        (!predicate || predicate(action))
     );
 }
 
@@ -55,8 +55,11 @@ export function callApiPattern(predicate: ActionPredicateType = null) {
 
 export function authShouldRenewPattern() {
     return (action) => (
-        !AuthService.isAuthenticated() ||
-        AuthService.isHalfWayToExpiration()
+        localStorage.getItem("id_token") &&
+        (
+            !AuthService.isAuthenticated() ||
+            AuthService.isHalfWayToExpiration()
+        )
     );
 }
 
@@ -84,7 +87,7 @@ function hasTestFunction(value: any) {
     return test && typeof test === "function";
 }
 
-function equalsOrIn(value: string, match: string | string[]) {
+function equalsOrIn(value, match: string | string[]) {
     if (!value) {
         return false;
     }

@@ -26,6 +26,9 @@ function handleActionsFn(_state: IFileUploadsReducerState, _action): IFileUpload
 
                 return {
                     ...state,
+                    uploadedFileNames: [
+                        action.payload.filename
+                    ],
                 };
             },
             [actions.FAILURE]: (state: IFileUploadsReducerState, action: any) => {
@@ -40,6 +43,7 @@ function handleActionsFn(_state: IFileUploadsReducerState, _action): IFileUpload
 
                 return {
                     ...state,
+                    uploadedFileNames: [],
                 };
             },
         }, {

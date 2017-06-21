@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import { Divider } from "material-ui";
 import React from "react";
 import IPost from "../IPost";
+import EditPostHeadlineImage from "./EditPostHeadlineImage";
 import FileUploadField from "./FileUploadField";
 import ScrollableDialog from "./ScrollableDialog";
 import { RaisedButton, TextField } from "./ui";
@@ -11,6 +12,7 @@ const cx = classNames.bind(require("./EditPost.scss"));
 export default class EditPost extends React.Component<IEditPostProps, {}> {
     constructor(props) {
         super(props);
+        this.onImageUploaded = this.onImageUploaded.bind(this);
         this.updateField = this.updateField.bind(this);
         this.save = this.save.bind(this);
     }
@@ -20,6 +22,10 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                 return null;
             }
             return <div className={cx("component")}>
+                <EditPostHeadlineImage
+                    className={cx("headlineImage")}
+                    imageUrl={this.props.post.headlineImageUrl}
+                    onImageUploaded={this.onImageUploaded} /><br />
                 <TextField name="headline" hintText="Title"
                     value={this.props.post.headline}
                     onChange={this.updateField}
@@ -28,14 +34,13 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     value={this.props.post.content}
                     onChange={this.updateField}
                     fullWidth /><br />
-                <FileUploadField onFileReady={(filename) => null} /><br/>
             </div>;
         };
         return <ScrollableDialog
             open={!!this.props.post}
             title="Edit Post"
             actions={[
-                <RaisedButton label="Save"
+                <RaisedButton label="Save & Close"
                     primary
                     className={cx("button")}
                     onTouchTap={this.save} />,
@@ -48,11 +53,14 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
             {content()}
         </ScrollableDialog>;
     }
+    private onImageUploaded(imageUrl) {
+        this.props.updateEdits("post", { headlineImageUrl: imageUrl });
+    }
     private updateField(event) {
         this.props.updateEdits("post", { [event.target.name]: event.target.value });
     }
     private save() {
-        this.props.save(this.props.post);
+        this.props.save(this.props.communityId, this.props.post);
     }
 }
 

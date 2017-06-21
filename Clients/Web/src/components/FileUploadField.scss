@@ -1,7 +1,8 @@
 .component {
     .dropzone {
-        width: 150px;
-        min-height: 100px;
+        width: 375px;
+        min-height: 200px;
+        border: 1px dashed darkgray;
         svg {
             color: lightgray !important;
         }
@@ -13,7 +14,7 @@
         color: red !important;
     }
     .dropzone-done {
-        width: 370px;
+        width: 375px;
         height: 200px;
         >div {
             max-width: 100%;

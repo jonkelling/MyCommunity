@@ -9,16 +9,14 @@ export default {
     "/": {
         "title": "Home",
         "/dashboard": {
-            "title": "AST Dashboard",
+            "title": "My Community Dashboard",
             "auth": true,
-            "/clients": { title: "Client Management", auth: true },
-            "/client": {
-                "title": "Client Management",
+            "/post": {
+                "title": "My Community Management",
                 "auth": true,
-                "/:clientId": {
-                    "title": "Details for:",
-                    "auth": true,
-                    "/phrases": { title: "Phrases", auth: true }
+                "/:postId": {
+                    title: "Details for:",
+                    auth: true
                 }
             },
             "/account": { title: "Account Management", auth: true },

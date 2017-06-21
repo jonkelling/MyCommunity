@@ -1,10 +1,12 @@
-import { push } from "redux-little-router";
+import { push, replace } from "redux-little-router";
 import * as actions from "./actions/index";
 import AuthService from "./auth/AuthService";
 import IPost from "./IPost";
 import * as schemas from "./schemas";
 
 export default {
+    push,
+    replace,
     loadCurrentUser: () => {
         const endpoint = `users/me`;
         return getCallApiAction(endpoint, schemas.user, "currentUser");
