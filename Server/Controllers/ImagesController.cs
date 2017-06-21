@@ -27,10 +27,9 @@ namespace Server.Controllers
 
         [HttpGet("{filename}")]
         // [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        public IActionResult Get(int communityId, string filename)
+        public async Task<IActionResult> GetAsync(int communityId, string filename)
         {
-            // return File(await azureBlobStorageService.GetBlob(filename), MimeTypeMap.GetMimeType(filename));
-            return Redirect(azureBlobStorageService.GetImageUrl(filename));
+            return File(await azureBlobStorageService.GetBlob(filename), MimeTypeMap.GetMimeType(filename));
         }
 
         [HttpPost("")]
@@ -48,9 +47,9 @@ namespace Server.Controllers
                 await file.CopyToAsync(ms);
                 ms.Position = 0;
                 var newFilename = await azureBlobStorageService.PutBlob(file.FileName, ms.ReadAllBytes());
-                var response = CreatedAtAction(nameof(Get),
+                var response = CreatedAtAction(nameof(GetAsync),
                     new { communityId, filename = newFilename },
-                    new { filename = $"https://api.mycommunity.ksocial.io/api/v1/communities/{communityId}/images/{newFilename}" });
+                    new { filename = azureBlobStorageService.GetImageUrl(newFilename) });
                 return response;
             }
         }
