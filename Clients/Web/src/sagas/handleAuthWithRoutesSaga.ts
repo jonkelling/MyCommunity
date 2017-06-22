@@ -1,4 +1,5 @@
 import stringify from "json-stringify-safe";
+import Enumerable from "linq";
 import { CALL_API } from "redux-api-middleware";
 import { push, replace } from "redux-little-router";
 import * as router from "redux-little-router";
@@ -7,7 +8,6 @@ import {
     actionChannel, call, fork, put,
     race, select, take, takeEvery
 } from "redux-saga/effects";
-import Enumerable from "../../node_modules/linq/linq";
 import * as actions from "../actions/index";
 import appActions from "../appActions";
 import AuthService from "../auth/AuthService";

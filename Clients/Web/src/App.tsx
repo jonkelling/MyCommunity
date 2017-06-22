@@ -1,13 +1,15 @@
-import { RaisedButton } from "material-ui";
+import { DropDownMenu, Menu, MenuItem, RaisedButton } from "material-ui";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Fragment } from "redux-little-router";
+import "./App.scss";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import ActiveUser from "./components/ActiveUser";
 import EditPost from "./components/EditPost";
+import MyCommunityAppBar from "./components/MyCommunityAppBar";
 import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
 import { View } from "./components/ui";
@@ -28,11 +30,14 @@ class App extends React.Component<any, any> {
     public render() {
         const selectedPost = this.props.edits.post;
 
-        return <MuiThemeProvider>
+        return <View>
+            <MyCommunityAppBar actions={this.props.appActions} />
             <Fragment forRoute="/dashboard">
                 <View>
                     <ActiveUser />
-                    <RaisedButton label="Logout" onTouchTap={this.props.appActions.logout} /><br /><br />
+                    <RaisedButton
+                        label="New Post"
+                        onTouchTap={() => this.props.appActions.startNewPost(this.props.app.currentUser)} />
                     <EditPost
                         communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
                         post={selectedPost}
@@ -45,7 +50,7 @@ class App extends React.Component<any, any> {
                     <PostList posts={this.props.entities.posts} />
                 </View>
             </Fragment>
-        </MuiThemeProvider>;
+        </View>;
     }
     private createPost(event) {
         this.props.createPost({ headline: this.state.headline, content: this.state.content });

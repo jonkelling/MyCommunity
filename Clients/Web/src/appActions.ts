@@ -35,6 +35,9 @@ export default {
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
+    startNewPost: (author) => {
+        return { type: actions.UPDATE_EDITS, payload: { key: "post", data: { author: author.id } } };
+    },
     createPost: (communityId: number, title: string, content: string) => {
         const endpoint = `communities/${communityId}/posts`;
         return getCallApiActionPost(endpoint, schemas.post, {
@@ -44,8 +47,13 @@ export default {
         });
     },
     savePost: (communityId: number, post: IPost) => {
-        const endpoint = `communities/${communityId}/posts/${post.id}`;
-        return getCallApiActionPut(endpoint, schemas.post, {
+        const endpoint = post.id
+            ? `communities/${communityId}/posts/${post.id}`
+            : `communities/${communityId}/posts`;
+        const apiAction = post.id
+            ? getCallApiActionPut
+            : getCallApiActionPost;
+        return apiAction(endpoint, schemas.post, {
             ...post,
             author: { id: post.author },
         });
@@ -55,6 +63,9 @@ export default {
         onSuccess: (response) => any, onFailure: (response) => any) => {
         const endpoint = `communities/${communityId}/images/`;
         return getCallApiActionPutFile(endpoint, null, file, source, onSuccess, onFailure);
+    },
+    login: () => {
+        return push("/login");
     },
     logout: () => {
         return push("/logout");

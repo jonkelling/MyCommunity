@@ -1,8 +1,8 @@
 const stringify = require("json-stringify-safe");
+import Enumerable from "linq";
 import omit from "lodash.omit";
 import { handleActions } from "redux-actions";
 import { REHYDRATE } from "redux-persist/constants";
-import Enumerable from "../../node_modules/linq/linq";
 import * as actions from "../actions/index";
 
 export default (state, action) => {

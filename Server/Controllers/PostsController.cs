@@ -80,7 +80,7 @@ namespace Server.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
-        [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
+        // [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
         public async Task<IActionResult> Post(int communityId, [FromBody]PostVm value)
         {
             var post = _mapper.Map<Post>(value);

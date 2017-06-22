@@ -13,6 +13,7 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
     constructor(props) {
         super(props);
         this.onImageUploaded = this.onImageUploaded.bind(this);
+        this.onImageRemoved = this.onImageRemoved.bind(this);
         this.updateField = this.updateField.bind(this);
         this.save = this.save.bind(this);
     }
@@ -25,7 +26,8 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                 <EditPostHeadlineImage
                     className={cx("headlineImage")}
                     imageUrl={this.props.post.headlineImageUrl}
-                    onImageUploaded={this.onImageUploaded} /><br />
+                    onImageUploaded={this.onImageUploaded}
+                    onImageRemoved={this.onImageRemoved} /><br />
                 <TextField name="headline" hintText="Title"
                     value={this.props.post.headline}
                     onChange={this.updateField}
@@ -55,6 +57,9 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
     }
     private onImageUploaded(imageUrl) {
         this.props.updateEdits("post", { headlineImageUrl: imageUrl });
+    }
+    private onImageRemoved() {
+        this.props.updateEdits("post", { headlineImageUrl: null });
     }
     private updateField(event) {
         this.props.updateEdits("post", { [event.target.name]: event.target.value });
