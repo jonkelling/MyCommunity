@@ -9,7 +9,7 @@ import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import ActiveUser from "./components/ActiveUser";
 import EditPost from "./components/EditPost";
-import MyCommunityAppBar from "./components/MyCommunityAppBar";
+import MainAppBar from "./components/MainAppBar";
 import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
 import { View } from "./components/ui";
@@ -31,7 +31,7 @@ class App extends React.Component<any, any> {
         const selectedPost = this.props.edits.post;
 
         return <View>
-            <MyCommunityAppBar actions={this.props.appActions} />
+            <MainAppBar actions={this.props.appActions} />
             <Fragment forRoute="/dashboard">
                 <View>
                     <ActiveUser />

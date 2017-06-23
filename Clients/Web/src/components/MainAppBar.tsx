@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import AppBarMemberMenu from "./AppBarMemberMenu";
 import { FlatButton, View } from "./ui";
 
-class MyCommunityAppBar extends React.Component<{
+class MainAppBar extends React.Component<{
     actions: { login: () => void, logout: () => void },
     logged: boolean
 }, {}> {
@@ -48,4 +48,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(MyCommunityAppBar);
+export default connect(mapStateToProps)(MainAppBar);
