@@ -75,6 +75,3 @@ Clients/Web/.awcache/
 
 # scriptcs
 Server/scriptcs_bin
-
-# Other
-Server/tests.http

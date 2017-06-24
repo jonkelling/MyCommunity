@@ -1,0 +1,60 @@
+GET /api/v1/users HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+
+POST /api/v1/users HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+    "firstName": "Prarie",
+    "lastName": "Crest",
+    "email": "prairiecrest@regencypm.com",
+    "communityId": 1
+}
+
+###
+
+GET /api/v1/communities/1/posts/ HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+
+POST /api/v1/communities/1/posts HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+	"author": { "id": 1 },
+	"headline": "June 1",
+	"content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod enim quis nulla interdum, non efficitur magna accumsan. Donec viverra diam at bibendum malesuada. Mauris sapien metus, volutpat at luctus euismod, viverra vitae metus. Aliquam faucibus enim in erat scelerisque ultrices. Vestibulum leo tellus, aliquam nec vestibulum sed, auctor quis ante. Vivamus molestie iaculis maximus. Cras ultrices tempus fermentum. Mauris non egestas diam, quis rhoncus neque. Quisque vitae mollis metus. Duis ipsum orci, condimentum eget felis ut, efficitur dictum leo. Fusce ac iaculis ipsum, nec blandit velit. Nullam eleifend ipsum in neque malesuada, id laoreet leo condimentum. Ut eleifend, erat et accumsan sollicitudin, leo augue auctor dui, sed luctus mi ex eget erat. Sed convallis ac enim et molestie. Aliquam vitae enim nec justo porttitor feugiat eu vel lectus. Donec blandit nisi at tortor efficitur interdum."
+}
+
+###
+
+GET http://{{host}}/api/v1/communities/1/Posts/44
+Authorization: {{header-authorization}}
+
+###
+
+PUT https://ksocial.blob.core.windows.net/mycommunityuploads/testrestimage.jpg HTTP/1.1
+x-ms-version: 2016-05-31
+x-ms-date: {{$timestamp}}
+x-ms-blob-type: BlockBlob
+Authorization: {{header-authorization-azureblobstorage}}
+Content-Length: 
+
+###
+
+#x-ms-blob-content-disposition: attachment; filename="fname.ext"  
