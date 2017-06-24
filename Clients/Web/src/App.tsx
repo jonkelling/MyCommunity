@@ -23,10 +23,6 @@ class App extends React.Component<any, any> {
         };
         this.createPost = this.createPost.bind(this);
     }
-    public componentWillMount() {
-        this.props.appActions.loadCurrentUser();
-        this.props.loadOlderPosts(1, new Date());
-    }
     public render() {
         const selectedPost = this.props.edits.post;
 

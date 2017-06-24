@@ -3,14 +3,22 @@ import { takeEvery } from "redux-saga/effects";
 import { call, put, select } from "redux-saga/effects";
 import { GET_CURRENT_USER_SUCCESS } from "../actions";
 import appActions from "../appActions";
+import AuthService from "../auth/AuthService";
+import { locationRequiresAuthPattern } from "../sagaPatterns";
 import waitCurrentUserSaga from "./waitCurrentUserSaga";
 
 export default function* loadCurrentUserDataSaga() {
     const state = yield select();
 
-    if (state.app.idToken) {
+    if (AuthService.isAuthenticated()) {
         yield put(appActions.loadCurrentUser());
     }
+
+    yield takeEvery(locationRequiresAuthPattern(), function* () {
+        if (!(yield select()).app.currentUser) {
+            yield put(appActions.loadCurrentUser());
+        }
+    });
 
     yield takeEvery(GET_CURRENT_USER_SUCCESS, alwaysLoadCurrentUserDataSaga);
 }
@@ -18,12 +26,7 @@ export default function* loadCurrentUserDataSaga() {
 function* alwaysLoadCurrentUserDataSaga() {
     const state = yield select();
 
-    const email = state.app.profile && state.app.profile.email;
-    const currentUser = state.entities.users && Enumerable
-        .from(state.entities.users)
-        .select((x) => x.value)
-        .singleOrDefault((x) => x.email === email);
-
+    const currentUser = state.app.currentUser;
     if (!currentUser || !currentUser.communityId) {
         // if ((yield select()).app.screenId !== ScreenId.NoCommunityAssigned) {
         //     yield put(appNavigation.startNoCommunityAssigned());
@@ -31,6 +34,6 @@ function* alwaysLoadCurrentUserDataSaga() {
         return;
     }
 
-    // yield put(getCallApiFSA(appActions.loadCommunity(currentUser.communityId)));
-    // yield put(getCallApiFSA(appActions.loadNewestPosts(currentUser.communityId, 20)));
+    yield put(appActions.loadCommunity(currentUser.communityId));
+    yield put(appActions.loadNewestPosts(currentUser.communityId, 20));
 }
