@@ -31,7 +31,7 @@ class MainAppBar extends React.Component<{
         return (
             <View>
                 <AppBar
-                    title="Title"
+                    title={"My Community"}
                     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
                     iconElementRight={this.props.logged
                         ? <AppBarMemberMenu logout={this.props.actions.logout} />
