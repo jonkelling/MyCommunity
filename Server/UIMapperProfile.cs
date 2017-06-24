@@ -13,12 +13,13 @@ namespace Server
             CreateMap<Post, PostVm>();
             CreateMap<Event, EventVm>();
             CreateMap<EventAttendee, EventAttendeeVm>();
+            CreateMap<FeedbackMessage, FeedbackMessageVm>();
 
             CreateMap<UserVm, User>();
             CreateMap<CommunityVm, Community>();
             CreateMap<PostVm, Post>();
             CreateMap<EventVm, Event>();
-            CreateMap<EventAttendeeVm, EventAttendee>();
+            CreateMap<FeedbackMessageVm, FeedbackMessage>();
         }
     }
 }

@@ -92,7 +92,6 @@ namespace Server.Controllers
                 CommunityId = communityId,
                 PostId = post.Id
             }, _mapper.Map<PostVm>(post));
-            // return Ok(_mapper.Map<PostVm>(post));
         }
 
         [HttpPut("{postId}")]

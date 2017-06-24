@@ -40,5 +40,6 @@ namespace Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<FeedbackMessage> FeedbackMessages { get; set; }
     }
 }

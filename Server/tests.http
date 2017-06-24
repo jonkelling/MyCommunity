@@ -21,6 +21,27 @@ Cache-Control: no-cache
 
 ###
 
+GET /api/v1/communities/1/feedbackmessages HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+
+POST /api/v1/communities/1/feedbackmessages HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+    user: { id: 1 },
+    message: "Thanks for creating such an awesome app!"
+}
+
+###
+
 GET /api/v1/communities/1/posts/ HTTP/1.1
 Host: {{host}}
 Authorization: {{header-authorization}}
