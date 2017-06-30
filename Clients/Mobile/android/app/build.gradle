@@ -95,6 +95,8 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
     }
     signingConfigs {
         release {
@@ -141,6 +143,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-blur')
     compile project(':react-native-keychain')
     compile project(':react-native-photo-view')
     compile project(':react-native-share')

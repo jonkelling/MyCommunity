@@ -1,6 +1,7 @@
 
 import { Navigation, NavigatorStyle } from "react-native-navigation";
 import * as actions from "./actions/index";
+import colors from "./colors";
 import { ScreenId } from "./screens/index";
 import { iconsMap } from "./utils/AppIcons";
 
@@ -9,7 +10,7 @@ const navigatorStyle: NavigatorStyle = {
     navBarTranslucent: true,
     drawUnderNavBar: false,
     navBarTextColor: "black",
-    navBarButtonColor: "black",
+    navBarButtonColor: colors.blue,
     statusBarTextColorScheme: "dark",
     drawUnderTabBar: true,
 };
@@ -31,8 +32,8 @@ const startApp = () => {
             {
                 label: "Home",
                 screen: "app.Home",
-                icon: iconsMap["ios-home-outline"],
-                selectedIcon: iconsMap["ios-home"],
+                icon: iconsMap["home"],
+                selectedIcon: iconsMap["home"],
                 title: "Home",
                 navigatorStyle,
                 navigatorButtons: {
@@ -45,10 +46,27 @@ const startApp = () => {
                     ],
                 },
             },
+            {
+                label: "Feedback",
+                screen: "app.Feedback",
+                icon: iconsMap["feedback"],
+                selectedIcon: iconsMap["feedback"],
+                title: "Feedback",
+                navigatorStyle,
+                navigatorButtons: {
+                    rightButtons: [
+                        {
+                            title: "Send",
+                            id: "send",
+                            // icon: iconsMap["ios-send-outline"],
+                        },
+                    ],
+                },
+            },
         ],
         tabsStyle: {
-            tabBarButtonColor: "black",
-            tabBarSelectedButtonColor: "darkgray",
+            tabBarButtonColor: "darkgray",
+            tabBarSelectedButtonColor: colors.blue,
             tabBarBackgroundColor: "white",
             tabBarHideShadow: false,
             tabBarTranslucent: false,

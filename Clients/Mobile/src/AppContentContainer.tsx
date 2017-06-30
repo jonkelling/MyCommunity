@@ -95,11 +95,6 @@ class AppContentContainer extends React.Component<{
         if (!props.app.idToken) {
             setTimeout(() => props.actions.login(), 500);
         }
-        else if (jwtHelper.isTokenExpired(props.app.idToken)) {
-            if (!props.app.refreshingToken) {
-                props.actions.refreshToken();
-            }
-        }
     }
 }
 

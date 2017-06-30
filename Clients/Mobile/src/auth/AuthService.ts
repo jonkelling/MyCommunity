@@ -7,6 +7,7 @@ import * as actions from "../actions/index";
 // tslint:disable-next-line:no-var-requires
 const Auth0Lock = require("react-native-lock");
 import { AsyncStorage } from "react-native";
+import { getTokenIssuedAtDate, getTokenExpirationDate, isTokenExpired } from "./jwtHelper";
 
 export class AuthService {
     private lock: any;
@@ -53,7 +54,13 @@ export class AuthService {
     public setToken(token) {
         // Saves user token to local storage
         // AsyncStorage.setItem("id_token", idToken);
-        this.store.dispatch({ type: actions.SET_AUTH_TOKEN, payload: { idToken: token.idToken } });
+        this.store.dispatch({
+            type: actions.SET_AUTH_TOKEN, payload: {
+                idToken: token.idToken,
+                expiresAt: getTokenExpirationDate(token.idToken),
+                issuedAt: getTokenIssuedAtDate(token.idToken),
+            }
+        });
         if (token.refreshToken) {
             Keychain
                 .setGenericPassword("refreshToken", token.refreshToken)
@@ -87,6 +94,30 @@ export class AuthService {
         this.store.dispatch({ type: actions.REMOVE_AUTH_TOKEN, payload: true });
     }
 
+    public isAuthenticated() {
+        const state = this.store.getState();
+        const expiresAt = getTokenExpirationDate(state.app.idToken);
+        if (!expiresAt) {
+            return false;
+        }
+        // return false;
+        return new Date().valueOf() < expiresAt.valueOf();
+    }
+
+    public isHalfWayToExpiration() {
+        const state = this.store.getState();
+        if (!state.app.expiresAt) {
+            return false;
+        }
+        const expiresAt = state.app.expiresAt.valueOf();
+        const issuedAt = state.app.issuedAt;
+        const halfTime = (expiresAt - issuedAt) / 2;
+        return (
+            (new Date().valueOf() > (expiresAt - halfTime)) &&
+            (new Date().valueOf() < expiresAt)
+        );
+    }
+
     public refreshToken() {
         return this
             .getRefreshToken()
@@ -98,6 +129,9 @@ export class AuthService {
             })
             .then((refreshToken) => {
                 return this.lock.authenticationAPI().refreshToken(refreshToken, {});
+            })
+            .then((token) => {
+                this.setToken(token);
             });
     }
 

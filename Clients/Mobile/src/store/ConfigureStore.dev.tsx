@@ -1,6 +1,5 @@
 ﻿// tslint:disable:no-var-requires
 import { applyMiddleware, compose, createStore, Middleware, StoreEnhancer } from "redux";
-import callApiConvertFsaMiddleware from "./middleware/callApiConvertFsaMiddleware";
 import loggerMiddleware from "./middleware/loggerMiddleware";
 const { apiMiddleware } = require("redux-api-middleware");
 const normalizrMiddleware = require("redux-normalizr3-middleware").default;
@@ -8,6 +7,7 @@ const thunk = require("redux-thunk").default;
 import { AsyncStorage } from "react-native";
 import { autoRehydrate, persistStore } from "redux-persist";
 import createSagaMiddleware from "redux-saga";
+import { composeWithDevTools as devtoolsComposeWithDevTools } from "remote-redux-devtools";
 import rootReducer from "../reducers/index";
 import rootSaga from "../sagas/rootSaga";
 import schemas from "../schemas";
@@ -15,7 +15,7 @@ import afterNormalizrMiddleware from "./middleware/afterNormalizrMiddleware";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
-import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
+// import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
 const PURGE = false;
 
@@ -31,9 +31,7 @@ export default function storeConfig(preloadedState?: any) {
         compose(
             applyMiddleware(
                 // auth,
-                callApiConvertFsaMiddleware,
                 auth0CustomMiddleware,
-                refreshTokenMiddleware,
                 apiEndPointMiddleware,
                 apiAuthMiddleware,
                 apiMiddleware,
@@ -56,10 +54,17 @@ export default function storeConfig(preloadedState?: any) {
 
 function configureStore<S>(storeEnhancer: StoreEnhancer<S>, preloadedState?: any) {
 
+    const composeEnhancers = devtoolsComposeWithDevTools({
+        realtime: true,
+        name: "My Community Native",
+        host: "127.0.0.1",
+        port: 8000, // the port your remotedev server is running at
+    } as any);
+
     const store = createStore(
         rootReducer,
         preloadedState,
-        compose(
+        composeEnhancers(
             storeEnhancer,
             // DevTools.instrument()
         ),

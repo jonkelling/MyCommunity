@@ -110,18 +110,7 @@ function handleActionsFn(_state, _action) {
                 if (!action.meta) {
                     return state;
                 }
-                const loadingKey =
-                    action.meta.source ||
-                    (
-                        action.meta.schema &&
-                        (
-                            action.meta.schema.key ||
-                            (
-                                action.meta.schema.schema &&
-                                action.meta.schema.schema.key
-                            )
-                        )
-                    );
+                const loadingKey = getLoadingKey(action);
                 return {
                     ...state,
                     loading: {
@@ -134,18 +123,7 @@ function handleActionsFn(_state, _action) {
                 if (!action.meta) {
                     return state;
                 }
-                const loadingKey =
-                    action.meta.source ||
-                    (
-                        action.meta.schema &&
-                        (
-                            action.meta.schema.key ||
-                            (
-                                action.meta.schema.schema &&
-                                action.meta.schema.schema.key
-                            )
-                        )
-                    );
+                const loadingKey = getLoadingKey(action);
                 console.log(`SUCCESS: ${loadingKey}`);
                 return {
                     ...state,
@@ -161,18 +139,7 @@ function handleActionsFn(_state, _action) {
                 if (!action.meta) {
                     return state;
                 }
-                const loadingKey =
-                    action.meta.source ||
-                    (
-                        action.meta.schema &&
-                        (
-                            action.meta.schema.key ||
-                            (
-                                action.meta.schema.schema &&
-                                action.meta.schema.schema.key
-                            )
-                        )
-                    );
+                const loadingKey = getLoadingKey(action);
                 console.log(`FAILURE REDUCER: ${stringify(action)}`);
                 return {
                     ...state,
@@ -219,4 +186,28 @@ function handleActionsFn(_state, _action) {
         },
     );
     return handler(_state, _action);
+}
+
+function isString(x) {
+    return typeof x === "string";
+}
+
+function getLoadingKey(action) {
+    return (
+        (
+            isString(action.meta.source) &&
+            action.meta.source
+        ) ||
+        (
+            action.meta.schema &&
+            (
+                action.meta.schema.key ||
+                (
+                    action.meta.schema.schema &&
+                    action.meta.schema.schema.key
+                )
+            )
+        ) ||
+        "noloadingkey"
+    );
 }

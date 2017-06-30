@@ -30,7 +30,8 @@ export default (state = {}, action) => {
 
 function excludeOldRecordsByDateReceived(entities) {
     entities = entities || {};
-    const cutoffDateTime = new Date(new Date().valueOf() - (1000*60*60*24*appSettings.entityDataExpirationDays));
+    const cutoffDateTimeOffset = 1000 * 60 * 60 * 24 * appSettings.entityDataExpirationDays;
+    const cutoffDateTime = new Date(new Date().valueOf() - cutoffDateTimeOffset);
     return Object.keys(entities).reduce(r1(entities, cutoffDateTime), {});
 }
 

@@ -1,5 +1,6 @@
 import { CALL_API_FSA } from "./actions";
 import * as actions from "./actions/index";
+import IFeedback from "./IFeedback";
 import * as schemas from "./schemas";
 
 // tslint:disable:object-literal-sort-keys
@@ -31,24 +32,76 @@ export default {
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
+    saveFeedback: (userId: number, communityId: number, feedbackData: IFeedback) => {
+        const endpoint = `communities/${communityId}/feedbackMessages`;
+        const subject = feedbackData.subject && `Subject: ${feedbackData.subject}`;
+        const body = {
+            user: { id: userId },
+            message: `${subject}\n${feedbackData.message}`.trim()
+        };
+        return getCallApiActionPost(endpoint, null, body, "sendFeedback");
+    },
     refreshToken: () => {
         return { type: actions.REFRESH_TOKEN };
     },
 };
 
 export function getCallApiFSA(action) {
-    return { type: CALL_API_FSA, payload: action };
+    return action;
 }
 
 function getCallApiAction(endpoint: string, responseSchema, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "GET");
+}
+
+function getCallApiActionPost(endpoint: string, responseSchema, body: any, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "POST", {
+        body: JSON.stringify(body),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+    });
+}
+
+function getCallApiActionPutFile(
+    endpoint: string, responseSchema, file: File, source = null,
+    onSuccess: (response: any) => any = null,
+    onFailure: (response: any) => any = null) {
+    const body = new FormData();
+    body.append(file.name, file);
+
+    return getCallApiAction2(endpoint, responseSchema, source, "POST", {
+        body,
+        headers: {
+        },
+    }, onSuccess, onFailure);
+}
+
+function getCallApiActionPut(endpoint: string, responseSchema, body: any, source = null) {
+    return getCallApiAction2(endpoint, responseSchema, source, "PUT", {
+        body: JSON.stringify(body),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+    });
+}
+
+function getCallApiAction2(
+    endpoint: string, responseSchema, source, method, extra = null,
+    onSuccess: (response: any) => any = null,
+    onFailure: (response: any) => any = null) {
     return ({
-        [CALL_API]: {
+        type: actions.CALL_API_FSA,
+        payload: {
             endpoint,
-            method: "GET",
+            method,
+            ...extra,
             types: [
                 {
                     meta: (action, state) => {
-                        console.log(`REQUEST: ${endpoint}`);
+                        // console.log(`REQUEST: ${endpoint}`);
                         return {
                             schema: responseSchema,
                             ...(source && { source }),
@@ -58,7 +111,10 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
                 },
                 {
                     meta: (action, state, res) => {
-                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res)}`);
+                        console.log(`SUCCESS RESPONSE (${endpoint}): ${JSON.stringify(res.body)}`);
+                        if (onSuccess) {
+                            onSuccess(res);
+                        }
                         return {
                             schema: responseSchema,
                             ...(source && { source }),
@@ -68,6 +124,9 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
                 },
                 {
                     meta: (action, state, res) => {
+                        if (onFailure) {
+                            onFailure(res);
+                        }
                         if (res) {
                             return {
                                 schema: responseSchema,
@@ -86,6 +145,6 @@ function getCallApiAction(endpoint: string, responseSchema, source = null) {
                     type: "FAILURE",
                 },
             ],
-        },
+        }
     });
 }

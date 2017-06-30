@@ -3,6 +3,7 @@ package com.mycommunity;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.cmcewen.blurview.BlurViewPackage;
 import com.auth0.lock.react.LockReactPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.reactnative.photoview.PhotoViewPackage;

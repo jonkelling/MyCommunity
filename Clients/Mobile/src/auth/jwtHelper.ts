@@ -12,6 +12,18 @@ export function getTokenExpirationDate(token) {
     return date;
 }
 
+export function getTokenIssuedAtDate(token) {
+    console.info(`getTokenExpirationDate: ${token}`);
+    const decoded = decode(token);
+    if (!decoded.iat) {
+        return null;
+    }
+
+    const date = new Date(0); // The 0 here is the key, which sets the date to the epoch
+    date.setUTCSeconds(decoded.iat);
+    return date;
+}
+
 export function isTokenExpired(token) {
     const date = getTokenExpirationDate(token);
     const offsetSeconds = 0;
