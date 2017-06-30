@@ -37,7 +37,7 @@ export default {
         const subject = feedbackData.subject && `Subject: ${feedbackData.subject}`;
         const body = {
             user: { id: userId },
-            message: `${subject}\n${feedbackData.message}`.trim()
+            message: `${subject || ""}\n${feedbackData.message}`.trim()
         };
         return getCallApiActionPost(endpoint, null, body, "sendFeedback");
     },
