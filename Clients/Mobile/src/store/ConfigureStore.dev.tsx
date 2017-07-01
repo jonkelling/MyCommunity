@@ -15,7 +15,6 @@ import afterNormalizrMiddleware from "./middleware/afterNormalizrMiddleware";
 import apiAuthMiddleware from "./middleware/apiAuthMiddleware";
 import apiEndPointMiddleware from "./middleware/apiEndPointMiddleware.dev";
 import auth0CustomMiddleware from "./middleware/auth0CustomMiddleware";
-// import refreshTokenMiddleware from "./middleware/refreshTokenMiddleware";
 
 const PURGE = false;
 

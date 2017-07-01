@@ -46,7 +46,11 @@
     "exclude": [
         "__tests__",
         "index.android.js",
+        "index.android.dev.js",
+        "index.android.prod.js",
         "index.ios.js",
+        "index.ios.dev.js",
+        "index.ios.prod.js",
         "build",
         "android",
         "ios",

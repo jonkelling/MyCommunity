@@ -60,7 +60,11 @@ obj/
 # React Native
 **/.vscode/.react/debuggerWorker.js
 **/.vscode/.react/index.ios.bundle
+**/.vscode/.react/index.ios.dev.bundle
+**/.vscode/.react/index.ios.prod.bundle
 **/.vscode/.react/index.ios.map
+**/.vscode/.react/index.ios.dev.map
+**/.vscode/.react/index.ios.prod.map
 Clients/Mobile/ios/main.jsbundle
 Clients/Mobile/ios/main.jsbundle.meta
 Clients/Mobile/android/local.properties

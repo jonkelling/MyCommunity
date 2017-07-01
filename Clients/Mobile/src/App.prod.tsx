@@ -10,7 +10,7 @@ import { NavigatorStyle } from "react-native-navigation";
 import { Provider } from "react-redux";
 import { Store } from "redux";
 import AppContentContainer from "./AppContentContainer";
-import storeConfig from "./store/ConfigureStore.dev";
+import storeConfig from "./store/ConfigureStore.prod";
 
 import appNavigation from "./appNavigation";
 
@@ -47,5 +47,3 @@ const styles: any = StyleSheet.create({
         textAlign: "center",
     },
 });
-
-// AppRegistry.registerComponent("mycommunity", () => App);

@@ -1,7 +1,7 @@
 import 'react-native';
 import React from 'react';
-import Index from '../index.android.js';
-import App from '../build/App';
+import Index from '../index.android.dev.js';
+import App from '../build/App.dev';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';

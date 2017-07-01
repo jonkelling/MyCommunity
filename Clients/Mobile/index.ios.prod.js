@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AppRegistry } from 'react-native'
-import App from './build/App'
+import App from './build/App.prod'
 
 // export default class Index extends React.Component {
 //     render() {
