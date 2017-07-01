@@ -90,13 +90,16 @@ class Feedback extends React.Component<IFeedbackProps, {}> {
         if (!this.isSendingFeedback()) {
             return null;
         }
-        return <BlurView style={styles.absolute} blurType="light">
-            <View styleName="flexible fill-parent vertical h-center v-center">
+        return <View styleName="flexible fill-parent">
+            <BlurView style={styles.absolute} blurType="light" />
+            <View styleName="flexible fill-parent vertical h-center v-top">
+                <Divider />
+                <Divider />
                 <Text styleName="white">Sending feedback. Please wait.</Text>
                 <Divider />
                 <ActivityIndicator animating={true} size="large" />
             </View>
-        </BlurView>;
+        </View>;
     }
     private onNavigatorEvent(event: any) {
         if (event.type === "NavBarButtonPress") {
