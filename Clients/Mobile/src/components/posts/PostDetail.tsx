@@ -35,15 +35,16 @@ class PostDetail extends React.Component<IPostDetailVm, {}> {
         }
         return <View style={{ flex: 1 }}>
             <ScrollView>
-                <Image
+                {this.props.post.headlineImageUrl && <Image
                     styleName="large-banner"
                     source={{
                         uri: this.props.post.headlineImageUrl ||
                         "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg",
-                    }} />
+                    }} />}
                 <View style={{ flex: 0, padding: 20, paddingBottom: 39 }}>
                     <Title style={{ fontWeight: "600" }}>{this.props.post.headline}</Title>
                     <Text>{moment(this.props.post.createdDateTime).fromNow()}</Text>
+                    <Text>{new Date(this.props.post.createdDateTime).toLocaleString()}</Text>
                     {/*<PostAuthor author={this.props.author} />*/}
                     <Divider />
                     <Text

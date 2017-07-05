@@ -34,8 +34,9 @@ function* alwaysLoadCurrentUserDataSaga() {
         return;
     }
 
-    yield call(delay, 2000);
+    // yield call(delay, 4000); // was doing this for testing.
 
     yield put(getCallApiFSA(appActions.loadCommunity(currentUser.communityId)));
-    yield put(getCallApiFSA(appActions.loadNewestPosts(currentUser.communityId, 20)));
+    yield put(getCallApiFSA(appActions.loadNewestPosts(currentUser.communityId, 10)));
+    yield put(getCallApiFSA(appActions.loadExpiredPosts(currentUser.communityId)));
 }

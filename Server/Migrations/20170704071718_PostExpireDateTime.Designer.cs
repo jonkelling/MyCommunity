@@ -9,9 +9,10 @@ using Server.Core;
 namespace Server.Migrations
 {
     [DbContext(typeof(MyCommunityContext))]
-    partial class MyCommunityContextModelSnapshot : ModelSnapshot
+    [Migration("20170704071718_PostExpireDateTime")]
+    partial class PostExpireDateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

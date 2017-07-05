@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Server.Controllers
 {
@@ -31,16 +35,22 @@ namespace Server.Controllers
             this.azureBlobStorageService = azureBlobStorageService;
         }
 
+        private PostVm Map(Post post) => _mapper.Map<PostVm>(post);
+        private Post Map(PostVm value) => _mapper.Map<Post>(value);
+        private IEnumerable<PostVm> Map(IEnumerable<Post> posts) => _mapper.Map<IEnumerable<PostVm>>(posts);
+
         [HttpGet]
         [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
         public async Task<IActionResult> Get(
             int communityId,
             [FromQuery] DateTime? before = null,
             [FromQuery] DateTime? after = null,
-            [FromQuery] int? limit = null)
+            [FromQuery] int? limit = null,
+            [FromQuery] bool includeExpired = false)
         {
             var results = from post in _dbContext.Posts.Include(post => post.Author)
                           where post.Author.CommunityId == communityId
+                          where includeExpired || !post.ExpireDateTime.HasValue || post.ExpireDateTime.Value > DateTime.UtcNow
                           select post;
 
             if (before.HasValue)
@@ -64,7 +74,7 @@ namespace Server.Controllers
                 results = results.Take(limit.Value);
             }
 
-            return Ok(_mapper.Map<IEnumerable<PostVm>>(await results.ToListAsync()));
+            return Ok(Map(await results.ToListAsync()));
         }
 
         [HttpGet("{postId}")]
@@ -75,7 +85,22 @@ namespace Server.Controllers
                           where post.Author.CommunityId == communityId
                           where post.Id == postId
                           select post;
-            return OkOrNotFound(_mapper.Map<PostVm>(await results.SingleOrDefaultAsync()));
+            return OkOrNotFound(Map(await results.SingleOrDefaultAsync()));
+        }
+
+        [HttpGet("expired/ids")]
+        [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
+        public async Task<IActionResult> Get(int communityId)
+        {
+            var results = from post in _dbContext.Posts
+                          where post.Author.CommunityId == communityId
+                          where post.ExpireDateTime.HasValue && post.ExpireDateTime.Value <= DateTime.UtcNow
+                          select post;
+            var expiredPosts = await results.ToListAsync();
+            var expiredPostIds =
+                from expiredPost in expiredPosts
+                select expiredPost.Id;
+            return OkOrNotFound(expiredPostIds);
         }
 
         [HttpPost]
@@ -83,7 +108,7 @@ namespace Server.Controllers
         // [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
         public async Task<IActionResult> Post(int communityId, [FromBody]PostVm value)
         {
-            var post = _mapper.Map<Post>(value);
+            var post = Map(value);
             post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
             await _dbContext.Posts.AddAsync(post);
             await _dbContext.SaveChangesAsync();
@@ -91,7 +116,7 @@ namespace Server.Controllers
             {
                 CommunityId = communityId,
                 PostId = post.Id
-            }, _mapper.Map<PostVm>(post));
+            }, Map(post));
         }
 
         [HttpPut("{postId}")]
@@ -99,7 +124,7 @@ namespace Server.Controllers
         [TypeFilter(typeof(ValidateUserIsPostAuthorFilterAttribute))]
         public async Task<IActionResult> Put(int communityId, int postId, [FromBody]PostVm value)
         {
-            var post = _mapper.Map<Post>(value);
+            var post = Map(value);
             post.Author = await _dbContext.Users.FindAsync(post.Author.Id);
             _dbContext.Posts.Update(post);
             await _dbContext.SaveChangesAsync();
@@ -116,5 +141,48 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpPatch("{postId}")]
+        [TypeFilter(typeof(ValidateCommunityUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateUserIsPostAuthorByIdFilterAttribute))]
+        public async Task<IActionResult> Patch(
+            int communityId,
+            int postId,
+            [FromBody]JsonPatchDocument<IPostExpireDateTimePatch> patch)
+        {
+            var post = await _dbContext.Posts.Include(x => x.Author).SingleOrDefaultAsync(x => x.Id == postId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            var original = Map(post);
+
+            // only allow PATCH for ExpireDateTime right now.
+            if (patch.Operations.Any(op => !string.Equals(op.path, $"/{nameof(post.ExpireDateTime)}", StringComparison.OrdinalIgnoreCase)))
+            {
+                return new BadRequestResult();
+            }
+
+            patch.ApplyTo((IPostExpireDateTimePatch)post, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            var model = new
+            {
+                original,
+                patched = Map(post)
+            };
+
+            return Ok(model);
+        }
     }
+
+
 }

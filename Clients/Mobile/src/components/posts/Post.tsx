@@ -12,6 +12,8 @@ export interface IPostVm {
         headlineImageUrl: string,
         content: string,
         createdDateTime: string,
+        modifiedDateTime: string,
+        expireDateTime: string,
     };
     author: IPostAuthor;
     contentStyle: TextStyle;
@@ -24,6 +26,8 @@ const styles: any = StyleSheet.create({
     date: {
         flex: 0,
         alignSelf: "flex-end",
+        color: "gray",
+        fontSize: 12,
     },
 });
 

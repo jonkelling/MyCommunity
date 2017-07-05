@@ -3,6 +3,7 @@ import { handleActions } from "redux-actions";
 import { REHYDRATE } from "redux-persist/constants";
 import Enumerable from "../../node_modules/linq/linq";
 import * as actions from "../actions/index";
+import omit from "lodash.omit";
 
 export default (state, action) => {
     if (action.type === actions.REMOVE_AUTH_TOKEN) {
@@ -52,7 +53,14 @@ function handleActionsFn(_state, _action) {
                 if (incoming) {
                     return {
                         ...state,
-                        ...incoming,
+                        ...omit(incoming,
+                            [
+                                "resultCount",
+                                "loading",
+                                "loggingIn"
+                            ]),
+                        resultCount: {},
+                        loading: {},
                         ...extras,
                     };
                 }
@@ -125,8 +133,17 @@ function handleActionsFn(_state, _action) {
                 }
                 const loadingKey = getLoadingKey(action);
                 console.log(`SUCCESS: ${loadingKey}`);
+                const resultCount =
+                    action.meta.source && action.meta.source.caller &&
+                    {
+                        resultCount: {
+                            ...state.resultCount,
+                            [action.meta.source.caller]: action.payload.result.length
+                        }
+                    };
                 return {
                     ...state,
+                    ...resultCount,
                     loading: {
                         ...state.loading,
                         [loadingKey]: false,
@@ -182,6 +199,7 @@ function handleActionsFn(_state, _action) {
                 [actions.LOADING_CURRENT_USER_PROCESS_VALIDATED]: action.payload,
             }),
         }, {
+            resultCount: {},
             loading: { app: true },
         },
     );

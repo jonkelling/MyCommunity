@@ -50,6 +50,52 @@ Cache-Control: no-cache
 
 ###
 
+GET /api/v1/communities/1/posts/?before=Tue, 04 Jul 2017 22:35:11 GMT&after=Tue, 04 Jul 2017 06:01:15 GMT&limit= HTTP/1.1
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+
+PATCH /api/v1/communities/1/posts/53
+Host: {{host}}
+Authorization: {{header-authorization}}
+Content-Type: application/json
+
+[
+    {
+      "op": "replace",
+      "path": "/expiredatetime",
+      "value": "2017-07-05T02:05:00.000000"
+    }
+]
+
+###
+
+GET /api/v1/communities/1/posts/expired/ids
+Host: {{host}}
+Authorization: {{header-authorization}}
+Cache-Control: no-cache
+
+###
+
+PATCH /api/v1/communities/1/posts/16
+Host: {{host}}
+Authorization: {{header-authorization}}
+Accept: text/plain
+Content-Type: application/json
+
+[
+    {
+      "op": "replace",
+      "path": "/headline",
+      "value": "Wooo! 12321 test"
+    }
+]
+
+###
+
 POST /api/v1/communities/1/posts HTTP/1.1
 Host: {{host}}
 Authorization: {{header-authorization}}
@@ -75,7 +121,3 @@ x-ms-date: {{$timestamp}}
 x-ms-blob-type: BlockBlob
 Authorization: {{header-authorization-azureblobstorage}}
 Content-Length: 
-
-###
-
-#x-ms-blob-content-disposition: attachment; filename="fname.ext"  

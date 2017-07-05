@@ -30,7 +30,14 @@ export default {
     loadOlderPosts: (communityId: number, beforeDateTime: Date, limit) => {
         const queryString = `before=${beforeDateTime.toUTCString()}&limit=${limit || ""}`;
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
-        return getCallApiAction(endpoint, schemas.postList);
+        return getCallApiAction(endpoint, schemas.postList, { caller: "loadOlderPosts" });
+    },
+    loadExpiredPosts: (communityId: number) => {
+        const endpoint = `communities/${communityId}/posts/expired/ids`;
+        return getCallApiAction(endpoint, null, "expiredPosts");
+    },
+    clearPosts: () => {
+        return { type: actions.CLEAR_POSTS };
     },
     saveFeedback: (userId: number, communityId: number, feedbackData: IFeedback) => {
         const endpoint = `communities/${communityId}/feedbackMessages`;
@@ -92,6 +99,13 @@ function getCallApiAction2(
     endpoint: string, responseSchema, source, method, extra = null,
     onSuccess: (response: any) => any = null,
     onFailure: (response: any) => any = null) {
+    extra = {
+        ...extra,
+        headers: {
+            ...(extra && extra.headers),
+            "Cache-Control": "no-cache"
+        }
+    }
     return ({
         type: actions.CALL_API_FSA,
         payload: {
