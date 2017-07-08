@@ -58,7 +58,7 @@ Cache-Control: no-cache
 
 ###
 
-PATCH /api/v1/communities/1/posts/53
+PATCH /api/v1/communities/1/posts/33
 Host: {{host}}
 Authorization: {{header-authorization}}
 Content-Type: application/json
@@ -67,7 +67,7 @@ Content-Type: application/json
     {
       "op": "replace",
       "path": "/expiredatetime",
-      "value": "2017-07-05T02:05:00.000000"
+      "value": "2017-07-04T01:00:00.000000"
     }
 ]
 
