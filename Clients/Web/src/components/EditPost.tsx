@@ -1,11 +1,11 @@
 import classNames from "classnames/bind";
-import { Divider } from "material-ui";
+import { DatePicker, Divider, Subheader, TimePicker } from "material-ui";
 import React from "react";
 import IPost from "../IPost";
 import EditPostHeadlineImage from "./EditPostHeadlineImage";
 import FileUploadField from "./FileUploadField";
 import ScrollableDialog from "./ScrollableDialog";
-import { RaisedButton, TextField } from "./ui";
+import { RaisedButton, TextField, View } from "./ui";
 
 const cx = classNames.bind(require("./EditPost.scss"));
 
@@ -15,6 +15,7 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
         this.onImageUploaded = this.onImageUploaded.bind(this);
         this.onImageRemoved = this.onImageRemoved.bind(this);
         this.updateField = this.updateField.bind(this);
+        this.updateDateField = this.updateDateField.bind(this);
         this.save = this.save.bind(this);
     }
     public render() {
@@ -28,6 +29,21 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     imageUrl={this.props.post.headlineImageUrl}
                     onImageUploaded={this.onImageUploaded}
                     onImageRemoved={this.onImageRemoved} /><br />
+                <View>
+                    <DatePicker autoOk
+                        name="expireDateTime"
+                        onChange={this.updateDateField}
+                        value={this.props.post.expireDateTime}
+                        floatingLabelText="Expiration date &amp; time"
+                        style={{ display: "inline-block", width: "auto" }}
+                        textFieldStyle={{ width: "auto" }} />
+                    <TimePicker
+                        onChange={this.updateDateField}
+                        value={this.props.post.expireDateTime}
+                        floatingLabelText="&nbsp;"
+                        style={{ display: "inline-block", width: "auto" }}
+                        textFieldStyle={{ width: "auto" }} />
+                </View>
                 <TextField name="headline" hintText="Title"
                     value={this.props.post.headline}
                     onChange={this.updateField}
@@ -63,6 +79,9 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
     }
     private updateField(event) {
         this.props.updateEdits("post", { [event.target.name]: event.target.value });
+    }
+    private updateDateField(event, date) {
+        this.props.updateEdits("post", { expireDateTime: date });
     }
     private save() {
         this.props.save(this.props.communityId, this.props.post);

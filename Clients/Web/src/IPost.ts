@@ -6,6 +6,7 @@ interface IPost extends IEntity {
     headline: string;
     headlineImageUrl: string;
     content: string;
+    expireDateTime: Date;
 }
 
 export default IPost;
