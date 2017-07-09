@@ -48,7 +48,7 @@
         "redux-devtools-dock-monitor": "^1.1.2",
         "redux-devtools-extension": "^2.13.2",
         "redux-devtools-log-monitor": "^1.3.0",
-        "redux-little-router": "^13.1.2",
+        "redux-little-router": "^14.2.0",
         "redux-logger": "^3.0.6",
         "redux-normalizr3-middleware": "^2.0.1",
         "redux-persist": "^4.8.0",

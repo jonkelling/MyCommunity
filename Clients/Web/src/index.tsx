@@ -13,14 +13,12 @@ export class Index extends React.Component<{ store: Redux.Store<any>, history: a
     public render() {
         return <ThemeProvider>
             <Provider store={this.props.store}>
-                <RouterProvider store={this.props.store}>
-                    <Fragment forRoute="/">
-                        <div>
-                            {this.props.children}
-                            <App />
-                        </div>
-                    </Fragment>
-                </RouterProvider>
+                <Fragment forRoute="/">
+                    <div>
+                        {this.props.children}
+                        <App />
+                    </div>
+                </Fragment>
             </Provider>
         </ThemeProvider>;
     }
