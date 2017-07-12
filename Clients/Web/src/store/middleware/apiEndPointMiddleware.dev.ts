@@ -4,8 +4,8 @@ import AuthService, { AuthService as AuthServiceType } from "../../auth/AuthServ
 
 const { CALL_API } = require("redux-api-middleware");
 
-const baseUrl = "http://localhost:5000/api/v1";
-// const baseUrl = "https://api.mycommunity.ksocial.io/api/v1";
+// const baseUrl = "http://localhost:5000/api/v1";
+const baseUrl = "https://api.mycommunity.ksocial.io/api/v1";
 
 export default (store) => {
     AuthService.configure("http://localhost:3000");

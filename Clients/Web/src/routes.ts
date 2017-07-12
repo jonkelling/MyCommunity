@@ -2,6 +2,9 @@
 // Uses https://github.com/snd/url-pattern for URL matching
 // and parameter extraction.
 export default {
+    "/:planUrl": { title: "Login" },
+    "/:planUrl/soda": { title: "Login" },
+    "/rightData/:approvedPlanID": { title: "" },
     "/login": { title: "Login" },
     "/signup": { title: "Sign Up" },
     // You can also define nested route objects!
