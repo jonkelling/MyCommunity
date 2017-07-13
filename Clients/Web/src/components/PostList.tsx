@@ -1,7 +1,8 @@
-import IPost from '../IPost';
+import IPost from "../IPost";
 
 import classNames from "classnames/bind";
 import Enumerable from "linq";
+import moment from "moment";
 import React from "react";
 import { Link } from "redux-little-router";
 const styles = require("./PostList.scss");
