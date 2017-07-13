@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Server.Data;
 
@@ -55,10 +56,10 @@ namespace Server
                     $"{nameof(connectionString)} is null or empty.",
                     nameof(connectionString));
 
-            var optionsBuilder =
-                new DbContextOptionsBuilder<MyCommunityContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<MyCommunityContext>();
 
             optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.ReplaceService<IEntityMaterializerSource, AppEntityMaterializerSource>();
 
             return new MyCommunityContext(optionsBuilder.Options);
         }

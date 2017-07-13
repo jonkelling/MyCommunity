@@ -1,22 +1,22 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "bin/": true,
-        "obj/": true,
-        ".vscode": true,
-        "scriptcs_bin/": true
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "bin/": true,
+    "obj/": true,
+    ".vscode": true,
+    "scriptcs_bin/": true
+  },
+  "rest-client.environmentVariables": {
+    "mycommunity-prod": {
+      "host": "api.mycommunity.ksocial.io"
     },
-    "rest-client.environmentVariables": {
-        "mycommunity-prod": {
-            "host": "api.mycommunity.ksocial.io"
-        },
-        "mycommunity-localdev": {
-            "host": "localhost:5000"
-        }
+    "mycommunity-localdev": {
+      "host": "localhost:5000"
     }
+  }
 }

@@ -110,7 +110,7 @@ Cache-Control: no-cache
 
 ###
 
-GET http://{{host}}/api/v1/communities/1/Posts/44
+GET http://{{host}}/api/v1/communities/1/Posts/63
 Authorization: {{header-authorization}}
 
 ###

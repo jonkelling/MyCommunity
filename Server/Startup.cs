@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
@@ -77,7 +78,10 @@ namespace Server
                 config.AddProfile<UIMapperProfile>();
             });
             services.AddDbContext<MyCommunityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection"));
+                options.ReplaceService<IEntityMaterializerSource, AppEntityMaterializerSource>();
+            });
 
             services.AddScoped<IMapper>(sp =>
                 new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));

@@ -8,9 +8,14 @@ namespace Server
     {
         public UIMapperProfile()
         {
+            // CreateMap<Entity, EntityVm>().AfterMap((e, v) => {
+            //     v.CreatedDateTime = v.CreatedDateTime.ToUniversalTime();
+            //     v.ModifiedDateTime = v.ModifiedDateTime.ToUniversalTime();
+            // });
+
             CreateMap<User, UserVm>();
             CreateMap<Community, CommunityVm>();
-            CreateMap<Post, PostVm>();
+            CreateMap<Post, PostVm>(); // .IncludeBase<Entity, EntityVm>();
             CreateMap<Event, EventVm>();
             CreateMap<EventAttendee, EventAttendeeVm>();
             CreateMap<FeedbackMessage, FeedbackMessageVm>();

@@ -4,5 +4,4 @@
 
 --update dbo.Users set [CommunityId] = 2 where [Email] = 'jonkelling+appletest2@gmail.com';
 
-select * from dbo.Posts where [AuthorId] = 4;
-select * from dbo.Communities;
+select Id, ExpireDateTime, CreatedDateTime from dbo.Posts where [AuthorId] = 1 and Id > 72;
