@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import { DatePicker, Divider, Subheader, TimePicker } from "material-ui";
 import moment from "moment";
 import React from "react";
+import BrowserDetection from "react-browser-detection";
 import IPost from "../IPost";
 import EditPostHeadlineImage from "./EditPostHeadlineImage";
 import FileUploadField from "./FileUploadField";
@@ -25,6 +26,38 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
             if (!this.props.post) {
                 return null;
             }
+            const MUIDateAndTimePicker = () => <div>
+                <DatePicker autoOk
+                    name="expireDateTime"
+                    onChange={this.updateDateField}
+                    value={this.props.post.expireDateTime && new Date(this.props.post.expireDateTime)}
+                    floatingLabelText={
+                        `Expiration date & time${!!this.props.post.expireDateTime ? "" : " (not set)"}`
+                    }
+                    floatingLabelStyle={{ whiteSpace: "nowrap" }}
+                    style={{ display: "inline-block", width: "auto" }}
+                    textFieldStyle={{ width: "auto" }} />
+                <TimePicker
+                    onChange={this.updateDateField}
+                    value={this.props.post.expireDateTime && new Date(this.props.post.expireDateTime)}
+                    floatingLabelText="&nbsp;"
+                    style={{ display: "inline-block", width: "auto" }}
+                    textFieldStyle={{ width: "auto" }} />
+            </div>;
+            const browserHandler = {
+                safari: MUIDateAndTimePicker,
+                unknown: MUIDateAndTimePicker,
+                default: (browser) => <div>
+                    <TextField type="date" value={
+                        this.props.post.expireDateTime &&
+                        new Date(this.props.post.expireDateTime).toString()
+                    } />
+                    <TextField type="time" value={
+                        this.props.post.expireDateTime &&
+                        new Date(this.props.post.expireDateTime).toString()
+                    } />
+                </div>
+            };
             return <div className={cx("component")}>
                 <EditPostHeadlineImage
                     className={cx("headlineImage")}
@@ -32,24 +65,9 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     onImageUploaded={this.onImageUploaded}
                     onImageRemoved={this.onImageRemoved} /><br />
                 <View>
-                    <DatePicker autoOk
-                        name="expireDateTime"
-                        onChange={this.updateDateField}
-                        value={this.props.post.expireDateTime && new Date(this.props.post.expireDateTime)}
-                        floatingLabelText={
-                            `Expiration date & time${!!this.props.post.expireDateTime ? "" : " (not set)"}`
-                        }
-                        floatingLabelStyle={{ whiteSpace: "nowrap" }}
-                        style={{ display: "inline-block", width: "auto" }}
-                        textFieldStyle={{ width: "auto" }} />
-                    <TimePicker
-                        onChange={this.updateDateField}
-                        value={this.props.post.expireDateTime && new Date(this.props.post.expireDateTime)}
-                        floatingLabelText="&nbsp;"
-                        style={{ display: "inline-block", width: "auto" }}
-                        textFieldStyle={{ width: "auto" }} />
-                    <div>{`${new Date(this.props.post.expireDateTime).toUTCString()}`}</div>
-                    <FormattedDateText>{new Date(this.props.post.createdDateTime)}</FormattedDateText>
+                    <BrowserDetection>
+                        {browserHandler}
+                    </BrowserDetection>
                 </View>
                 <TextField name="headline" hintText="Title"
                     value={this.props.post.headline}
