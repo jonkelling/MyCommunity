@@ -1,3 +1,4 @@
+import moment from "moment";
 import { push, replace } from "redux-little-router";
 import * as actions from "./actions/index";
 import AuthService from "./auth/AuthService";
@@ -20,23 +21,33 @@ export default {
         return getCallApiAction(endpoint, schemas.post);
     },
     loadNewestPosts: (communityId: number, limit = null) => {
-        const now = new Date().toUTCString();
+        const now = new Date().toISOString();
         const endpoint = `communities/${communityId}/posts/?before=${now}&limit=${limit || ""}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
     loadNewerPosts: (communityId: number, afterDateTime: Date, limit = null) => {
-        const now = new Date().toUTCString();
-        const queryString = `before=${now}&after=${afterDateTime.toUTCString()}&limit=${limit || ""}`;
+        const now = new Date().toISOString();
+        const queryString = `before=${now}&after=${afterDateTime.toISOString()}&limit=${limit || ""}`;
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
     loadOlderPosts: (communityId: number, beforeDateTime: Date, limit) => {
-        const queryString = `before=${beforeDateTime.toUTCString()}&limit=${limit || ""}`;
+        const queryString = `before=${beforeDateTime.toISOString()}&limit=${limit || ""}`;
         const endpoint = `communities/${communityId}/posts/?${queryString}`;
         return getCallApiAction(endpoint, schemas.postList);
     },
+    clearPosts: () => {
+        return { type: actions.CLEAR_POSTS };
+    },
     startNewPost: (author) => {
-        return { type: actions.UPDATE_EDITS, payload: { key: "post", data: { author: author.id } } };
+        return {
+            type: actions.UPDATE_EDITS, payload: {
+                key: "post", data: {
+                    author: author.id,
+                    expireDateTime: moment().add(1, "month").toISOString()
+                }
+            }
+        };
     },
     createPost: (communityId: number, title: string, content: string) => {
         const endpoint = `communities/${communityId}/posts`;

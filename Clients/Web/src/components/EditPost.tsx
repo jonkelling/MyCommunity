@@ -7,8 +7,7 @@ import IPost from "../IPost";
 import EditPostHeadlineImage from "./EditPostHeadlineImage";
 import FileUploadField from "./FileUploadField";
 import ScrollableDialog from "./ScrollableDialog";
-import { RaisedButton, TextField, View } from "./ui";
-import FormattedDateText from "./ui/FormattedDateText";
+import { DateTimeTextField, FormattedDateText, RaisedButton, TextField, View } from "./ui";
 
 const cx = classNames.bind(require("./EditPost.scss"));
 
@@ -44,18 +43,14 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     style={{ display: "inline-block", width: "auto" }}
                     textFieldStyle={{ width: "auto" }} />
             </div>;
+            const fdsa = moment(this.props.post.expireDateTime).format("YYYY-MM-DDTHH:mm");
             const browserHandler = {
                 safari: MUIDateAndTimePicker,
                 unknown: MUIDateAndTimePicker,
                 default: (browser) => <div>
-                    <TextField type="date" value={
-                        this.props.post.expireDateTime &&
-                        new Date(this.props.post.expireDateTime).toString()
-                    } />
-                    <TextField type="time" value={
-                        this.props.post.expireDateTime &&
-                        new Date(this.props.post.expireDateTime).toString()
-                    } />
+                    <DateTimeTextField
+                        value={this.props.post.expireDateTime}
+                        name="expireDateTime" onChange={this.updateDateField} />
                 </div>
             };
             return <div className={cx("component")}>
@@ -65,9 +60,10 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                     onImageUploaded={this.onImageUploaded}
                     onImageRemoved={this.onImageRemoved} /><br />
                 <View>
-                    <BrowserDetection>
+                    {/* <BrowserDetection>
                         {browserHandler}
-                    </BrowserDetection>
+                    </BrowserDetection> */}
+                    {browserHandler.default(null)}
                 </View>
                 <TextField name="headline" hintText="Title"
                     value={this.props.post.headline}

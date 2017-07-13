@@ -34,6 +34,8 @@ export const GET_CURRENT_USER_SUCCESS = "GET_CURRENT_USER_SUCCESS";
 export const UPDATE_EDITS = "UPDATE_EDITS";
 export const CLEAR_EDITS = "CLEAR_EDITS";
 
+export const CLEAR_POSTS = "CLEAR_POSTS";
+
 export const ROUTER_LOCATION_CHANGED = "ROUTER_LOCATION_CHANGED";
 
 export const LOG = "LOG";

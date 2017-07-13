@@ -41,6 +41,7 @@ class App extends React.Component<any, any> {
                         save={this.props.appActions.savePost}
                         cancel={() => {
                             this.props.appActions.push("/dashboard");
+                            this.props.appActions.clearPosts();
                             this.props.loadOlderPosts(1, new Date());
                         }} />
                     <PostList posts={this.props.entities.posts} />
