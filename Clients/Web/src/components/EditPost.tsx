@@ -49,6 +49,10 @@ export default class EditPost extends React.Component<IEditPostProps, {}> {
                 unknown: MUIDateAndTimePicker,
                 default: (browser) => <div>
                     <DateTimeTextField
+                        floatingLabelText={
+                            `Expiration date & time${!!this.props.post.expireDateTime ? "" : " (not set)"}`
+                        }
+                        floatingLabelStyle={{ whiteSpace: "nowrap" }}
                         value={this.props.post.expireDateTime}
                         name="expireDateTime" onChange={this.updateDateField} />
                 </div>

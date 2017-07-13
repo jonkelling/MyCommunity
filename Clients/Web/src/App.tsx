@@ -44,6 +44,7 @@ class App extends React.Component<any, any> {
                             this.props.appActions.clearPosts();
                             this.props.loadOlderPosts(1, new Date());
                         }} />
+                    {this.props.app.loading.posts && <div>Loading...</div>}
                     <PostList posts={this.props.entities.posts} />
                 </View>
             </Fragment>
