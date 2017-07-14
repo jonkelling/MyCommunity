@@ -1,10 +1,10 @@
+import classNames from "classnames/bind";
 import { DropDownMenu, Menu, MenuItem, RaisedButton } from "material-ui";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Fragment } from "redux-little-router";
-import "./App.scss";
 import appActions from "./appActions";
 import AuthService from "./auth/AuthService";
 import ActiveUser from "./components/ActiveUser";
@@ -14,6 +14,8 @@ import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
 import { View } from "./components/ui";
 import editsActions from "./editsActions";
+
+const cx = classNames.bind(require("./App.scss"));
 
 class App extends React.Component<any, any> {
     constructor(props) {
@@ -26,7 +28,7 @@ class App extends React.Component<any, any> {
     public render() {
         const selectedPost = this.props.edits.post;
 
-        return <View>
+        return <View className={cx("AntdApp")}>
             <MainAppBar actions={this.props.appActions} />
             <Fragment forRoute="/dashboard">
                 <View>

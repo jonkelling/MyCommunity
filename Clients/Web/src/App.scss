@@ -1,3 +1,15 @@
+@import "/node_modules/antd/dist/antd.css";
+.AntdApp {
+    display: relative;
+}
+
 body {
     margin: 0;
+    >div[style*="absolute"] {
+        z-index: 999999;
+    }
+}
+
+.ant-calendar-picker-container {
+    z-index: 999999;
 }
