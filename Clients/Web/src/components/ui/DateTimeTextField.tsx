@@ -17,20 +17,25 @@ export default class DateTimeTextField extends React.Component<IDateTimeTextFiel
     }
     public render() {
         return <div>
-            <DatePicker
-                onChange={this.onChange}
-                value={(this.props.value && moment(this.props.value)) || null}
-                format="YYYY-MM-DD   h:mm a"
-                showToday={true}
-                showTime={{
-                    disabledSeconds: () => Enumerable.range(0, 60).toArray(),
-                    disabledMinutes: () => Enumerable.range(0, 60).except([0, 15, 30, 45]).toArray(),
-                    use12Hours: true,
-                    hideDisabledOptions: true,
-                    defaultValue: moment("08:00 PM", "hh:mm a")
-                }}
-                style={{ marginRight: 8 }}
-            />
+            <div>
+                <label style={{ paddingRight: 8 }}>
+                    Expiration Date/Time:
+                </label>
+                <DatePicker
+                    onChange={this.onChange}
+                    value={(this.props.value && moment(this.props.value)) || null}
+                    format="YYYY-MM-DD   h:mm a"
+                    showToday={true}
+                    showTime={{
+                        disabledSeconds: () => Enumerable.range(0, 60).toArray(),
+                        disabledMinutes: () => Enumerable.range(0, 60).except([0, 15, 30, 45]).toArray(),
+                        use12Hours: true,
+                        hideDisabledOptions: true,
+                        defaultValue: moment("08:00 PM", "hh:mm a")
+                    }}
+                    style={{ marginRight: 8 }}
+                />
+            </div>
         </div>;
     }
     private onChange(date: moment.Moment, dateString: string) {
