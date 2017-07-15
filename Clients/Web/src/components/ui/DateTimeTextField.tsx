@@ -3,6 +3,7 @@ import { DatePickerProps } from "antd/lib/date-picker";
 import Enumerable from "linq";
 import moment from "moment";
 import React from "react";
+import appSettings from "../../appSettings";
 import { TextField } from "../ui";
 
 interface IDateTimeTextField {
@@ -31,7 +32,10 @@ export default class DateTimeTextField extends React.Component<IDateTimeTextFiel
                         disabledMinutes: () => Enumerable.range(0, 60).except([0, 15, 30, 45]).toArray(),
                         use12Hours: true,
                         hideDisabledOptions: true,
-                        defaultValue: moment("08:00 PM", "hh:mm a")
+                        defaultValue: moment(
+                            appSettings.defaultExpirationTime.value,
+                            appSettings.defaultExpirationTime.format
+                        )
                     }}
                     style={{ marginRight: 8 }}
                 />
