@@ -1,15 +1,16 @@
 {
   "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "dist/": true,
-    "node_modules/": true,
-    "index.html": true,
-    "test.html": true,
-    "yarn.lock": true,
-    ".vscode/": true
+    "**/.git": false,
+    "**/.svn": false,
+    "**/.hg": false,
+    "**/CVS": false,
+    "**/.DS_Store": false,
+    "dist/": false,
+    "node_modules/": false,
+    "index.html": false,
+    "test.html": false,
+    "yarn.lock": false,
+    ".vscode/": false,
+    ".awcache/": false
   }
 }

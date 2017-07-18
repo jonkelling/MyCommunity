@@ -198,7 +198,7 @@ module.exports = {
                             options: {
                                 minimize: false,
                                 modules: true,
-                                importLoaders: 1,
+                                importLoaders: 2,
                                 localIdentName: "[name]__[local]__[hash:base64:5]",
                             }
                         },
@@ -218,7 +218,8 @@ module.exports = {
                                 includePaths: [
                                     SRC_ROOT
                                     //path.resolve(APP_ROOT, "styles/sass-resources.scss")
-                                ]
+                                ],
+                                importer: jsonImporter
                             }
                         },
                         {
