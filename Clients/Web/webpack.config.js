@@ -7,6 +7,7 @@ const merge = require("webpack-merge");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const LessPluginCleanCSS = require("less-plugin-clean-css");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const jsonImporter = require("node-sass-json-importer");
 
 require('dotenv').config();
 
@@ -160,7 +161,7 @@ module.exports = {
                         options: {
                             minimize: false,
                             modules: true,
-                            importLoaders: 1,
+                            importLoaders: 2,
                             localIdentName: "[name]__[local]__[hash:base64:5]",
                         }
                     },
@@ -180,7 +181,8 @@ module.exports = {
                             includePaths: [
                                 SRC_ROOT
                                 //path.resolve(APP_ROOT, "styles/sass-resources.scss")
-                            ]
+                            ],
+                            importer: jsonImporter
                         }
                     },
                     {

@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 export default class PostList extends React.Component<IPostListProps, any> {
     public render() {
         const Post = (post) => <div key={post.id}>
-            <Link href={`/dashboard/post/${post.id}`}>{post.headline}</Link>
+            <Link href={`/dashboard/posts/${post.id}`}>{post.headline}</Link>
         </div>;
 
         const posts =

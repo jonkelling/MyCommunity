@@ -3,7 +3,7 @@ import { DatePickerProps } from "antd/lib/date-picker";
 import Enumerable from "linq";
 import moment from "moment";
 import React from "react";
-import appSettings from "../../appSettings";
+import * as appSettings from "../../appSettings";
 import { TextField } from "../ui";
 
 interface IDateTimeTextField {

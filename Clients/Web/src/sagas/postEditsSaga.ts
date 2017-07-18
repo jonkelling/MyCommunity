@@ -17,7 +17,7 @@ export default function* postEditsSaga() {
     while (true) {
         const action = yield take(locationChangedPattern());
 
-        if (locationChangedToPathNamePattern(/\/post\/(\d+)$/)(action)) {
+        if (locationChangedToPathNamePattern(/\/posts\/(\d+)$/)(action)) {
             yield call(editPost, action);
         } else {
             yield call(clearEditPost);
@@ -26,7 +26,7 @@ export default function* postEditsSaga() {
 }
 
 function* editPost(action) {
-    const postId = /\/post\/(\d+)$/.exec(action.payload.pathname)[1];
+    const postId = /\/dashboard\/posts\/(\d+)$/.exec(action.payload.pathname)[1];
 
     yield call(waitForPost, postId);
 

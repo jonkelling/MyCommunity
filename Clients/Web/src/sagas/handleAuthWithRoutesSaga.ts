@@ -52,7 +52,7 @@ export default function* handleAuthWithRoutesSaga(dispatch) {
         function* () {
             if (!(yield select()).app.refreshingToken) {
                 yield call(delay, 1); // give time for auth token to get set
-                yield put(replace("/dashboard"));
+                yield put(replace("/dashboard/posts"));
             }
         }
     );

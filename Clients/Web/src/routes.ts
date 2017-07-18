@@ -11,13 +11,17 @@ export default {
         "/dashboard": {
             "title": "My Community Dashboard",
             "auth": true,
-            "/post": {
+            "/posts": {
                 "title": "My Community Management",
                 "auth": true,
                 "/:postId": {
                     title: "Details for:",
                     auth: true
                 }
+            },
+            "/marketingMaterials": {
+                title: "Marketing Materials",
+                auth: true
             },
             "/account": { title: "Account Management", auth: true },
         },

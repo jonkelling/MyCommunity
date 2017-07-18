@@ -1,6 +1,8 @@
 @import "/node_modules/antd/dist/antd.css";
+@import "./appSettings.json";
 .AntdApp {
     display: relative;
+    font-size: inherit;
 }
 
 body {
@@ -8,8 +10,23 @@ body {
     >div[style*="absolute"] {
         z-index: 999999;
     }
+    font-size: inherit;
 }
 
 .ant-calendar-picker-container {
     z-index: 999999;
+}
+
+.app-bar.desktop,
+.app-bar.tablet {
+    padding-left: #{$drawerWidth}px;
+}
+
+.content {
+    margin: 48px 72px;
+}
+
+.content.desktop,
+.content.tablet {
+    margin-left: #{$drawerWidth+72}px;
 }

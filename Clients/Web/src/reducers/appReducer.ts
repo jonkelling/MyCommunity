@@ -1,3 +1,4 @@
+import * as settings from "../appSettings";
 const stringify = require("json-stringify-safe");
 import Enumerable from "linq";
 import omit from "lodash.omit";
@@ -7,7 +8,10 @@ import * as actions from "../actions/index";
 
 export default (state, action) => {
     if (action.type === actions.REMOVE_AUTH_TOKEN) {
-        return { loading: { app: false } };
+        return {
+            loading: { app: false },
+            settings
+        };
     }
 
     let newState: any = handleActionsFn(state, action);

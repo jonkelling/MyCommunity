@@ -10,10 +10,12 @@ import AuthService from "./auth/AuthService";
 import ActiveUser from "./components/ActiveUser";
 import EditPost from "./components/EditPost";
 import MainAppBar from "./components/MainAppBar";
+import MarketingMaterial from "./components/MarketingMaterial/MarketingMaterial";
 import PostList from "./components/PostList";
 import ScrollableDialog from "./components/ScrollableDialog";
 import { View } from "./components/ui";
 import editsActions from "./editsActions";
+import { responsive } from "./Responsive";
 
 const cx = classNames.bind(require("./App.scss"));
 
@@ -28,29 +30,41 @@ class App extends React.Component<any, any> {
     public render() {
         const selectedPost = this.props.edits.post;
 
-        return <View className={cx("AntdApp")}>
-            <MainAppBar actions={this.props.appActions} />
-            <Fragment forRoute="/dashboard">
-                <View>
-                    <ActiveUser />
-                    <RaisedButton
-                        label="New Post"
-                        onTouchTap={() => this.props.appActions.startNewPost(this.props.app.currentUser)} />
-                    <EditPost
-                        communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
-                        post={selectedPost}
-                        updateEdits={this.props.editsActions.updateEdits}
-                        save={this.props.appActions.savePost}
-                        cancel={() => {
-                            this.props.appActions.push("/dashboard");
-                            this.props.appActions.clearPosts();
-                            this.props.loadOlderPosts(1, new Date());
-                        }} />
-                    {this.props.app.loading.posts && <div>Loading...</div>}
-                    <PostList posts={this.props.entities.posts} />
+        return responsive((flags) => {
+            const responsiveClassNames = Object.keys(flags).map((key) => ({ [cx(key)]: flags[key] }));
+            return <View className={cx("AntdApp")}>
+                <View className={classNames(cx("app-bar"), responsiveClassNames)}>
+                    <MainAppBar actions={this.props.appActions} />
                 </View>
-            </Fragment>
-        </View>;
+                <Fragment forRoute="/dashboard">
+                    <View className={classNames(cx("content"), responsiveClassNames)}>
+                        {/* <ActiveUser /> */}
+                        <Fragment forRoute="/posts">
+                            <View>
+                                <RaisedButton
+                                    label="New Post"
+                                    onTouchTap={() => this.props.appActions.startNewPost(this.props.app.currentUser)} />
+                                <EditPost
+                                    communityId={this.props.app.currentUser && this.props.app.currentUser.communityId}
+                                    post={selectedPost}
+                                    updateEdits={this.props.editsActions.updateEdits}
+                                    save={this.props.appActions.savePost}
+                                    cancel={() => {
+                                        this.props.appActions.push("/dashboard/posts");
+                                        this.props.appActions.clearPosts();
+                                        this.props.loadOlderPosts(1, new Date());
+                                    }} />
+                                {this.props.app.loading.posts && <div>Loading...</div>}
+                                <PostList posts={this.props.entities.posts} />
+                            </View>
+                        </Fragment>
+                        <Fragment forRoute="/marketingMaterial">
+                            <MarketingMaterial />
+                        </Fragment>
+                    </View>
+                </Fragment>
+            </View >;
+        });
     }
     private createPost(event) {
         this.props.createPost({ headline: this.state.headline, content: this.state.content });
