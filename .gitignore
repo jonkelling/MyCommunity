@@ -79,3 +79,6 @@ Clients/Web/.awcache/
 
 # scriptcs
 Server/scriptcs_bin
+
+# WebFS
+Clients/WebFS*
